@@ -1,0 +1,60 @@
+.custom-size-image {
+    width: 288px;
+    height: 400px;
+    overflow: hidden;
+    transition: box-shadow 0.5s ease;
+
+}
+
+.custom-size-image:hover {
+    transform: scale(1.05);
+    cursor: pointer;
+}
+
+.custom-form-login {
+    margin-right: 10vw;
+
+}
+
+.border {
+    border-radius: 40px;
+
+}
+
+.custom-container-text-login {
+    margin-top: 17vh;
+    position: relative;
+}
+
+.custom-title-login {
+    margin: 0 0 0 10vw;
+    padding: 0 0 0 0;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 45px;
+    font-weight: bold;
+    color: black;
+    /*  position: absolute;
+   left: 0;
+   top: 0; */
+}
+
+.custom-width-login {
+    margin-top: 7vh;
+    width: 100%;
+    background-color: #4461F2;
+    color: #FFFFFF;
+
+}
+
+.custom-containe-login-buttom span {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 4px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 9px;
+    color: #4461f2;
+}
+
+.custom-recover-pass:hover {
+    cursor: pointer;
+}

@@ -1,10 +1,11 @@
 import React from "react";
+import Login from "../components/login";
 
 function AppUI (){
 
     return (
         <>
-        <h1>Hola opticentral </h1>
+            <Login />        
         </>
     )
 }

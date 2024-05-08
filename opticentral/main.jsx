@@ -1,5 +1,8 @@
 import React from "react";
-import ReactDOM from "react-dom/client"
+import ReactDOM from "react-dom/client";
+import 'bulma/css/bulma.min.css';
+import './index.css'
+
 import App from "./src/App/App"
 
 const root = ReactDOM.createRoot(document.getElementById("app"));
