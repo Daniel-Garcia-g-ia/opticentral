@@ -1,4 +1,5 @@
 import React from "react";
+import { useEffect, useState } from "react";
 import Navbar from "../navbar";
 import logoLogin from "../../assets/images/logoLogin.webp"
 import { HiOutlineMail } from "react-icons/hi";
@@ -7,17 +8,25 @@ import { MdPassword } from "react-icons/md";
 
 
 function Login() {
+
+    const [email, setEmail] = useState("");
+    const [passWord, setPassWord] = useState("");
+
+    const handleClickLogin = async () => {
+
+        const formLoginData = new FormData();
+        formLoginData.append("email",email);
+        formLoginData.append("password", passWord);
+
+        
+
+    }
+
     return (
         <>
             <nav>
                 <Navbar />
             </nav>
-
-
-
-
-
-
             <div className="columns is-centered custom-container-text-login">
 
 
@@ -43,9 +52,9 @@ function Login() {
                 <div className="column custom-form-login">
                     <div className="field">
                         <p className="control has-icons-left has-icons-right">
-                            <input className="input" type="email" placeholder="Correo" />
+                            <input className="input" type="email" placeholder="Correo" value={email} onChange={(e) => setEmail(e.target.value)} />
                             <span className="icon is-small is-left">
-                                <HiOutlineMail size={"20"}/>
+                                <HiOutlineMail size={"20"} />
                             </span>
                             <span className="icon is-small is-right">
                                 <i className="fas fa-check"></i>
@@ -56,15 +65,15 @@ function Login() {
 
                     <div className="field">
                         <p className="control has-icons-left">
-                            <input className="input" type="password" placeholder="Contraseña" />
+                            <input className="input" type="password" placeholder="Contraseña" value={passWord} onChange={(e) => setPassWord(e.target.value)} />
                             <span className="icon is-small is-left">
-                                <MdPassword size={"20"}/>
+                                <MdPassword size={"20"} />
                             </span>
                         </p>
 
                     </div>
                     <div className="custom-containe-login-buttom">
-                        <button className="button custom-width-login">
+                        <button className="button custom-width-login" onClick={handleClickLogin}>
                             Ingresar
                         </button>
 

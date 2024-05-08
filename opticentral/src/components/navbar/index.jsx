@@ -9,11 +9,11 @@ function Navbar() {
 
 
 
-                    <nav class="navbar is-four-fifths " role="navigation" aria-label="main navigation">
-                        <div class="navbar-brand pl-6">
+                    <nav className="navbar is-four-fifths " role="navigation" aria-label="main navigation">
+                        <div className="navbar-brand pl-6">
 
 
-                            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+                            <a role="button" className="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
                                 <span aria-hidden="true"></span>
                                 <span aria-hidden="true"></span>
                                 <span aria-hidden="true"></span>
@@ -21,40 +21,40 @@ function Navbar() {
                             </a>
                         </div>
 
-                        <div id="navbarBasicExample" class="navbar-menu ">
-                            <div class="navbar-start">
-                                <a class="navbar-item  ">
+                        <div id="navbarBasicExample" className="navbar-menu ">
+                            <div className="navbar-start">
+                                <a className="navbar-item  ">
                                     Home
                                 </a>
 
-                                <a class="navbar-item ">
+                                <a className="navbar-item ">
                                     Documentation
                                 </a>
 
-                                <div class="navbar-item has-dropdown is-hoverable">
-                                    <a class="navbar-link ">
+                                <div className="navbar-item has-dropdown is-hoverable">
+                                    <a className="navbar-link ">
                                         More
                                     </a>
 
-                                    <div class="navbar-dropdown">
-                                        <a class="navbar-item ">
+                                    <div className="navbar-dropdown">
+                                        <a className="navbar-item ">
                                             About
                                         </a>
-                                        <a class="navbar-item is-selected ">
+                                        <a className="navbar-item is-selected ">
                                             Jobs
                                         </a>
-                                        <a class="navbar-item ">
+                                        <a className="navbar-item ">
                                             Contact
                                         </a>
-                                        <hr class="navbar-divider" />
-                                        <a class="navbar-item">
+                                        <hr className="navbar-divider" />
+                                        <a className="navbar-item">
                                             Report an issue
                                         </a>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="navbar-end pr-6">
+                            <div className="navbar-end pr-6">
                                 <a className="navbar-item has-text-link">
                                     Sing in
                                 </a>
