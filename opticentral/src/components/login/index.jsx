@@ -10,15 +10,28 @@ import { MdPassword } from "react-icons/md";
 function Login() {
 
     const [email, setEmail] = useState("");
-    const [passWord, setPassWord] = useState("");
+    const [password, setPassword] = useState("");
 
     const handleClickLogin = async () => {
-
-        const formLoginData = new FormData();
-        formLoginData.append("email",email);
-        formLoginData.append("password", passWord);
-
         
+        try {
+            const response = await fetch ("http://localhost:3000/app/v1/loginUser", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+
+                },
+                body: JSON.stringify({email, password}),
+            });
+            console.log(response.body)
+            
+
+            const data = await response.json()
+            console.log(data)
+
+        } catch (error){
+            console.log("Error al iniciar sesion", error)
+        } 
 
     }
 
@@ -65,7 +78,7 @@ function Login() {
 
                     <div className="field">
                         <p className="control has-icons-left">
-                            <input className="input" type="password" placeholder="Contraseña" value={passWord} onChange={(e) => setPassWord(e.target.value)} />
+                            <input className="input" type="password" placeholder="Contraseña" value={password} onChange={(e) => setPassword(e.target.value)} />
                             <span className="icon is-small is-left">
                                 <MdPassword size={"20"} />
                             </span>
