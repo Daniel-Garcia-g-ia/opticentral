@@ -1,5 +1,7 @@
 import React from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import { fetchLogin } from "../services/fetchLogin";
+import { AuthContext } from "../context/AuthContext";
 import Navbar from "../navbar";
 import logoLogin from "../../assets/images/logoLogin.webp"
 import { HiOutlineMail } from "react-icons/hi";
@@ -11,27 +13,19 @@ function Login() {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const { login } = useContext(AuthContext);
 
     const handleClickLogin = async () => {
-        
         try {
-            const response = await fetch ("http://localhost:3000/app/v1/loginUser", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
+            const userData = await fetchLogin("http://localhost:3000/app/v1/loginUser", email, password)
+            login(userData)
 
-                },
-                body: JSON.stringify({email, password}),
-            });
-            console.log(response.body)
-            
+        } catch (error) {
+            console.log('Error al iniciar sesion', error)
+        }
 
-            const data = await response.json()
-            console.log(data)
 
-        } catch (error){
-            console.log("Error al iniciar sesion", error)
-        } 
+
 
     }
 
