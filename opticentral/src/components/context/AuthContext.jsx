@@ -1,7 +1,6 @@
 import React from "react";
+import { setLocalStorage } from "../services/LocalStorage";
 import { useState, createContext, } from "react";
-import {Redirect} from "react-router-dom"
-
 
 const AuthContext = createContext();
 
@@ -11,9 +10,12 @@ const AuthProvider = ({ children }) => {
     const [dataToken, setDataToken]= useState();
 
     const login = (userData) => {
-        console.log(userData)
-        if(userData.status===200 && userData.body.auht){
-            setIsLoggedIn(true);            
+        
+        if(userData.status===200 && userData.body.auth){
+            setLocalStorage('authData', userData.body)
+
+            setIsLoggedIn(true);   
+                 
         }else{
             logout()
         }    
@@ -26,7 +28,7 @@ const AuthProvider = ({ children }) => {
     return (
         <AuthContext.Provider value={{ isLoggedIn, login, logout }}>
 
-            {isLoggedIn ? <Redirect to="/home" />: children}
+            {children}
             
         </AuthContext.Provider>
 

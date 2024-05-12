@@ -1,5 +1,6 @@
 import React from "react";
 import { useEffect, useState, useContext } from "react";
+import { Navigate } from "react-router-dom";
 import { fetchLogin } from "../services/fetchLogin";
 import { AuthContext } from "../context/AuthContext";
 import Navbar from "../navbar";
@@ -13,21 +14,32 @@ function Login() {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [navigate, setNavigate] = useState(false)
     const { login } = useContext(AuthContext);
 
+    const { isLoggedIn } = useContext(AuthContext);
+
+
+    
     const handleClickLogin = async () => {
         try {
             const userData = await fetchLogin("http://localhost:3000/app/v1/loginUser", email, password)
             login(userData)
+            
+
 
         } catch (error) {
             console.log('Error al iniciar sesion', error)
-        }
-
+        } 
 
 
 
     }
+
+    if (isLoggedIn) {
+        return <Navigate to="/home" replace />
+    }
+
 
     return (
         <>
