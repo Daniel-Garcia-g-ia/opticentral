@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import Navbar from "../navbar"
 import { AuthContext } from "../context/AuthContext";
 import { Navigate } from "react-router-dom";
 
@@ -6,7 +7,8 @@ function Home() {
 
     return (
         <>
-            <div>Welcome to Home</div>
+        <Navbar />
+            
         </>
 
     )
