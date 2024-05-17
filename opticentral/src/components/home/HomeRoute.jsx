@@ -3,22 +3,41 @@ import { Navigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import { getLocalStorage } from '../services/LocalStorage';
 import Home from './index';
+import { fetchMachine } from '../services/fetchMachine';
 
 
 function HomeRoute() {
     const { isLoggedIn } = useContext(AuthContext);
     const [redirect, setRedirect] = useState(false);
+    const [equipmentData, setEquipmentData] = useState({});
 
     useEffect(() => {
 
 
+       
+        const authData = getLocalStorage('authData')
 
-        const authData = getLocalStorage('authData')       
 
-        if (!authData || !authData.auth && !authData.token) {
+
+        if (!authData || !authData.auth && !authData.token) {           
+           
             setRedirect(true);
         } else {
-            setRedirect(false);
+            //Peticion GET ApI
+            fetchMachine('http://localhost:3000/app/v1/equipments',authData.token).then(data =>{
+                if(!data.body.auth){
+                    setRedirect(true);
+                }else{
+                    setEquipmentData(data.body.equipments)
+                    setRedirect(false);
+                }
+            }).catch(error=>{
+                setRedirect(true)
+            })
+            
+            
+           
+            
 
         }
     }, [isLoggedIn]);
@@ -28,7 +47,7 @@ function HomeRoute() {
             {redirect ? (
                 <Navigate to="/" />
             ) : (
-                <Home />
+                <Home equipmentData={equipmentData} />
             )}
         </>
     );
