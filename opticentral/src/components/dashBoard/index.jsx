@@ -1,7 +1,9 @@
 import React from "react";
 import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import Navbar from "../navbar";
 import MainDetail from "./MainDetail";
+import FreeProduction from "./FreeProduction";
 import AddReport from "./AddReport";
 
 import { IoMdAddCircleOutline } from "react-icons/io";
@@ -9,11 +11,13 @@ import { IoMdAddCircleOutline } from "react-icons/io";
 
 
 function DashBoard() {
+    const location = useLocation();
+    const {equipment}= location.state || {}
 
     const [activeAddReport, setActiveAddReport] = useState(false)
 
     useEffect(() => {
-        console.log(activeAddReport)
+        console.log(equipment)
 
 
 
@@ -69,6 +73,7 @@ function DashBoard() {
                             <div className="box is-custom-box-detail">
 
                                 {/* <MainDetail /> */}
+                                <FreeProduction />
 
                                 { activeAddReport && <AddReport activeAddReport={activeAddReport} setActiveAddReport={setActiveAddReport} />}
 

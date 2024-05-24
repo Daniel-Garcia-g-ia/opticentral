@@ -1,11 +1,11 @@
 import React from "react";
 
 
-function Card({ image, place, title }) {
+function Card({ image, place, title, onClick }) {
     return (
         <>
 
-            <div className="is-card">
+            <div className="is-card" onClick={onClick}>
 
                 <div className="">
 

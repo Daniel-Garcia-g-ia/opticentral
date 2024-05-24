@@ -1,6 +1,6 @@
 function flatArray (data){
     const newData= data.flat()
-    console.log(newData);
+    /* console.log(newData); */
     return newData
 }
 

@@ -1,9 +1,18 @@
 import React from "react";
+import { useState } from "react";
 
-function AddReport( {activeAddReport, setActiveAddReport}) {
+function AddReport({ activeAddReport, setActiveAddReport }) {
+    const [productionReport, setProductionReport]= useState(false);
+    const [nameInput, setNameInput]= useState([]);
 
-    const HandledClickDismiss = ()=>{
+
+
+    const HandledClickDismiss = () => {
         setActiveAddReport(false)
+    }
+
+    const HandledChanceReport = () => {
+        setProductionReport(true)
     }
     return (
         <>
@@ -18,9 +27,12 @@ function AddReport( {activeAddReport, setActiveAddReport}) {
                                 <div className="field ">
                                     <label className="label custom-label">Reportar</label>
                                     <div className="select is-small ">
-                                        <select className="is-hovered custom-width-add-report ">
-                                            <option>Avería</option>
-                                            <option>With options</option>
+                                        <select className="is-hovered custom-width-add-report " onChange={HandledChanceReport}>
+                                            <option> </option>
+                                            <option>Producción</option>
+                                            <option>Averia</option>
+                                            <option>Paro Externo</option>
+                                            <option>Turno no programado</option>
                                         </select>
                                     </div>
 
@@ -34,8 +46,6 @@ function AddReport( {activeAddReport, setActiveAddReport}) {
                                             <option>With options</option>
                                         </select>
                                     </div>
-
-
                                 </div>
 
                                 <div className="field pl-6">
@@ -123,7 +133,7 @@ function AddReport( {activeAddReport, setActiveAddReport}) {
                                 <div className="field pl-6">
                                     <label className="label custom-label">Solución</label>
                                     <div className="control ">
-                                        <textarea class="textarea is-custom-width-textarea" ></textarea>
+                                        <textarea className="textarea is-custom-width-textarea" ></textarea>
 
                                     </div>
                                 </div>
