@@ -1,6 +1,16 @@
 import React from "react";
+import { useContext } from "react";
+import { NavbarContext } from "../context/NavbarContext";
 
 function Navbar() {
+
+    const {production}= useContext(NavbarContext)
+
+    const handeldClickProduction =()=>{
+
+        production()
+    }
+
     return (
 
         <>
@@ -27,8 +37,8 @@ function Navbar() {
                                     Home
                                 </a>
 
-                                <a className="navbar-item ">
-                                    Documentation
+                                <a className="navbar-item" onClick={handeldClickProduction}>
+                                    Producción
                                 </a>
 
                                 <div className="navbar-item has-dropdown is-hoverable">

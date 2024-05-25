@@ -1,6 +1,35 @@
 import React from "react";
+import { useState, useEffect,useContext } from "react";
+import { NavbarContext } from "../context/NavbarContext";
+import InputsFreeProduction from "./InputsFreeProduction";
 
 function FreeProduction() {
+
+    const {discardProduction}= useContext(NavbarContext)
+
+    const [amountProductions, setAmountProductions] = useState(0);
+
+    useEffect(() => {
+        console.log(amountProductions)
+    }, [amountProductions])
+
+
+
+    const handledChangeAmountProduction = (e) => {
+
+        const inputValue = e.target.value;
+
+        if (/^[0-5]$/.test(inputValue) || inputValue === '') {
+            setAmountProductions(inputValue);
+        }
+
+    }
+
+    const handledClickDiscard = ()=>{
+        discardProduction()
+    }
+
+
     return (
         <>
 
@@ -15,90 +44,30 @@ function FreeProduction() {
                         <span className="">Cantidad Filtraciones: </span>
                         <div className="field pl-6">
                             <div className="control is-custom-small-amount">
-                                <input className="input is-small" type="number" />
+                                <input className="input is-small" type="number" value={amountProductions} onChange={handledChangeAmountProduction} min="0" max="5" step="1" />
                             </div>
                         </div>
                     </div>
                 </div>
-                <div className="columns has-text-centered">
 
-                    <div className="column">
-
-                        <div className="field is-horizontal">
-
-
-                            <div className="field ">
-                                <span>Marca </span>
-                                <div className="control ">
-                                    <select className="select is-small is-custom-with-select">
-                                        <option></option>
-                                        <option>Andina</option>
-                                        <option>Andina Ligth</option>
-
-
-                                    </select>
-                                </div>
-
-                            </div>
-                            <div className="field pl-3">
-                                <span>Brew ID </span>
-                                <div className="field pl-3 has-addons">
-                                    <p className="control">
-                                        <input className="input is-small is-success is-custom-wifth-amount-hl " type="number" />
-                                    </p>
-
-                                </div>
-
-                            </div>
-
-                            <div className="field pl-3">
-                                <span>Volumen</span>
-                                <div className="field pl-3 has-addons">
-                                    <p className="control">
-                                        <input className="input is-small is-success is-custom-wifth-amount-hl " type="number" />
-                                    </p>
-                                    <p className="control">
-                                        <a className="button is-static is-small">
-                                            Hl
-                                        </a>
-                                    </p>
-
-                                </div>
-
-                            </div>
-
-                            <div className="field pl-3">
-                                <span>Cocimiento</span>
-                                <div className="field pl-3 has-addons">
-                                    <p className="control">
-                                        <input className="input is-small is-success is-custom-wifth-amount-hl " type="number" />
-                                    </p>
-                                    <p className="control">
-                                        <a className="button is-static is-small">
-                                            #
-                                        </a>
-                                    </p>
-
-                                </div>
-
-                            </div>
-
-
-
-
+                <div className="columns  ">
+                    <div className="column is-flex is-justify-content-center">
+                        <div>
+                            {Array.from({ length: amountProductions }, (_, index) => (
+                                <InputsFreeProduction key={index} />
+                            ))}
                         </div>
-
                     </div>
-
                 </div>
-                <div className="columns pt-5">
+
+                <div className="columns pt-0 custom-postion-save">
                     <div className="column is-flex is-justify-content-center">
                         <div className="field is-grouped">
                             <div className="control ">
                                 <button className="button is-link">Guardar</button>
                             </div>
                             <div className="control ">
-                                <button className="button is-link is-light">Descartar</button>
+                                <button className="button is-link is-light" onClick={handledClickDiscard}>Descartar</button>
                             </div>
                         </div>
 
@@ -115,3 +84,15 @@ function FreeProduction() {
 }
 
 export default FreeProduction;
+
+
+
+
+
+
+
+
+
+
+
+

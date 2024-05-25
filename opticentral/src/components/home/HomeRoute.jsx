@@ -3,7 +3,7 @@ import { Navigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import { getLocalStorage } from '../services/LocalStorage';
 import Home from './index';
-import { fetchMachine } from '../services/fetchMachine';
+import { fetchData } from '../services/fetchData';
 
 
 function HomeRoute() {
@@ -24,7 +24,7 @@ function HomeRoute() {
             setRedirect(true);
         } else {
             //Peticion GET ApI
-            fetchMachine('http://localhost:3000/app/v1/equipments',authData.token).then(data =>{
+            fetchData('http://localhost:3000/app/v1/equipments',authData.token).then(data =>{
                 if(!data.body.auth){
                     setRedirect(true);
                 }else{

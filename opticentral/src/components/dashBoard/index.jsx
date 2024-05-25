@@ -1,30 +1,94 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import { useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../navbar";
+
 import MainDetail from "./MainDetail";
 import FreeProduction from "./FreeProduction";
 import AddReport from "./AddReport";
 
 import { IoMdAddCircleOutline } from "react-icons/io";
+import { fetchData } from "../services/fetchData";
+import { fetchOneData } from "../services/fetchData";
+import { getLocalStorage } from "../services/LocalStorage";
+import { NavbarContext } from "../context/NavbarContext";
+
+import { basicMessage, textUnderMessage } from "../services/alerts";
+
 
 
 
 function DashBoard() {
+
+    const navigate = useNavigate();
     const location = useLocation();
-    const {equipment}= location.state || {}
+    const isFirstRender = useRef();
+    const { permissonsRole } = useContext(NavbarContext)
+    const [activateDeatilProduction, setActivateDetailsProduction] = useState(false)
+    const [date, setDate] = useState(" ");
+    const [dataTurn, setDataTurn] = useState("Turno 1");
+    const [selectedDate, setSelectedDate] = useState();
+    const { equipment } = location.state || {};
+    const { id, code, name, place } = equipment;
 
     const [activeAddReport, setActiveAddReport] = useState(false)
 
     useEffect(() => {
-        console.log(equipment)
+
+        if (!isFirstRender.current) {
+            isFirstRender.current = true;
+            return;
+        }
+        if (permissonsRole) {
+            return;
+
+        } else {
+            const authData = getLocalStorage('authData')
+
+            if (!authData || !authData.auth && !authData.token) {
+                navigate('/')
+            } else {
+                //Peticion GET ApI
+
+                fetchOneData('http://localhost:3000/app/v1/processData', code, date, dataTurn, authData.token).then(result => {
+                    if (!result.body.auth) {
+                        navigate('/')
+
+                    } else {
+                        if (result.body && result.body.data && result.body.data.length > 0) {
+                            if (!result.body.data[0].processData[0].release) {
+                                textUnderMessage('Producción sin liberar', 'Informar al líder de turno', 'warning')
+
+                            } else {
+                                setActivateDetailsProduction(true)
+                            }
+
+                        } else {
+                            basicMessage('Sin datos registrados')
+                        }
+                    }
+                }).catch(error => {
+                    console.log(error)
+                    navigate('/')
+                })
+            }
+
+        }
 
 
-
-    }, [activeAddReport])
+    }, [selectedDate])
 
     const handledClickAdd = () => {
         setActiveAddReport(true)
+    }
+    const handledOnChangeDate = (e) => {
+        setDate(e.target.value)
+        setSelectedDate(!selectedDate)
+    }
+    const handledOnChangeTurn = (e) => {
+        setDataTurn(e.target.value);
+        setSelectedDate(!selectedDate);
     }
     return (
         <>
@@ -38,13 +102,13 @@ function DashBoard() {
                             <div className="field is-horizontal">
 
                                 <div className="control is-expanded">
-                                    <input className="input" type="date" />
+                                    <input className="input" type="date" value={date} onChange={handledOnChangeDate} />
                                 </div>
 
                                 <p className="control pl-2">
                                     <span className="select">
-                                        <select name="" id="">
-                                            <option defaultValue> turno 1</option>
+                                        <select name="" id="" value={dataTurn} onChange={handledOnChangeTurn}>
+                                            <option> turno 1</option>
                                             <option>Turno 2</option>
                                             <option>Turno 3</option>
                                         </select>
@@ -65,17 +129,23 @@ function DashBoard() {
                         <div className="column">
 
                             <div className="has-text-centered">
-                                <h1 className="title is-4">Mash Filter</h1>
+                                <h1 className="title is-4">{name}</h1>
                             </div>
 
 
 
                             <div className="box is-custom-box-detail">
 
-                                {/* <MainDetail /> */}
-                                <FreeProduction />
+                                {activateDeatilProduction && <MainDetail />}
 
-                                { activeAddReport && <AddReport activeAddReport={activeAddReport} setActiveAddReport={setActiveAddReport} />}
+                                <div className="is-centered">
+                                    {permissonsRole && <FreeProduction />}
+
+                                </div>
+
+
+
+                                {activeAddReport && <AddReport activeAddReport={activeAddReport} setActiveAddReport={setActiveAddReport} />}
 
 
 

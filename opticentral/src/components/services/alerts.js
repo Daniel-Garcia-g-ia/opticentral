@@ -10,8 +10,22 @@ function successAlert (){
       })
 }
 
+function basicMessage(message){
+    Swal.fire(message)
+}
+
+function textUnderMessage(title, text, icon){
+    Swal.fire({
+        title: title,
+        text: text,
+        icon: icon
+      });
+}
+
 export{
-    successAlert
+    successAlert,
+    basicMessage,
+    textUnderMessage
 }
 
 

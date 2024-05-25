@@ -5,7 +5,7 @@ function MainDetail() {
         <>
 
             <p className="is-flex">
-                <h4 className="title is-6"> Nombre de la receta</h4>
+                <span className="title is-6"> Nombre de la receta</span>
             </p>
 
             <div className="field pt-5 is-horizontal">

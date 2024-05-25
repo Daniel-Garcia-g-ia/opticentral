@@ -20,7 +20,7 @@ function CardMachine({ equipmentData }) {
 
     }, [equipmentData]);
 
-    const handledCardClick = (equipment) => {
+    const handledCardClick = (equipment) => {        
         
         navigate('/dashboard',{state:{equipment}})
     }
@@ -32,7 +32,7 @@ function CardMachine({ equipmentData }) {
                     {equipments.map((equipment, index) => (
                         <div key={index} className="column is-one-fifth">
                             {equipment && (
-                                <Card image={prensa} place={equipment.place} title={equipment.name} onClick={() => handledCardClick(equipment.code)} />
+                                <Card image={prensa} place={equipment.place} title={equipment.name} onClick={() => handledCardClick(equipment)} />
                             )}
                         </div>
                     ))}
