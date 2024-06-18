@@ -7,12 +7,14 @@ import Navbar from "../navbar";
 import MainDetail from "./MainDetail";
 import FreeProduction from "./FreeProduction";
 import AddReport from "./AddReport";
+import { dataBrands } from "../../assets/data/data"
 
 import { IoMdAddCircleOutline } from "react-icons/io";
 import { fetchData } from "../services/fetchData";
 import { fetchOneData } from "../services/fetchData";
 import { getLocalStorage } from "../services/LocalStorage";
 import { NavbarContext } from "../context/NavbarContext";
+import { DateContext } from "../context/DateContext";
 
 import { basicMessage, textUnderMessage } from "../services/alerts";
 
@@ -21,10 +23,14 @@ import { basicMessage, textUnderMessage } from "../services/alerts";
 
 function DashBoard() {
 
+
+
     const navigate = useNavigate();
     const location = useLocation();
     const isFirstRender = useRef();
     const { permissonsRole } = useContext(NavbarContext)
+    const { dateContext } = useContext(DateContext);
+    const { turnContext } = useContext(DateContext)
     const [activateDeatilProduction, setActivateDetailsProduction] = useState(false)
     const [date, setDate] = useState(" ");
     const [dataTurn, setDataTurn] = useState("Turno 1");
@@ -34,7 +40,11 @@ function DashBoard() {
 
     const [activeAddReport, setActiveAddReport] = useState(false)
 
+    const brands = dataBrands()
+
     useEffect(() => {
+        dateContext(date)
+        turnContext(dataTurn)
 
         if (!isFirstRender.current) {
             isFirstRender.current = true;
@@ -83,7 +93,7 @@ function DashBoard() {
         setActiveAddReport(true)
     }
     const handledOnChangeDate = (e) => {
-        setDate(e.target.value)
+        setDate(e.target.value)       
         setSelectedDate(!selectedDate)
     }
     const handledOnChangeTurn = (e) => {
@@ -138,10 +148,11 @@ function DashBoard() {
 
                                 {activateDeatilProduction && <MainDetail />}
 
-                                <div className="is-centered">
-                                    {permissonsRole && <FreeProduction />}
 
-                                </div>
+                                {permissonsRole && <FreeProduction equipmentId={code} equipmentName={name}
+                                    location={place} />}
+
+
 
 
 

@@ -1,17 +1,112 @@
 import React from "react";
-import { useState, useEffect,useContext } from "react";
+import { useState, useEffect, useContext } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
 import { NavbarContext } from "../context/NavbarContext";
+import { DateContext } from "../context/DateContext";
+import { findMaxBrewId } from "../services/preData";
+import { basicMessage } from "../services/alerts";
+import { dataBrands } from "../../assets/data/data";
+import { getLocalStorage } from "../services/LocalStorage";
+import { fetchData, fetchSetReport} from "../services/fetchData";
 import InputsFreeProduction from "./InputsFreeProduction";
+import { dataNewReport, preDatafreeProduction } from "../services/preData";
 
-function FreeProduction() {
+function FreeProduction({ equipmentId, equipmentName, location }) {
 
-    const {discardProduction}= useContext(NavbarContext)
+
+    const { discardProduction } = useContext(NavbarContext)
+
+    const { dateSelected } = useContext(DateContext)
+    const { turnSelected } = useContext(DateContext)
+
+    const [brewId, setBrewId] = useState(0);
+    const [inputValues, setInputValues] = useState({})
+    const [redirect, setRedirect] = useState(false);
+    const [saveData, setSaveData] = useState(false)
+
+    const navigate = useNavigate()
 
     const [amountProductions, setAmountProductions] = useState(0);
 
     useEffect(() => {
-        console.log(amountProductions)
-    }, [amountProductions])
+
+        const authData = getLocalStorage('authData')
+        if (!authData || !authData.auth && !authData.token) {
+
+
+            navigate('/');
+
+        } else {
+            fetchData('http://localhost:3000/app/v1/mostRecentReport/0001', authData.token)
+                .then(data => {
+                    if (!data.body.auth) {
+                        navigate('/');
+                    } else {
+                        if (!data.body.data) {
+                            basicMessage('Sin reportes registrados')
+
+                        } else {
+                            const maxBrewId = findMaxBrewId(data.body.data.processData);
+                            setBrewId(maxBrewId)
+
+                        }
+
+
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                    navigate('/');
+                });
+
+
+
+        }
+
+
+    }, []);
+
+
+    const handledInputChange = (index, name, value) => {
+        setInputValues(prevValues => ({
+            ...prevValues,
+            [index]: {
+                ...prevValues[index],
+                [name]: value
+            }
+        }))
+    }
+
+
+
+
+    const handledClickSave = () => {
+
+        const processData = preDatafreeProduction(dateSelected, turnSelected, inputValues)
+        const report = dataNewReport(equipmentId, equipmentName, location, processData)
+
+   
+
+        const authData = getLocalStorage('authData')
+        if (!authData || !authData.auth && !authData.token) {
+            navigate('/');
+
+        } else {           
+
+            fetchSetReport('http://localhost:3000/app/v1/processData/addProduction', authData.token, report               
+            ).then(response => {
+                console.log(response)
+            }).catch(e => {
+                console.log(e)
+            })
+        }
+
+    }
+
+
+
+
+
 
 
 
@@ -25,9 +120,10 @@ function FreeProduction() {
 
     }
 
-    const handledClickDiscard = ()=>{
+    const handledClickDiscard = () => {
         discardProduction()
     }
+
 
 
     return (
@@ -54,7 +150,7 @@ function FreeProduction() {
                     <div className="column is-flex is-justify-content-center">
                         <div>
                             {Array.from({ length: amountProductions }, (_, index) => (
-                                <InputsFreeProduction key={index} />
+                                <InputsFreeProduction key={index} brewId={brewId} index={index} onInputChange={handledInputChange} />
                             ))}
                         </div>
                     </div>
@@ -64,7 +160,7 @@ function FreeProduction() {
                     <div className="column is-flex is-justify-content-center">
                         <div className="field is-grouped">
                             <div className="control ">
-                                <button className="button is-link">Guardar</button>
+                                <button className="button is-link" onClick={handledClickSave} >Guardar</button>
                             </div>
                             <div className="control ">
                                 <button className="button is-link is-light" onClick={handledClickDiscard}>Descartar</button>

@@ -5,6 +5,7 @@ import HomeRoute from "../components/home/HomeRoute"
 import DashBoard from "../components/dashBoard";
 import { AuthProvider } from "../components/context/AuthContext";
 import { NavbarProvider } from "../components/context/NavbarContext";
+import { DateProvider } from "../components/context/DateContext";
 
 function AppUI() {
 
@@ -14,18 +15,18 @@ function AppUI() {
 
 
             <NavbarProvider>
-                <AuthProvider>
-                    <Router>
-                        <Routes>
-                            <Route path="/" element={<Login />} />
-                            <Route path="/home" element={<HomeRoute />} />
-                            <Route path="/dashboard" element={<DashBoard />} />
+                <DateProvider>
+                    <AuthProvider>
+                        <Router>
+                            <Routes>
+                                <Route path="/" element={<Login />} />
+                                <Route path="/home" element={<HomeRoute />} />
+                                <Route path="/dashboard" element={<DashBoard />} />
 
-                        </Routes>
-                    </Router>
-                </AuthProvider>
-
-
+                            </Routes>
+                        </Router>
+                    </AuthProvider>
+                </DateProvider>
             </NavbarProvider>
 
 
