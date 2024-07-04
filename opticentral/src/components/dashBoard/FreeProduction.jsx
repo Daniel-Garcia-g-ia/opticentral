@@ -4,10 +4,10 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { NavbarContext } from "../context/NavbarContext";
 import { DateContext } from "../context/DateContext";
 import { findMaxBrewId } from "../services/preData";
-import { basicMessage } from "../services/alerts";
+import { basicMessage, eventBasic } from "../services/alerts";
 import { dataBrands } from "../../assets/data/data";
 import { getLocalStorage } from "../services/LocalStorage";
-import { fetchData, fetchSetReport} from "../services/fetchData";
+import { fetchData, fetchSetReport } from "../services/fetchData";
 import InputsFreeProduction from "./InputsFreeProduction";
 import { dataNewReport, preDatafreeProduction } from "../services/preData";
 
@@ -55,7 +55,8 @@ function FreeProduction({ equipmentId, equipmentName, location }) {
                     }
                 })
                 .catch(error => {
-                    console.error('Error fetching data:', error);
+                    eventBasic('error', error)
+
                     navigate('/');
                 });
 
@@ -82,31 +83,33 @@ function FreeProduction({ equipmentId, equipmentName, location }) {
 
     const handledClickSave = () => {
 
-        const processData = preDatafreeProduction(dateSelected, turnSelected, inputValues)
-        const report = dataNewReport(equipmentId, equipmentName, location, processData)
 
-   
+
+
+        const processData = preDatafreeProduction(dateSelected, turnSelected, inputValues)
+
+        const report = dataNewReport(equipmentId, equipmentName, location, processData)
 
         const authData = getLocalStorage('authData')
         if (!authData || !authData.auth && !authData.token) {
             navigate('/');
 
-        } else {           
+        } else {
 
-            fetchSetReport('http://localhost:3000/app/v1/processData/addProduction', authData.token, report               
+
+            fetchSetReport('http://localhost:3000/app/v1/processData/addProduction', authData.token, report
             ).then(response => {
-                console.log(response)
-            }).catch(e => {
-                console.log(e)
+                eventBasic('success', 'Producción Liberada!')
+            }).catch(error => {
+                eventBasic('error', error)
             })
         }
 
+
+
+
+
     }
-
-
-
-
-
 
 
 

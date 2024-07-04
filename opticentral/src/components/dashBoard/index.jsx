@@ -42,6 +42,10 @@ function DashBoard() {
 
     const brands = dataBrands()
 
+    /* useEffect(()=>{
+        dateContext(date)
+    },[]) */
+
     useEffect(() => {
         dateContext(date)
         turnContext(dataTurn)
@@ -59,9 +63,10 @@ function DashBoard() {
             if (!authData || !authData.auth && !authData.token) {
                 navigate('/')
             } else {
-                //Peticion GET ApI
-
+                //Peticion GET ApI              
+             
                 fetchOneData('http://localhost:3000/app/v1/processData', code, date, dataTurn, authData.token).then(result => {
+                    
                     if (!result.body.auth) {
                         navigate('/')
 
@@ -118,7 +123,7 @@ function DashBoard() {
                                 <p className="control pl-2">
                                     <span className="select">
                                         <select name="" id="" value={dataTurn} onChange={handledOnChangeTurn}>
-                                            <option> turno 1</option>
+                                            <option>Turno 1</option>
                                             <option>Turno 2</option>
                                             <option>Turno 3</option>
                                         </select>
@@ -146,7 +151,7 @@ function DashBoard() {
 
                             <div className="box is-custom-box-detail">
 
-                                {activateDeatilProduction && <MainDetail />}
+                               {/*  {activateDeatilProduction && <MainDetail />} */}
 
 
                                 {permissonsRole && <FreeProduction equipmentId={code} equipmentName={name}

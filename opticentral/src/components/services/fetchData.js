@@ -50,7 +50,7 @@ function fetchOneData(url, equipmentId, date, turn, token) {
 function fetchSetReport(url, token, data) {
     return new Promise((resolve, reject) => {   
         
-        console.log(data)
+        
         fetch(url, {
             method: 'POST',
             headers: {

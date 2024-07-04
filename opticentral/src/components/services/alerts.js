@@ -22,10 +22,22 @@ function textUnderMessage(title, text, icon){
       });
 }
 
+function eventBasic(icon,message){
+
+    Swal.fire({
+        position: "top-end",
+        icon: icon,
+        title: message,
+        showConfirmButton: false,
+        timer: 1500
+      });
+}
+
 export{
     successAlert,
     basicMessage,
-    textUnderMessage
+    textUnderMessage,
+    eventBasic
 }
 
 

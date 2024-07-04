@@ -8,8 +8,8 @@ const DateContext = createContext();
 
 const DateProvider = ({ children }) => {
 
-    const [dateSelected, setDateSelected]= useState('');
-    const [turnSelected, setTurnSelected]= useState('')
+    const [dateSelected, setDateSelected]= useState("");
+    const [turnSelected, setTurnSelected]= useState("");
 
     const dateContext =(info)=>{
         setDateSelected(info)
