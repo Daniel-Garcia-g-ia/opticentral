@@ -17,6 +17,7 @@ import { NavbarContext } from "../context/NavbarContext";
 import { DateContext } from "../context/DateContext";
 
 import { basicMessage, textUnderMessage } from "../services/alerts";
+import { ImInsertTemplate } from "react-icons/im";
 
 
 
@@ -31,12 +32,21 @@ function DashBoard() {
     const { permissonsRole } = useContext(NavbarContext)
     const { dateContext } = useContext(DateContext);
     const { turnContext } = useContext(DateContext)
-    const [activateDeatilProduction, setActivateDetailsProduction] = useState(false)
+    const [activateDeatilProduction, setActivateDetailsProduction] = useState(true)
     const [date, setDate] = useState(" ");
     const [dataTurn, setDataTurn] = useState("Turno 1");
     const [selectedDate, setSelectedDate] = useState();
+    const [dataLength, setDataLength] = useState(0);
+    const [report_id, setReport_id] = useState([]);
+    const [processDataId, setProcessDataId] = useState([]);
+    const [productionId, setProductionId] = useState([]);
+    const [reportId, setReportId] = useState([]);
+    const [brandName, setBrandName] = useState([]);
+    const [volumeAmount, setVolemeAmount] = useState([]);
+    const [brewId, setBrewId] = useState([]);
     const { equipment } = location.state || {};
     const { id, code, name, place } = equipment;
+    const [dataSelected, setDataSelected] = useState();
 
     const [activeAddReport, setActiveAddReport] = useState(false)
 
@@ -64,9 +74,9 @@ function DashBoard() {
                 navigate('/')
             } else {
                 //Peticion GET ApI              
-             
+
                 fetchOneData('http://localhost:3000/app/v1/processData', code, date, dataTurn, authData.token).then(result => {
-                    
+
                     if (!result.body.auth) {
                         navigate('/')
 
@@ -75,12 +85,70 @@ function DashBoard() {
                             if (!result.body.data[0].processData[0].release) {
                                 textUnderMessage('Producción sin liberar', 'Informar al líder de turno', 'warning')
 
+
                             } else {
-                                setActivateDetailsProduction(true)
+                                //Obtiene informacion para agregar reportes  
+                                
+                                
+
+                                setDataLength(result.body.data[0].processData[0].production.length)
+                                const ids = result.body.data.map(item => item._id)
+                                setReport_id(ids)
+
+                                const processDataIds = result.body.data.flatMap(item => (
+                                    item.processData.map(item => item._id)
+                                ))
+
+                                setProcessDataId(processDataIds);
+
+                                const productionIds = result.body.data.flatMap(item => (
+                                    item.processData.flatMap(process =>
+                                        process.production.map(item => item._id)
+
+                                    )
+                                ))
+                                setProductionId(productionIds)
+
+                                const reportIds = result.body.data.flatMap(item=>(
+                                    item.processData.flatMap(process => (
+                                           process.production.flatMap(report => (
+                                            report.report.map(item=>item._id)
+                                           ))                                         
+                                    ))
+                                ))
+
+                                setReportId(reportIds)
+                                
+
+                                const brands = result.body.data.flatMap(item =>
+                                    item.processData.flatMap(process =>
+                                        process.production.map(production => production.brand)
+                                    )
+                                );
+                                setBrandName(brands);
+                                const volumenes = result.body.data.flatMap(item =>
+                                    item.processData.flatMap(process =>
+                                        process.production.map(production => production.volume)
+                                    )
+                                );
+                                setVolemeAmount(volumenes);
+
+                                const brewIds = result.body.data.flatMap(item => (
+                                    item.processData.flatMap(process =>
+                                        process.production.map(production => production.brewId)
+                                    )
+                                ));
+
+                                setBrewId(brewIds)
+
+
+
                             }
 
                         } else {
                             basicMessage('Sin datos registrados')
+                            setDataLength(result.body.data.length)
+
                         }
                     }
                 }).catch(error => {
@@ -94,11 +162,13 @@ function DashBoard() {
 
     }, [selectedDate])
 
-    const handledClickAdd = () => {
+    const handledClickAdd = (data) => {
+        setActivateDetailsProduction(!activateDeatilProduction)
         setActiveAddReport(true)
+        setDataSelected(data)
     }
     const handledOnChangeDate = (e) => {
-        setDate(e.target.value)       
+        setDate(e.target.value)
         setSelectedDate(!selectedDate)
     }
     const handledOnChangeTurn = (e) => {
@@ -131,9 +201,9 @@ function DashBoard() {
                                 </p>
                             </div>
                             <div className="box is-custom-box-gantt">
-                                <span className="custom-position-add" onClick={handledClickAdd}>
+                                {/*  <span className="custom-position-add" onClick={handledClickAdd}>
                                     < IoMdAddCircleOutline size={26} />
-                                </span>
+                                </span> */}
 
 
                             </div>
@@ -150,23 +220,24 @@ function DashBoard() {
 
 
                             <div className="box is-custom-box-detail">
+                                {activateDeatilProduction && Array.from({ length: dataLength }, (_, index) => (
+                                    <MainDetail key={index} index={index} _id={report_id[index]} processDataId={processDataId[index]}
+                                        productionId={productionId[index]} reportId={reportId[index]}
+                                        brand={brandName[index]} volume={volumeAmount[index]} brewId={brewId[index]}
+                                        handledClickAdd={handledClickAdd} />
+                                ))}
 
-                               {/*  {activateDeatilProduction && <MainDetail />} */}
 
-
-                                {permissonsRole && <FreeProduction equipmentId={code} equipmentName={name}
+                                {permissonsRole && <FreeProduction
+                                    equipmentId={code}
+                                    equipmentName={name}
                                     location={place} />}
 
-
-
-
-
-                                {activeAddReport && <AddReport activeAddReport={activeAddReport} setActiveAddReport={setActiveAddReport} />}
-
-
-
-
-
+                                {activeAddReport && <AddReport
+                                    activeAddReport={activeAddReport}
+                                    setActiveAddReport={setActiveAddReport}
+                                    setActivateDetailsProduction={setActivateDetailsProduction}
+                                    data={dataSelected} />}
 
                             </div>
 

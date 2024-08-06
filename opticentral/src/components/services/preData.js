@@ -22,7 +22,7 @@ function findMaxBrewId(processData) {
 
 function dataNewReport(equipmentId, equipmentName, location, processData) {
 
-    
+
     return {
         equipmentId: equipmentId,
         equipmentName: equipmentName,
@@ -37,7 +37,12 @@ function dataNewReport(equipmentId, equipmentName, location, processData) {
                 volume: processData.production[index].volume,
                 startTime: processData.production[index].dateInit,
                 endTime: processData.production[index].dateEnd,
-                release: processData.production[index].release
+                release: processData.production[index].release,
+                report:[{
+                    productionReportItem: []
+                }
+                    
+                ]
             }))
         }
 
@@ -48,34 +53,51 @@ function dataNewReport(equipmentId, equipmentName, location, processData) {
 
 }
 
-function preDatafreeProduction (date, turn, inputValues){
+function preDatafreeProduction(date, turn, inputValues) {
 
-    
 
-    
     const allReleased = Object.keys(inputValues).every(index => inputValues[index].release === true);
-    
-    const release = allReleased ? true : false;
-   
 
-    return{
+    const release = allReleased ? true : false;
+
+
+    return {
         date: date,
         turn: turn,
-        release: release ,
+        release: release,
         production: Object.keys(inputValues).map(index => ({
             brand: inputValues[index].brand,
             brewId: inputValues[index].brewId,
             volume: inputValues[index].volume,
             startTime: inputValues[index].dateInit,
             endTime: inputValues[index].dateEnd,
-            release: inputValues[index].release
+            release: inputValues[index].release,
+                        
         }))
 
     }
 }
+
+function preDataReportItemProduction(dataIds, dataReportProdcution) {
+    return {
+        processDataId: dataIds.processDataId,
+        productionId: dataIds.productionId,
+        reportId: dataIds.reportId,
+        startTime: dataReportProdcution.startTime,
+        endTime: dataReportProdcution.endTime,
+        totalTime: dataReportProdcution.totalTime,
+        volume: dataReportProdcution.volume
+    }
+
+
+}
+
+
+
 export {
     flatArray,
     findMaxBrewId,
     dataNewReport,
-    preDatafreeProduction
+    preDatafreeProduction,
+    preDataReportItemProduction
 }

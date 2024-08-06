@@ -48,14 +48,38 @@ function fetchOneData(url, equipmentId, date, turn, token) {
 }
 
 function fetchSetReport(url, token, data) {
-    return new Promise((resolve, reject) => {   
-        
-        
+    return new Promise((resolve, reject) => {
+
+
         fetch(url, {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",
                 "x-access-token": token
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => resolve(data))
+            .catch(error => reject(error));
+    });
+}
+
+
+function fetchUpdateReportProduction(url, reportId, token, data) {
+    return new Promise((resolve, reject) => {
+
+        fetch(`${url}/${reportId}`, {
+            method: 'PUT',
+            headers: {
+                "Content-Type": "application/json",
+                "x-access-token": token
+
             },
             body: JSON.stringify(data)
         })
@@ -67,13 +91,16 @@ function fetchSetReport(url, token, data) {
         })
         .then(data => resolve(data))
         .catch(error => reject(error));
-    });
+
+    })
 }
+
 
 
 export {
     fetchData,
     fetchOneData,
-    fetchSetReport
+    fetchSetReport,
+    fetchUpdateReportProduction
 
 };
