@@ -14,10 +14,10 @@ function AddProduction() {
     const [time, setTime] = useState(0);
 
     const [dataReport, setDataReport] = useState({
-        startTime: 0,
-        endTime: 0,
-        totalTime: 0,
-        volume: 0
+        startTime: null,
+        endTime: null,
+        totalTime: null,
+        volume: null
     })
 
     useEffect(() => {
@@ -54,6 +54,7 @@ function AddProduction() {
 
         }))
 
+
     }
 
     const handledEndTimeChange = (e) => {
@@ -86,7 +87,7 @@ function AddProduction() {
     return (
         <>
             <section className="columns is-centered">
-                <label className="custom-label-total-report">Tiempo Total de Reporte: {time} h</label>
+                <label className="custom-label-total-report">Tiempo Total de Reporte: {timeDifference} h</label>
                 
 
                 <div className="columns is-centered has-text-centered">

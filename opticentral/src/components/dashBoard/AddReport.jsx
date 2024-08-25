@@ -3,10 +3,12 @@ import { useState, useContext, useEffect } from "react";
 import { ReportContext } from "../context/ReportContext";
 import { getLocalStorage } from "../services/LocalStorage";
 import { fetchUpdateReportProduction } from "../services/fetchData";
-import { preDataReportItemProduction } from "../services/preData";
+import { preDataReportItemProduction, validateDataWhithoutNull, preDataReportItemfault, preDataReportItemExternalStop, preDataReportItemUnscheduled } from "../services/preData";
 import { eventBasic, textUnderMessage } from "../services/alerts";
 import AddProduction from "./AddProduction";
 import AveriaReport from "./AveriaReport";
+import ParoExterno from "./ParoExterno";
+import TurnoNoProgramado from "./TurnoNoProgramado";
 
 function AddReport({ activeAddReport, setActiveAddReport, setActivateDetailsProduction, data }) {
     const { dataReportProduction } = useContext(ReportContext)
@@ -14,9 +16,14 @@ function AddReport({ activeAddReport, setActiveAddReport, setActivateDetailsProd
     const [saveReport, setSaveReport] = useState(false);
     const [activeSetProductionReport, setActiveProductionReport] = useState(false);
     const [activeAveriaReport, setActiveAveriaReport] = useState(false);
+    const [activeParoExterno, setActiveParoExterno] = useState(false);
+    const [activeTurnoNoProgramado, setActiveTurnoNoProgramado] = useState(false);
+    const [dataFetch, setDataFetch] = useState({})
 
     const [productionReport, setProductionReport] = useState(false);
     const [brand, setBrand] = useState(data.brand);
+
+
 
 
 
@@ -25,16 +32,36 @@ function AddReport({ activeAddReport, setActiveAddReport, setActivateDetailsProd
 
         // Effect active report production
 
-        if (typereport === 'Producción') {
-            setActiveProductionReport(!activeSetProductionReport);
-            setActiveAveriaReport(false);
 
+        if (typereport === 'Producción') {
+            setActiveTurnoNoProgramado(false);
+            setActiveAveriaReport(false);
+            setActiveParoExterno(false);
+            setActiveAveriaReport(false);
+            setActiveProductionReport(!activeSetProductionReport);
         }
 
         if (typereport === 'Avería') {
+            setActiveTurnoNoProgramado(false);
+            setActiveAveriaReport(false);
             setActiveProductionReport(false);
+            setActiveParoExterno(false);
             setActiveAveriaReport(!activeAveriaReport);
         }
+
+        if (typereport === 'Paro Externo') {
+            setActiveTurnoNoProgramado(false);
+            setActiveProductionReport(false);
+            setActiveAveriaReport(false);
+            setActiveParoExterno(!activeParoExterno);
+        }
+        if (typereport === 'Turno no Programado') {
+            setActiveProductionReport(false);
+            setActiveAveriaReport(false);
+            setActiveParoExterno(false);
+            setActiveTurnoNoProgramado(!activeTurnoNoProgramado);
+        }
+
 
 
 
@@ -42,10 +69,6 @@ function AddReport({ activeAddReport, setActiveAddReport, setActivateDetailsProd
     }, [typereport])
 
     useEffect(() => {
-
-        //Data configuration for the PUT fetch request 
-
-        const dataFetch = preDataReportItemProduction(data, dataReportProduction)
 
         // Validate user login token
 
@@ -77,8 +100,31 @@ function AddReport({ activeAddReport, setActiveAddReport, setActivateDetailsProd
         setActiveAddReport(false)
     }
     const handledClickSaveReport = () => {
-        setSaveReport(!saveReport)
 
+
+        const validateReport = validateDataWhithoutNull(dataReportProduction)
+        if (validateReport) {
+            textUnderMessage("¡Validar Información!", "Por favor, ingrese información válida y completa !", "warning")
+
+        } else {
+
+            if (typereport === 'Producción') {
+                setDataFetch(preDataReportItemProduction(data, dataReportProduction));
+                setSaveReport(!saveReport);
+            }else if (typereport === 'Avería') {
+                 setDataFetch(preDataReportItemfault(data, dataReportProduction));
+                 setSaveReport(!saveReport);
+             } else if (typereport === 'Paro Externo') {
+                 setDataFetch(preDataReportItemExternalStop(data, dataReportProduction));
+                 setSaveReport(!saveReport); 
+             }else if (typereport ==='Turno no Programado'){
+
+                console.log(dataReportProduction)
+                setDataFetch(preDataReportItemUnscheduled(data,dataReportProduction));
+                setSaveReport(!saveReport); 
+
+             }
+        }
     }
 
     const HandledChanceReport = (e) => {
@@ -110,19 +156,22 @@ function AddReport({ activeAddReport, setActiveAddReport, setActivateDetailsProd
                                         <option>Producción</option>
                                         <option>Avería</option>
                                         <option>Paro Externo</option>
-                                        <option>Turno no programado</option>
+                                        <option>Turno no Programado</option>
                                     </select>
                                 </div>
 
                             </div>
 
-                            
+
                         </div>
 
 
                     </div>
                     {activeSetProductionReport && <AddProduction />}
-                    {activeAveriaReport && <AveriaReport />   }
+                    {activeAveriaReport && <AveriaReport />}
+                    {activeParoExterno && <ParoExterno />}
+                    {activeTurnoNoProgramado && <TurnoNoProgramado />}
+
 
 
 
@@ -140,7 +189,7 @@ function AddReport({ activeAddReport, setActiveAddReport, setActivateDetailsProd
                     </div>
 
 
-                
+
 
                 </div>
 
@@ -154,5 +203,8 @@ function AddReport({ activeAddReport, setActiveAddReport, setActivateDetailsProd
         </>
     )
 }
+
+
+
 
 export default AddReport;

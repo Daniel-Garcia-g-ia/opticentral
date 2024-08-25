@@ -118,6 +118,8 @@ function DashBoard() {
                                 ))
 
                                 setReportId(reportIds)
+
+                               
                                 
 
                                 const brands = result.body.data.flatMap(item =>

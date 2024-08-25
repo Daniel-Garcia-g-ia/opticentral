@@ -158,6 +158,9 @@
 .custom-width-add-report {
     width: 16rem;
 }
+.custom-width-add-report-averia {
+    width: 12rem;
+}
 
 .is-custom-width-textarea {
     width: 24rem;
@@ -226,8 +229,28 @@
     left: 1rem;
     top: 3.5rem;
 }
+.custom-label-total-report-stop{
+    padding: 0.3rem 0.5rem;
+    border: solid 5px #4B6DAE;
+    position: absolute;
+    left: 1rem;
+    top: 3.5rem; 
+}
+.custom-label-total-report-noProgram{
+    padding: 0.3rem 0.5rem;
+    border: solid 5px #BB8493;
+    position: absolute;
+    left: 1rem;
+    top: 3.5rem; 
+
+}
+
 
 
 .custom-addreport{
-    padding-top: 6rem;
+    padding-top: 4rem;
+}
+
+.text-area-width{
+    width: 24rem;
 }

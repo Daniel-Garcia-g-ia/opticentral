@@ -38,10 +38,14 @@ function dataNewReport(equipmentId, equipmentName, location, processData) {
                 startTime: processData.production[index].dateInit,
                 endTime: processData.production[index].dateEnd,
                 release: processData.production[index].release,
-                report:[{
-                    productionReportItem: []
+                report: [{
+                    productionReportItem: [],
+                    productionFaultItem: [],
+                    productionExternalStopItmem: [],
+                    productionUnscheduled: [],
+
                 }
-                    
+
                 ]
             }))
         }
@@ -72,7 +76,7 @@ function preDatafreeProduction(date, turn, inputValues) {
             startTime: inputValues[index].dateInit,
             endTime: inputValues[index].dateEnd,
             release: inputValues[index].release,
-                        
+
         }))
 
     }
@@ -80,6 +84,8 @@ function preDatafreeProduction(date, turn, inputValues) {
 
 function preDataReportItemProduction(dataIds, dataReportProdcution) {
     return {
+        productionReportItem:"productionReportItem",
+        typeReport:"production",
         processDataId: dataIds.processDataId,
         productionId: dataIds.productionId,
         reportId: dataIds.reportId,
@@ -92,6 +98,62 @@ function preDataReportItemProduction(dataIds, dataReportProdcution) {
 
 }
 
+function preDataReportItemfault(dataIds,dataReportFault){
+    return{
+        productionFaultItem:"productionFaultItem",
+        typeReport:"fault",
+        processDataId: dataIds.processDataId,
+        productionId: dataIds.productionId,
+        reportId: dataIds.reportId,
+        startTime: dataReportFault.startTime,
+        endTime: dataReportFault.endTime,
+        totalTime: dataReportFault.totalTime,
+        system: dataReportFault.system,
+        subSystem: dataReportFault.subSystem,
+        component: dataReportFault.component,
+        failureMode: dataReportFault.failureMode,
+        solution: dataReportFault.solution,
+        
+    }
+}
+function preDataReportItemExternalStop(dataIds,dataReportExternalStop){
+    return{
+        productionExternalStopItem:"productionExternalStopItem",
+        typeReport:"external",
+        processDataId: dataIds.processDataId,
+        productionId: dataIds.productionId,
+        reportId: dataIds.reportId,
+        startTime:dataReportExternalStop.startTime,
+        endTime:dataReportExternalStop.endTime,
+        totalTime:dataReportExternalStop.totalTime,
+        typeStop: dataReportExternalStop.typeStop,
+        detailStop: dataReportExternalStop.detailStop,
+        descriptionStop: dataReportExternalStop.descriptionStop,
+        solution: dataReportExternalStop.solution
+    }
+}
+function preDataReportItemUnscheduled(dataIds,dataReportUnschedule){
+    return{
+        productionUnscheduledItem:"productionUnscheduledItem",
+        typeReport:"Unscheduled",
+        processDataId: dataIds.processDataId,
+        productionId: dataIds.productionId,
+        reportId: dataIds.reportId,
+        startTime:dataReportUnschedule.startTime,
+        endTime:dataReportUnschedule.endTime,
+        totalTime:dataReportUnschedule.totalTime,        
+        
+    }
+}
+
+function validateDataWhithoutNull(data) {
+
+    return Object.values(data).some(value => value === null || value ==='');
+
+
+
+}
+
 
 
 export {
@@ -99,5 +161,9 @@ export {
     findMaxBrewId,
     dataNewReport,
     preDatafreeProduction,
-    preDataReportItemProduction
+    preDataReportItemProduction,
+    preDataReportItemfault,
+    preDataReportItemExternalStop,
+    preDataReportItemUnscheduled,
+    validateDataWhithoutNull
 }
