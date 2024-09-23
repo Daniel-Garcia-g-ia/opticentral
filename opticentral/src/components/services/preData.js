@@ -156,6 +156,63 @@ function validateDataWhithoutNull(data) {
 
 
 
+
+
+// Función para transformar un array de reportes en el formato deseado
+function transformReportItems(reportItems, name, bg, marca, brewId) {
+    return reportItems.map(item => ({
+        name,
+        tiempoTotal: item.totalTime,
+        inicio: item.startTime,
+        fin: item.endTime,
+        bg: bg,  
+        marca: marca,
+        brewId: brewId
+
+       
+    }));
+}
+
+function sortReportsByStartTime(reports) {
+    return reports.sort((a, b) => {
+        const timeA = new Date(`1970-01-01T${a.inicio}:00`);
+        const timeB = new Date(`1970-01-01T${b.inicio}:00`);
+        return timeA - timeB;
+    });
+}
+
+//funcion extraer los reportes
+
+function extractedReportData(data) {
+    let allTransformedData = [];
+
+    data.forEach(dataItem => {
+        const report = dataItem.report[0]; // Acceder al reporte en el dataItem actual
+        
+        // Transformar cada tipo de reporte (producción, avería, etc.) y agregarlo al array
+        const transformedData = [            
+            ...transformReportItems(report.productionReportItem, 'Producción', '#A5DD9B', dataItem.brand, dataItem.brewId),
+            ...transformReportItems(report.productionFaultItem, 'Avería', '#F68D2B', dataItem.brand, dataItem.brewId),
+            ...transformReportItems(report.productionExternalStopItem, 'Paro Externo', '#4B6DAE', dataItem.brand, dataItem.brewId),
+            ...transformReportItems(report.productionUnscheduledItem, 'No Programado', '#BB8493', dataItem.brand, dataItem.brewId)
+        ];
+
+        allTransformedData = allTransformedData.concat(transformedData); // Agregar los datos transformados al array total
+    });
+
+    // Ordenar todos los reportes transformados por la hora de inicio
+    return sortReportsByStartTime(allTransformedData);
+}
+
+// Función separada para calcular el tiempo total
+function extractedTotalTime(dataArray) {
+    // Usamos reduce para sumar los tiempos totales de cada reporte
+    const totalTime = dataArray.reduce((sum, report) => sum + report.tiempoTotal, 0);
+    return totalTime.toFixed(2);
+}
+
+
+
 export {
     flatArray,
     findMaxBrewId,
@@ -165,5 +222,7 @@ export {
     preDataReportItemfault,
     preDataReportItemExternalStop,
     preDataReportItemUnscheduled,
-    validateDataWhithoutNull
+    validateDataWhithoutNull,
+    extractedReportData,
+    extractedTotalTime
 }

@@ -52,12 +52,12 @@ function MainDetail({ _id, processDataId, productionId, reportId, brand, volume,
                             <input className="input is-small" type="text" placeholder=" " disabled />
                         </div>
                     </div>
-                    <div className="field pl-5">
+                    {/* <div className="field pl-5">
                         <label className=""> Total Averias  </label>
                         <div className="control is-custom-small">
                             <input className="input is-small" type="text" placeholder=" " disabled />
                         </div>
-                    </div>
+                    </div> */}
                 </div>
 
             </div>

@@ -33,9 +33,9 @@ function Navbar() {
 
                         <div id="navbarBasicExample" className="navbar-menu ">
                             <div className="navbar-start">
-                                <a className="navbar-item  ">
+                                {/* <a className="navbar-item  ">
                                     Home
-                                </a>
+                                </a> */}
 
                                 <a className="navbar-item" onClick={handeldClickProduction}>
                                     Producción

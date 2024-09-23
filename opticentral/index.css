@@ -120,6 +120,7 @@
 }
 
 .is-custom-box-gantt {
+    padding: 0.3rem;
     position: relative;
     background-color: #D9D9D9;
     width: 100%;
@@ -158,6 +159,7 @@
 .custom-width-add-report {
     width: 16rem;
 }
+
 .custom-width-add-report-averia {
     width: 12rem;
 }
@@ -213,44 +215,94 @@
 
 }
 
-.custom-label-total-report{
-   
+.custom-label-total-report {
+
     padding: 0.3rem 0.5rem;
     border: solid 5px #A5DD9B;
     position: absolute;
     left: 1rem;
     top: 3.5rem;
 }
-.custom-label-total-report-averia{
-   
+
+.custom-label-total-report-averia {
+
     padding: 0.3rem 0.5rem;
-    border: solid 5px #F68D2B;
+    border:  5px solid #F68D2B;
     position: absolute;
     left: 1rem;
     top: 3.5rem;
 }
-.custom-label-total-report-stop{
+
+.custom-label-total-report-stop {
     padding: 0.3rem 0.5rem;
     border: solid 5px #4B6DAE;
     position: absolute;
     left: 1rem;
-    top: 3.5rem; 
+    top: 3.5rem;
 }
-.custom-label-total-report-noProgram{
+
+.custom-label-total-report-noProgram {
     padding: 0.3rem 0.5rem;
     border: solid 5px #BB8493;
     position: absolute;
     left: 1rem;
-    top: 3.5rem; 
+    top: 3.5rem;
 
 }
 
 
 
-.custom-addreport{
+.custom-addreport {
     padding-top: 4rem;
 }
 
-.text-area-width{
+.text-area-width {
     width: 24rem;
+}
+
+.custom-gannt-bar {
+    padding: 0;
+    margin-top: 0.1rem;
+    border-radius: 40px;
+}
+
+.custom-title-gannt-bar {
+    font-family: 'inter', sans-serif;
+    font-size: 20px;
+    color: black;
+
+
+}
+
+.is-custom-card-model-detail {
+    position: absolute;
+    left: -50px;
+    top: 0px;
+    z-index: 1000;
+   
+
+    
+   
+}
+
+.is-custom-gannt-bar{
+    position: relative;
+}
+.is-custom-card-model-detail{
+    width: 25vw;
+
+}
+
+.is-custom-separator{
+    border: solid, #D9D9D9 , 2px;
+    
+}
+
+.is-custom-total-time{ 
+
+    border-bottom: solid #5d5f6448;
+    padding: 5px 0 5px 5px;
+   /*  border:solid 2px, red; */
+    font-family: 'Ubuntu', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: 20px;
 }

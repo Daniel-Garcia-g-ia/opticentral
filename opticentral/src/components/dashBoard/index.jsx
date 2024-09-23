@@ -7,13 +7,16 @@ import Navbar from "../navbar";
 import MainDetail from "./MainDetail";
 import FreeProduction from "./FreeProduction";
 import AddReport from "./AddReport";
+import TotalReportTime from "./TotalReportTime";
 import { dataBrands } from "../../assets/data/data"
 
 import { IoMdAddCircleOutline } from "react-icons/io";
 import { fetchData } from "../services/fetchData";
 import { fetchOneData } from "../services/fetchData";
 import { getLocalStorage } from "../services/LocalStorage";
+import { extractedReportData, extractedTotalTime } from "../services/preData"
 import { NavbarContext } from "../context/NavbarContext";
+import Gannt from "./Gannt";
 import { DateContext } from "../context/DateContext";
 
 import { basicMessage, textUnderMessage } from "../services/alerts";
@@ -33,10 +36,13 @@ function DashBoard() {
     const { dateContext } = useContext(DateContext);
     const { turnContext } = useContext(DateContext)
     const [activateDeatilProduction, setActivateDetailsProduction] = useState(true)
+    const [activeTotalTime, setActiveTime] = useState(true)
     const [date, setDate] = useState(" ");
     const [dataTurn, setDataTurn] = useState("Turno 1");
     const [selectedDate, setSelectedDate] = useState();
     const [dataLength, setDataLength] = useState(0);
+    const [reportLength, setReportLength] = useState(0);
+    const [dataExtractedReport, setDataExtractedReport] = useState(0);
     const [report_id, setReport_id] = useState([]);
     const [processDataId, setProcessDataId] = useState([]);
     const [productionId, setProductionId] = useState([]);
@@ -47,33 +53,53 @@ function DashBoard() {
     const { equipment } = location.state || {};
     const { id, code, name, place } = equipment;
     const [dataSelected, setDataSelected] = useState();
+    const [totalTimeExtraxtesReport, setTotalTimeExtractedReport] = useState(0)
 
     const [activeAddReport, setActiveAddReport] = useState(false)
 
     const brands = dataBrands()
 
-    /* useEffect(()=>{
-        dateContext(date)
-    },[]) */
+    useEffect(()=>{
+        if(permissonsRole){            
+            setActiveTime(false)
+            setActivateDetailsProduction(false)
+        }else{
+            setActiveTime(true) 
+            setActivateDetailsProduction(true)
+            setSelectedDate(!selectedDate)
+
+        }
+
+      
+        
+        
+    },[permissonsRole])
 
     useEffect(() => {
         dateContext(date)
         turnContext(dataTurn)
+        
+        
 
-        if (!isFirstRender.current) {
+        /* if (!isFirstRender.current) {
             isFirstRender.current = true;
+            console.log('datods')
             return;
-        }
-        if (permissonsRole) {
+        } */
+        if (permissonsRole) {    
+               
+           
             return;
 
         } else {
+            
             const authData = getLocalStorage('authData')
 
             if (!authData || !authData.auth && !authData.token) {
                 navigate('/')
             } else {
-                //Peticion GET ApI              
+                //Peticion GET ApI   
+                         
 
                 fetchOneData('http://localhost:3000/app/v1/processData', code, date, dataTurn, authData.token).then(result => {
 
@@ -81,18 +107,29 @@ function DashBoard() {
                         navigate('/')
 
                     } else {
+                        
                         if (result.body && result.body.data && result.body.data.length > 0) {
                             if (!result.body.data[0].processData[0].release) {
                                 textUnderMessage('Producción sin liberar', 'Informar al líder de turno', 'warning')
+                                setReportLength(0)
 
 
                             } else {
                                 //Obtiene informacion para agregar reportes  
-                                
-                                
+                                setActiveTime(true)
 
+
+                                const extractedReport = extractedReportData(result.body.data[0].processData[0].production)
+
+                                setReportLength(extractedReport.length)
+                                setDataExtractedReport(extractedReport)
+                                const totalTimeExtracted = extractedTotalTime(extractedReport)
+                                setTotalTimeExtractedReport(totalTimeExtracted)
                                 setDataLength(result.body.data[0].processData[0].production.length)
+
                                 const ids = result.body.data.map(item => item._id)
+
+
                                 setReport_id(ids)
 
                                 const processDataIds = result.body.data.flatMap(item => (
@@ -107,20 +144,21 @@ function DashBoard() {
 
                                     )
                                 ))
+                                //console.log('production id',productionIds)
                                 setProductionId(productionIds)
 
-                                const reportIds = result.body.data.flatMap(item=>(
+                                const reportIds = result.body.data.flatMap(item => (
                                     item.processData.flatMap(process => (
-                                           process.production.flatMap(report => (
-                                            report.report.map(item=>item._id)
-                                           ))                                         
+                                        process.production.flatMap(report => (
+                                            report.report.map(item => item._id)
+                                        ))
                                     ))
                                 ))
-
+                                // console.log('report id', reportIds)
                                 setReportId(reportIds)
 
-                               
-                                
+
+
 
                                 const brands = result.body.data.flatMap(item =>
                                     item.processData.flatMap(process =>
@@ -150,6 +188,8 @@ function DashBoard() {
                         } else {
                             basicMessage('Sin datos registrados')
                             setDataLength(result.body.data.length)
+                            setActiveTime(false)
+                            setReportLength(0)
 
                         }
                     }
@@ -168,6 +208,7 @@ function DashBoard() {
         setActivateDetailsProduction(!activateDeatilProduction)
         setActiveAddReport(true)
         setDataSelected(data)
+        /* setSelectedDate(!selectedDate) */
     }
     const handledOnChangeDate = (e) => {
         setDate(e.target.value)
@@ -194,7 +235,7 @@ function DashBoard() {
 
                                 <p className="control pl-2">
                                     <span className="select">
-                                        <select name="" id="" value={dataTurn} onChange={handledOnChangeTurn}>
+                                        <select name="turn" id="turn-select" value={dataTurn} onChange={handledOnChangeTurn}>
                                             <option>Turno 1</option>
                                             <option>Turno 2</option>
                                             <option>Turno 3</option>
@@ -203,9 +244,16 @@ function DashBoard() {
                                 </p>
                             </div>
                             <div className="box is-custom-box-gantt">
-                                {/*  <span className="custom-position-add" onClick={handledClickAdd}>
-                                    < IoMdAddCircleOutline size={26} />
-                                </span> */}
+
+                                {Array.from({ length: reportLength }, (_, index) => (
+                                    <Gannt key={index}
+                                        index={index}
+                                        bg='#BB8493'
+                                        data={dataExtractedReport[index]}
+                                    />
+                                ))}
+
+
 
 
                             </div>
@@ -222,8 +270,13 @@ function DashBoard() {
 
 
                             <div className="box is-custom-box-detail">
+
+                                {activeTotalTime &&
+                                    <TotalReportTime data={totalTimeExtraxtesReport} />
+                                }
+
                                 {activateDeatilProduction && Array.from({ length: dataLength }, (_, index) => (
-                                    <MainDetail key={index} index={index} _id={report_id[index]} processDataId={processDataId[index]}
+                                    <MainDetail key={index} index={index} _id={report_id[0]} processDataId={processDataId[0]}
                                         productionId={productionId[index]} reportId={reportId[index]}
                                         brand={brandName[index]} volume={volumeAmount[index]} brewId={brewId[index]}
                                         handledClickAdd={handledClickAdd} />
@@ -239,6 +292,8 @@ function DashBoard() {
                                     activeAddReport={activeAddReport}
                                     setActiveAddReport={setActiveAddReport}
                                     setActivateDetailsProduction={setActivateDetailsProduction}
+                                    setSelectedDate = {setSelectedDate}
+                                    selectedDate= {selectedDate}
                                     data={dataSelected} />}
 
                             </div>
