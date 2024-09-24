@@ -1,0 +1,308 @@
+.custom-size-image {
+    width: 288px;
+    height: 400px;
+    overflow: hidden;
+    transition: box-shadow 0.5s ease;
+
+}
+
+.custom-size-image:hover {
+    transform: scale(1.05);
+    cursor: pointer;
+}
+
+.custom-form-login {
+    margin-right: 10vw;
+
+}
+
+.border {
+    border-radius: 40px;
+
+}
+
+.custom-container-text-login {
+    margin-top: 17vh;
+    position: relative;
+}
+
+.custom-title-login {
+    margin: 0 0 0 10vw;
+    padding: 0 0 0 0;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 45px;
+    font-weight: bold;
+    color: black;
+    /*  position: absolute;
+   left: 0;
+   top: 0; */
+}
+
+.custom-width-login {
+    margin-top: 7vh;
+    width: 100%;
+    background-color: #4461F2;
+    color: #FFFFFF;
+
+}
+
+.custom-containe-login-buttom span {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 4px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 9px;
+    color: #4461f2;
+}
+
+.custom-recover-pass:hover {
+    cursor: pointer;
+}
+
+/* Style Card */
+
+.is-card {
+
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0px 4px 6px rgb(0, 0, 0, 0.1);
+    transition: box-shadow 0.5s ease;
+}
+
+.is-custom-area {
+    color: #203cc9;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10px;
+    z-index: 3;
+}
+
+.is-custom-machine {
+    position: absolute;
+    color: black;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    z-index: 3;
+}
+
+.is-custom-image-card-size {
+    display: flex;
+    align-items: flex-end;
+    border-radius: 10px;
+    width: 80%;
+    overflow: hidden;
+    transition: box-shadow 0.5s ease;
+
+}
+
+.is-custom-card {
+    padding: 1.5rem 0 0 0;
+    display: flex;
+    justify-content: center;
+
+}
+
+.gradient-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 50%;
+    background: linear-gradient(white, 70%, transparent);
+    z-index: 1;
+
+
+}
+
+.is-card:hover {
+    transform: scale(1.05);
+    cursor: pointer;
+}
+
+.is-custom-box-gantt {
+    padding: 0.3rem;
+    position: relative;
+    background-color: #D9D9D9;
+    width: 100%;
+    height: 75vh;
+}
+
+.is-custom-box-detail {
+    margin-left: 10vh;
+    margin-top: 1.8rem;
+    background-color: #D9D9D9;
+    width: fill;
+    height: 75vh;
+}
+
+.custom-position-add {
+    position: absolute;
+    top: 0px;
+    right: -27px;
+}
+
+.custom-position-add:hover {
+    cursor: pointer;
+}
+
+
+.is-custom-small {
+    width: 8rem;
+    height: 1rem;
+}
+
+.custom-label {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    color: #5D5F64;
+}
+
+.custom-width-add-report {
+    width: 16rem;
+}
+
+.custom-width-add-report-averia {
+    width: 12rem;
+}
+
+.is-custom-width-textarea {
+    width: 24rem;
+}
+
+.custom-title-free {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-size: 20px;
+    color: black;
+}
+
+.is-custom-small-amount {
+
+    width: 3rem;
+}
+
+.is-custom-with-select {
+    width: 10rem;
+}
+
+.is-custom-wifth-amount-hl {
+    width: 5rem;
+}
+
+/* .custom-postion-save{
+    position: absolute;
+    bottom: 0px;
+} */
+
+.box-custom {
+    padding-bottom: 0.5rem;
+    border-bottom: solid #5d5f6448;
+}
+
+.brand-title {
+    color: #F26F10;
+}
+
+.is-custom-brand-add-report:hover {
+    cursor: pointer;
+}
+
+.custom-section-add-report {
+    position: relative
+}
+
+.custom-brand-add-report {
+    position: absolute;
+    left: 1rem;
+
+}
+
+.custom-label-total-report {
+
+    padding: 0.3rem 0.5rem;
+    border: solid 5px #A5DD9B;
+    position: absolute;
+    left: 1rem;
+    top: 3.5rem;
+}
+
+.custom-label-total-report-averia {
+
+    padding: 0.3rem 0.5rem;
+    border:  5px solid #F68D2B;
+    position: absolute;
+    left: 1rem;
+    top: 3.5rem;
+}
+
+.custom-label-total-report-stop {
+    padding: 0.3rem 0.5rem;
+    border: solid 5px #4B6DAE;
+    position: absolute;
+    left: 1rem;
+    top: 3.5rem;
+}
+
+.custom-label-total-report-noProgram {
+    padding: 0.3rem 0.5rem;
+    border: solid 5px #BB8493;
+    position: absolute;
+    left: 1rem;
+    top: 3.5rem;
+
+}
+
+
+
+.custom-addreport {
+    padding-top: 4rem;
+}
+
+.text-area-width {
+    width: 24rem;
+}
+
+.custom-gannt-bar {
+    padding: 0;
+    margin-top: 0.1rem;
+    border-radius: 40px;
+}
+
+.custom-title-gannt-bar {
+    font-family: 'inter', sans-serif;
+    font-size: 20px;
+    color: black;
+
+
+}
+
+.is-custom-card-model-detail {
+    position: absolute;
+    left: -50px;
+    top: 0px;
+    z-index: 1000;
+   
+
+    
+   
+}
+
+.is-custom-gannt-bar{
+    position: relative;
+}
+.is-custom-card-model-detail{
+    width: 25vw;
+
+}
+
+.is-custom-separator{
+    border: solid, #D9D9D9 , 2px;
+    
+}
+
+.is-custom-total-time{ 
+
+    border-bottom: solid #5d5f6448;
+    padding: 5px 0 5px 5px;
+   /*  border:solid 2px, red; */
+    font-family: 'Ubuntu', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: 20px;
+}

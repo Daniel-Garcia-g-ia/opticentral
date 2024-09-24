@@ -1,4 +1,6 @@
 import React from "react";
+import './index.css'
+
 
 import { useEffect, useState, useContext } from "react";
 import { Navigate } from "react-router-dom";
