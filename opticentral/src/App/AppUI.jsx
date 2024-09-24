@@ -11,8 +11,7 @@ import { ReportProvider } from "../components/context/ReportContext";
 function AppUI() {
 
 
-    return (
-        <>
+    return (       <>
 
             <ReportProvider>
                 <NavbarProvider>
