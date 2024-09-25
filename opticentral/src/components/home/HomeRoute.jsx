@@ -40,7 +40,7 @@ function HomeRoute() {
             
 
         }
-    }, [isLoggedIn]);
+    }, []);
 
     return (
         <>
