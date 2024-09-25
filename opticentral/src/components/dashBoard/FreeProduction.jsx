@@ -97,7 +97,7 @@ function FreeProduction({ equipmentId, equipmentName, location }) {
         } else {
 
 
-            fetchSetReport('https://backendopticentral.onrender.comapp/v1/processData/addProduction', authData.token, report
+            fetchSetReport('https://backendopticentral.onrender.com/app/v1/processData/addProduction', authData.token, report
             ).then(response => {
                 eventBasic('success', 'Producción Liberada!')
             }).catch(error => {
