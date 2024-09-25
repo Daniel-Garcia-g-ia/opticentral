@@ -101,7 +101,7 @@ function DashBoard() {
                 //Peticion GET ApI   
                          
 
-                fetchOneData('http://localhost:3000/app/v1/processData', code, date, dataTurn, authData.token).then(result => {
+                fetchOneData('https://backendopticentral.onrender.com/app/v1/processData', code, date, dataTurn, authData.token).then(result => {
 
                     if (!result.body.auth) {
                         navigate('/')

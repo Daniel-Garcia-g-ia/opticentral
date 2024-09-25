@@ -37,7 +37,7 @@ function FreeProduction({ equipmentId, equipmentName, location }) {
             navigate('/');
 
         } else {
-            fetchData('http://localhost:3000/app/v1/mostRecentReport/0001', authData.token)
+            fetchData('https://backendopticentral.onrender.com/app/v1/mostRecentReport/0001', authData.token)
                 .then(data => {
                     if (!data.body.auth) {
                         navigate('/');

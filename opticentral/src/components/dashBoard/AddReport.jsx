@@ -89,7 +89,7 @@ function AddReport({ activeAddReport, setActiveAddReport, setActivateDetailsProd
         }else {
             
             
-            fetchUpdateReportProduction('http://localhost:3000/app/v1/updateData', data._id, authData.token, dataFetch)
+            fetchUpdateReportProduction('https://backendopticentral.onrender.com/app/v1/updateData', data._id, authData.token, dataFetch)
             
                 .then(result => {
                     eventBasic('success', 'Reporte, ¡Guardado con exito!')

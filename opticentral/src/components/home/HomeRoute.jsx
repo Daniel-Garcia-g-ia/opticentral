@@ -24,7 +24,7 @@ function HomeRoute() {
             setRedirect(true);
         } else {
             //Peticion GET ApI
-            fetchData('http://localhost:3000/app/v1/equipments',authData.token).then(data =>{
+            fetchData('https://backendopticentral.onrender.com/app/v1/equipments',authData.token).then(data =>{
                 if(!data.body.auth){
                     setRedirect(true);
                 }else{
