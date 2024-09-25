@@ -11,14 +11,8 @@ function HomeRoute() {
     const [redirect, setRedirect] = useState(false);
     const [equipmentData, setEquipmentData] = useState({});
 
-    useEffect(() => {
-
-
-       
+    useEffect(() => {       
         const authData = getLocalStorage('authData')
-
-
-
         if (!authData || !authData.auth && !authData.token) {           
            
             setRedirect(true);
@@ -33,14 +27,10 @@ function HomeRoute() {
                 }
             }).catch(error=>{
                 setRedirect(true)
-            })
-            
-            
-           
-            
+            })          
 
         }
-    }, []);
+    });
 
     return (
         <>
