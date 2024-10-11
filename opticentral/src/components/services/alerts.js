@@ -39,10 +39,10 @@ function processingAction(activate){
   if (activate){
     Swal.fire({
       title: 'Cargando ...',
-      html: 'Por favor espere...',
+      html: 'Por favor espere...',      
       allowOutsideClick:false,
       didOpe:()=>{
-        Swa.showLoading();
+        Swal.showLoading();
       }
     })
   }else{
