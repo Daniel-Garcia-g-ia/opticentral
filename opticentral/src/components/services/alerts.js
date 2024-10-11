@@ -34,8 +34,7 @@ function eventBasic(icon,message){
 }
 
 
-function processingAction(activate){
-  
+function processingAction(activate){  
   if (activate){
     Swal.fire({
       title: 'Cargando ...',
