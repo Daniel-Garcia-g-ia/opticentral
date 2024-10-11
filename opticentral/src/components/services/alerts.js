@@ -58,7 +58,7 @@ function processingAction(){
     }
   });
 
-
+}
 export{
     successAlert,
     basicMessage,
