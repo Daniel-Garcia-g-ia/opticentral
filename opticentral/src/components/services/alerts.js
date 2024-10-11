@@ -33,11 +33,38 @@ function eventBasic(icon,message){
       });
 }
 
+
+function processingAction(activate){
+    Swal.fire({
+        title: "Auto close alert!",
+        html: "I will close in <b></b> milliseconds.",
+        timer: 2000,
+        timerProgressBar: false,
+        didOpen: () => {
+          Swal.showLoading();
+          /* const timer = Swal.getPopup().querySelector("b");
+          timerInterval = setInterval(() => {
+            timer.textContent = `${Swal.getTimerLeft()}`;
+          }, 100); */
+        },
+        willClose: () => {
+          clearInterval(activate);
+        }
+      }).then((result) => {
+        /* Read more about handling dismissals below */
+        if (result.dismiss === Swal.DismissReason.timer) {
+          console.log("I was closed by the timer");
+        }
+      });
+}
+
+
 export{
     successAlert,
     basicMessage,
     textUnderMessage,
-    eventBasic
+    eventBasic,
+    processingAction
 }
 
 

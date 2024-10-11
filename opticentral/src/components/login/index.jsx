@@ -1,5 +1,6 @@
 import React from "react";
-import './index.css'
+import './index.css';
+import processingAction from "../services/alerts.js"
 
 
 import { useEffect, useState, useContext } from "react";
@@ -25,6 +26,8 @@ function Login() {
 
     
     const handleClickLogin = async () => {
+
+        processingAction(false)
         try {
             const userData = await fetchLogin("https://backendopticentral.onrender.com/app/v1/loginUser", email, password)
             login(userData)
