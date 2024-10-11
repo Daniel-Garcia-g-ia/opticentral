@@ -27,7 +27,7 @@ function Login() {
     
     const handleClickLogin = async () => {
 
-        processingAction(false)
+        processingAction()
         try {
             const userData = await fetchLogin("https://backendopticentral.onrender.com/app/v1/loginUser", email, password)
             login(userData)

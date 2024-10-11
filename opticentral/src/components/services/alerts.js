@@ -34,7 +34,7 @@ function eventBasic(icon,message){
 }
 
 
-function processingAction(activate){
+function processingAction(){
   let timerInterval;
   Swal.fire({
     title: "Auto close alert!",
