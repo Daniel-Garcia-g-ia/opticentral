@@ -1,6 +1,6 @@
 import React from "react";
 import './index.css';
-import processingAction from "../services/alerts.js"
+import {processingAction} from "../services/alerts"
 
 
 import { useEffect, useState, useContext } from "react";
