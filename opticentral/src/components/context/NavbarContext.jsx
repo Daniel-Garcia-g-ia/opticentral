@@ -14,9 +14,13 @@ const NavbarProvider = ({ children }) => {
         const user = getLocalStorage('authData');
 
         if(user.role=='administrator'||'lider'){
-            setPermissonsRole(true)
-            
+            setPermissonsRole(true)            
+        }else{
+            setPermissonsRole(false)  
+
         }
+
+        console.log(permissonsRole)
     }
 
     const discardProduction =()=>{

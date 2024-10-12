@@ -227,7 +227,7 @@
 .custom-label-total-report-averia {
 
     padding: 0.3rem 0.5rem;
-    border:  5px solid #F68D2B;
+    border: 5px solid #F68D2B;
     position: absolute;
     left: 1rem;
     top: 3.5rem;
@@ -253,7 +253,7 @@
 
 
 .custom-addreport {
-    padding-top: 4rem;
+    padding-top: 0.2rem;
 }
 
 .text-area-width {
@@ -279,30 +279,40 @@
     left: -50px;
     top: 0px;
     z-index: 1000;
-   
 
-    
-   
+
+
+
 }
 
-.is-custom-gannt-bar{
+.is-custom-gannt-bar {
     position: relative;
 }
-.is-custom-card-model-detail{
+
+.is-custom-card-model-detail {
     width: 25vw;
 
 }
 
-.is-custom-separator{
-    border: solid, #D9D9D9 , 2px;
-    
+.is-custom-separator {
+    border: solid, #D9D9D9, 2px;
+
 }
 
-.is-custom-total-time{ 
+.is-custom-total-time {
 
     border-bottom: solid #5d5f6448;
-    padding: 5px 0 5px 5px;
-   /*  border:solid 2px, red; */
+    padding: 0px 5px 5px 5px;
+    /*  border:solid 2px, red; */
     font-family: 'Ubuntu', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     font-size: 20px;
+}
+
+.is-custom-add-report-icon {
+    padding-right: 1rem;
+
+}
+
+.is-custom-add-report-icon:hover span {
+    cursor: pointer;
 }

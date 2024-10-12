@@ -9,6 +9,7 @@ import FreeProduction from "./FreeProduction";
 import AddReport from "./AddReport";
 import TotalReportTime from "./TotalReportTime";
 import { dataBrands } from "../../assets/data/data"
+import AddReportExt from "./AddReportExt";
 
 import { IoMdAddCircleOutline } from "react-icons/io";
 import { fetchData } from "../services/fetchData";
@@ -19,8 +20,9 @@ import { NavbarContext } from "../context/NavbarContext";
 import Gannt from "./Gannt";
 import { DateContext } from "../context/DateContext";
 
-import { basicMessage, textUnderMessage } from "../services/alerts";
+import { basicMessage, textUnderMessage, processingAction, closeSwal, eventBasic } from "../services/alerts";
 import { ImInsertTemplate } from "react-icons/im";
+
 
 
 
@@ -31,13 +33,15 @@ function DashBoard() {
 
     const navigate = useNavigate();
     const location = useLocation();
-    const isFirstRender = useRef();
+    const isFirstRender1 = useRef();
+    const isFirstRender2 = useRef();
+    const { production } = useContext(NavbarContext);
     const { permissonsRole } = useContext(NavbarContext)
     const { dateContext } = useContext(DateContext);
     const { turnContext } = useContext(DateContext)
     const [activateDeatilProduction, setActivateDetailsProduction] = useState(true)
-    const [activeTotalTime, setActiveTime] = useState(true)
-    const [date, setDate] = useState(" ");
+    const [activeTotalTime, setActiveTime] = useState(false)
+    const [date, setDate] = useState('');
     const [dataTurn, setDataTurn] = useState("Turno 1");
     const [selectedDate, setSelectedDate] = useState();
     const [dataLength, setDataLength] = useState(0);
@@ -56,64 +60,64 @@ function DashBoard() {
     const [totalTimeExtraxtesReport, setTotalTimeExtractedReport] = useState(0)
 
     const [activeAddReport, setActiveAddReport] = useState(false)
+    const [activateReportExt, setActivateReportExt] = useState(false)
 
     const brands = dataBrands()
 
-    useEffect(()=>{
-        if(permissonsRole){            
+    useEffect(() => {
+        
+        if (!isFirstRender1.current) {
+            isFirstRender1.current = true;           
+            return;
+        }
+        if (permissonsRole) {
             setActiveTime(false)
             setActivateDetailsProduction(false)
-        }else{
-            setActiveTime(true) 
+            return
+        } else {
+            setActiveTime(true)
             setActivateDetailsProduction(true)
             setSelectedDate(!selectedDate)
 
         }
 
-      
-        
-        
-    },[permissonsRole])
+    }, [permissonsRole])
 
     useEffect(() => {
+        if (!isFirstRender2.current) {
+            isFirstRender2.current = true;
+            return;
+        }
+        
         dateContext(date)
         turnContext(dataTurn)
         
         
+        if (!permissonsRole) {
 
-        /* if (!isFirstRender.current) {
-            isFirstRender.current = true;
-            console.log('datods')
-            return;
-        } */
-        if (permissonsRole) {    
-               
-           
-            return;
-
-        } else {
-            
             const authData = getLocalStorage('authData')
 
             if (!authData || !authData.auth && !authData.token) {
                 navigate('/')
-            } else {
-                //Peticion GET ApI   
-                         
+            } else if (date && dataTurn) {
+                processingAction('Validando informacíon','Por favor espere...',true)
+                 //Peticion GET ApI   
+                
 
                 fetchOneData('https://backendopticentral.onrender.com/app/v1/processData', code, date, dataTurn, authData.token).then(result => {
-
+                    
                     if (!result.body.auth) {
+                        
                         navigate('/')
 
                     } else {
+                        closeSwal()
+                        
                         
                         if (result.body && result.body.data && result.body.data.length > 0) {
                             if (!result.body.data[0].processData[0].release) {
                                 textUnderMessage('Producción sin liberar', 'Informar al líder de turno', 'warning')
                                 setReportLength(0)
-
-
                             } else {
                                 //Obtiene informacion para agregar reportes  
                                 setActiveTime(true)
@@ -185,18 +189,23 @@ function DashBoard() {
 
                             }
 
-                        } else {
-                            basicMessage('Sin datos registrados')
+                        } else {          
+                            
                             setDataLength(result.body.data.length)
                             setActiveTime(false)
                             setReportLength(0)
+                            basicMessage('Sin datos registrados')
+                            
 
                         }
                     }
                 }).catch(error => {
-                    console.log(error)
+                    processingAction(null,null,false)
+                    eventBasic('error',`error: ${error}`)
                     navigate('/')
                 })
+            }else{
+                setActiveTime(false)
             }
 
         }
@@ -272,7 +281,7 @@ function DashBoard() {
                             <div className="box is-custom-box-detail">
 
                                 {activeTotalTime &&
-                                    <TotalReportTime data={totalTimeExtraxtesReport} />
+                                    <TotalReportTime data={totalTimeExtraxtesReport} setActivateReportExt={setActivateReportExt} />
                                 }
 
                                 {activateDeatilProduction && Array.from({ length: dataLength }, (_, index) => (
@@ -292,9 +301,13 @@ function DashBoard() {
                                     activeAddReport={activeAddReport}
                                     setActiveAddReport={setActiveAddReport}
                                     setActivateDetailsProduction={setActivateDetailsProduction}
-                                    setSelectedDate = {setSelectedDate}
-                                    selectedDate= {selectedDate}
+                                    setSelectedDate={setSelectedDate}
+                                    selectedDate={selectedDate}
                                     data={dataSelected} />}
+
+                                {activateReportExt && <AddReportExt setActivateDetailsProduction={setActivateDetailsProduction} />
+
+                                }
 
                             </div>
 

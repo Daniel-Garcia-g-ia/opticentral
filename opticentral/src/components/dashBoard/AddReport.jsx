@@ -6,7 +6,7 @@ import { fetchUpdateReportProduction } from "../services/fetchData";
 import { preDataReportItemProduction, validateDataWhithoutNull, preDataReportItemfault, preDataReportItemExternalStop, preDataReportItemUnscheduled } from "../services/preData";
 import { eventBasic, textUnderMessage } from "../services/alerts";
 import AddProduction from "./AddProduction";
-import AveriaReport from "./AveriaReport";
+
 import ParoExterno from "./ParoExterno";
 import TurnoNoProgramado from "./TurnoNoProgramado";
 
@@ -170,7 +170,7 @@ function AddReport({ activeAddReport, setActiveAddReport, setActivateDetailsProd
                             <div className="field ">
                                 <label className="label custom-label">Reportar</label>
                                 <div className="select is-small ">
-                                    <select className="is-hovered custom-width-add-report " onChange={HandledChanceReport} value={typereport}>
+                                    <select className="is-hovered custom-width-add-report " onChange={HandledChanceReport} value={typeReport}  >
                                         <option> </option>
                                         <option>Producción</option>
                                         <option>Avería</option>
@@ -187,7 +187,7 @@ function AddReport({ activeAddReport, setActiveAddReport, setActivateDetailsProd
 
                     </div>
                     {activeSetProductionReport && <AddProduction />}
-                    {activeAveriaReport && <AveriaReport />}
+                    {/* {activeAveriaReport && <AveriaReport />} */}
                     {activeParoExterno && <ParoExterno />}
                     {activeTurnoNoProgramado && <TurnoNoProgramado />}
 

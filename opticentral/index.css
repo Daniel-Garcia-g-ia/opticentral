@@ -212,8 +212,8 @@
 .custom-brand-add-report {
     position: absolute;
     left: 1rem;
-
 }
+
 
 .custom-label-total-report {
 
@@ -250,10 +250,8 @@
 
 }
 
-
-
 .custom-addreport {
-    padding-top: 4rem;
+    padding-top: 1rem;
 }
 
 .text-area-width {
@@ -305,4 +303,13 @@
    /*  border:solid 2px, red; */
     font-family: 'Ubuntu', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     font-size: 20px;
+}
+
+.is-custom-add-report-icon {
+    padding-right: 1rem;
+    
+}
+
+.is-custom-add-report-icon:hover span{
+    cursor: pointer;
 }

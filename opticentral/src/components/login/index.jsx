@@ -1,6 +1,6 @@
 import React from "react";
 import './index.css';
-import {processingAction} from "../services/alerts"
+import {processingAction, eventBasic,closeSwal} from "../services/alerts"
 
 
 import { useEffect, useState, useContext } from "react";
@@ -26,16 +26,27 @@ function Login() {
 
     
     const handleClickLogin = async () => {
+        
 
-        processingAction(true)
+        processingAction('Validando Usuario','Por favor espere...',true)
         try {
-            const userData = await fetchLogin("https://backendopticentral.onrender.com/app/v1/loginUser", email, password)
-            login(userData)
+            const userData = await fetchLogin("https://backendopticentral.onrender.com/app/v1/loginUser", email, password)              
+                    
+
+            if(userData.status!=200){                 
+                eventBasic('error', 'Validar usuario y contraseña') 
+            }else if(userData.status==200){
+                closeSwal()
+                login(userData)
+            }
+            
             
 
 
         } catch (error) {
-            console.log('Error al iniciar sesion', error)
+            eventBasic('error server', `error: ${error}`) 
+            closeSwal()                
+            
         } 
 
 
