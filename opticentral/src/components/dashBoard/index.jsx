@@ -99,8 +99,8 @@ function DashBoard() {
 
             if (!authData || !authData.auth && !authData.token) {
                 navigate('/')
-            } else if (date && dataTurn) {
-                processingAction('Validando informacíon','Por favor espere...',true)
+            } else if (!activateReportExt && date && dataTurn) {
+                processingAction('Validando información','Por favor espere...',true)
                  //Peticion GET ApI   
                 
 
@@ -216,7 +216,7 @@ function DashBoard() {
     const handledClickAdd = (data) => {
         setActivateDetailsProduction(!activateDeatilProduction)
         setActiveAddReport(true)
-        setDataSelected(data)
+        setDataSelected(data)        
         /* setSelectedDate(!selectedDate) */
     }
     const handledOnChangeDate = (e) => {
@@ -239,12 +239,12 @@ function DashBoard() {
                             <div className="field is-horizontal">
 
                                 <div className="control is-expanded">
-                                    <input className="input" type="date" value={date} onChange={handledOnChangeDate} />
+                                    <input className="input" type="date" value={date} onChange={handledOnChangeDate} disabled={activateReportExt} />
                                 </div>
 
                                 <p className="control pl-2">
                                     <span className="select">
-                                        <select name="turn" id="turn-select" value={dataTurn} onChange={handledOnChangeTurn}>
+                                        <select name="turn" id="turn-select" value={dataTurn} onChange={handledOnChangeTurn} disabled={activateReportExt} >
                                             <option>Turno 1</option>
                                             <option>Turno 2</option>
                                             <option>Turno 3</option>
@@ -305,7 +305,10 @@ function DashBoard() {
                                     selectedDate={selectedDate}
                                     data={dataSelected} />}
 
-                                {activateReportExt && <AddReportExt setActivateDetailsProduction={setActivateDetailsProduction} />
+                                {activateReportExt && <AddReportExt 
+                                setActivateDetailsProduction={setActivateDetailsProduction} 
+                                setActivateReportExt={setActivateReportExt}
+                                />
 
                                 }
 

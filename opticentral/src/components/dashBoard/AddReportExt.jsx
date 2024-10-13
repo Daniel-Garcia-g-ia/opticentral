@@ -2,16 +2,22 @@ import React from "react";
 import './index.css'
 import {useState, useEffect} from "react"
 import ICReport from "./ICReport";
+import ECReport from "./ECReport";
+import DPAReport from "./DPAReport";
+import NSTReport from "./NSTReport";
 
-function AddReportExt({setActivateDetailsProduction}) {
+function AddReportExt({setActivateDetailsProduction,  setActivateReportExt}) {
 
     const [activateICReport, setActivateICReport]= useState(false);
+    const [activateECReport, setActivateECReport]= useState(false);
+    const [activateDPAReport, setActivateDPAReport]= useState(false);
+    const [activateNSTReport, setAcvateNSTReport]= useState(false);
     
     const [typeReport, setTypeReport]=useState(' ')
 
     useEffect(()=>{
         setActivateDetailsProduction(false)
-    })
+    },[])
     
 
 
@@ -20,7 +26,31 @@ function AddReportExt({setActivateDetailsProduction}) {
             if (typeReport === 'IC') {
                 
                 setActivateICReport(true);
+                setActivateECReport(false)
+                setActivateDPAReport(false);
+                setAcvateNSTReport(false);
                
+            }else if(typeReport === 'EC'){
+
+                setActivateECReport(true);
+                setActivateICReport(false);
+                setActivateDPAReport(false);
+                setAcvateNSTReport(false);
+
+
+            }else if(typeReport === 'DPA'){
+                setActivateDPAReport(true);
+                setActivateECReport(false);
+                setActivateICReport(false);
+                setAcvateNSTReport(false);
+
+
+            }else if(typeReport === 'NST'){
+                setAcvateNSTReport(true);
+                setActivateDPAReport(false);
+                setActivateECReport(false);
+                setActivateICReport(false);
+
             }
 
             
@@ -33,6 +63,14 @@ function AddReportExt({setActivateDetailsProduction}) {
         
 
     }
+
+    const handledClickDismiss =()=>{
+        setActivateReportExt(false)  
+        setActivateDetailsProduction(true)     
+
+    }
+
+    
 
 
     return (
@@ -73,6 +111,10 @@ function AddReportExt({setActivateDetailsProduction}) {
                     </div>
 
                     {activateICReport && <ICReport />}
+                    {activateECReport && <ECReport />}
+                    {activateDPAReport && <DPAReport />}
+                    {activateNSTReport && <NSTReport />}
+                    
                     
 
 
@@ -84,7 +126,7 @@ function AddReportExt({setActivateDetailsProduction}) {
                                 <button className="button is-link" >Guardar</button>
                             </div>
                             <div className="control ">
-                                <button className="button is-link is-light" >Descartar</button>
+                                <button className="button is-link is-light" onClick={handledClickDismiss} >Descartar</button>
                             </div>
                         </div>
 

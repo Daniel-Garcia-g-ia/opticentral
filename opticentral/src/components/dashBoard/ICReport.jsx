@@ -2,7 +2,7 @@ import React from "react";
 import { useState, useEffect, useContext } from "react";
 import { ReportContext } from "../context/ReportContext";
 import { calculateTimeDifference } from "../services/calculateTimeDifference";
-import { GiConsoleController } from "react-icons/gi";
+
 
 
 
@@ -18,12 +18,13 @@ function ICReport() {
     const [dataComponent, setDataComponent] = useState('');
     const [dataModeFail, setDataModeFail] = useState('');
     const [dataSolution, setDataSolution] = useState('');
+    const [dataMachines, setDataMachines] = useState('');
     const [optionSubSystem, setOptionSubSystem] = useState([])
-    const [optionComponet, setOptionComponent] = useState([])
+    const [optionComponet, setOptionComponent] = useState([]);
+    const [optionMachine, setOptionMachine] = useState([]);
     const [optionModeFailure, setOptionModeFailure] = useState([])
     const [data, setData] = useState(false);
     const [time, setTime] = useState(0);
-
     const [dataReport, setDataReport] = useState({
         startTime: null,
         endTime: null,
@@ -32,6 +33,7 @@ function ICReport() {
         subSystem: null,
         component: null,
         failureMode: null,
+        machine: null,
         solution: null,
 
     });
@@ -47,10 +49,27 @@ function ICReport() {
             'Mecánico',
             'Neumático',
             'Transmisión',
+        ],
+        'Falta de Personal': [
+            'Personal Insuficiente'
+        ],
+        'Paros de Calidad': [
+            'Producto fuera de especificación',
+            'Producto en Observación',
         ]
 
     }
     const componentsBySubsystem = {
+
+        'Producto en Observación':[
+            'Producto en Observación', 'Oxígeno', 'Espuma', 'Alcohol', 'Extracto'
+        ],
+        'Producto fuera de especificación': [
+            'Producto fuera de especificación', 'Oxígeno', 'Espuma', 'Alcohol', 'Extracto'
+        ],
+        'Personal Insuficiente': [
+            'Personal Insuficiente'
+        ],
         'Automatización': [
             'BOTEC',
             'PLC',
@@ -63,17 +82,17 @@ function ICReport() {
             'Periferias'
         ],
         'Metrología': [
-            'Presión',
-            'Temperatura',
-            'Nivel',
-            'Peso',
-            'CO2',
-            'Oxígeno',
-            'Alcohol',
-            'Extracto',
-            'Turbidez',
-            'Densidad',
-            'AntonPar'
+            'Medidor de Presión',
+            'Medidor de Temperatura',
+            'Medidor de Nivel',
+            'Medidor de Peso',
+            'Medidor de CO2',
+            'Medidor de Oxígeno',
+            'Medidor de Alcohol',
+            'Medidor de Extracto',
+            'Medidor de Turbidez',
+            'Medidor de Densidad',
+            'Medidor de AntonPar'
         ],
         'Eléctrico': [
             'Interruptor',
@@ -165,6 +184,7 @@ function ICReport() {
     };
 
     const failureModesByComponent = {
+        'Personal Insuficiente': ['Falta de personal operativo'],
         'BOTEC': ['Falla de Comunicación', 'Error en servidores', 'Perdida de Visualización', 'Falla en Tendencias', 'Estacion no Disponible', 'Error al crear Receta', 'Receta en falla'],
         'PLC': ['Falla en memoria', 'Sin alimentación', 'Error de programación', 'Falla en perisféricos'],
         'Sensores': ['Error de lectura', 'Falla de conexión', 'Conector sulfatado', 'Cable Averiado'],
@@ -175,16 +195,16 @@ function ICReport() {
         'Variadores': ['Falla Alimentacion', 'Falla de Parametros', 'Sobretensión', 'falla Eléctrica', 'Parada segura', 'Estado en Manual'],
         'Perisferias': ['Falla Alimentacion', 'Falla de Parametros', 'Sobretensión', 'falla Eléctrica', 'Falla de Cableado'],
         'Presión': ['Falla de medicion', 'Error de medición', 'Calibración', 'Alimentación', 'Conector Averiado', 'Daño de Componente'],
-        'Temperatura': ['Falla de medicion', 'Error de Conexión', 'Calibración', 'Alimentación', 'Conector Averiado', 'Daño de Componente'],
-        'Nivel': ['Falla de medicion', 'Error de Conexión', 'Calibración', 'Alimentación', 'Conector Averiado', 'Daño de Componente'],
-        'Peso': ['Falla de medicion', 'Error de Conexión', 'Calibración', 'Alimentación', 'Conector Averiado', 'Daño de Componente'],
-        'CO2': ['Falla de medicion', 'Error de Conexión', 'Calibración', 'Alimentación', 'Conector Averiado', 'Daño de Componente'],
-        'Oxígeno': ['Falla de medicion', 'Error de Conexión', 'Calibración', 'Alimentación', 'Conector Averiado', 'Daño de Componente'],
-        'Alcohol': ['Falla de medicion', 'Error de Conexión', 'Calibración', 'Alimentación', 'Conector Averiado', 'Daño de Componente'],
-        'Extracto': ['Falla de medicion', 'Error de Conexión', 'Calibración', 'Alimentación', 'Conector Averiado', 'Daño de Componente'],
-        'Turbidez': ['Falla de medicion', 'Error de Conexión', 'Calibración', 'Alimentación', 'Conector Averiado', 'Daño de Componente'],
-        'Densidad': ['Falla de medicion', 'Error de Conexión', 'Calibración', 'Alimentación', 'Conector Averiado', 'Daño de Componente'],
-        'AntonPar': ['Falla de programa', 'Falla de medicion', 'Error de Conexión', 'Calibración', 'Alimentación', 'Conector Averiado', 'Daño de Componente'],
+        'Medidor de Temperatura': ['Falla de medicion', 'Error de Conexión', 'Calibración', 'Alimentación', 'Conector Averiado', 'Daño de Componente'],
+        'Medidor de Nivel': ['Falla de medicion', 'Error de Conexión', 'Calibración', 'Alimentación', 'Conector Averiado', 'Daño de Componente'],
+        'Medidor de Peso': ['Falla de medicion', 'Error de Conexión', 'Calibración', 'Alimentación', 'Conector Averiado', 'Daño de Componente'],
+        'Medidor de CO2': ['Falla de medicion', 'Error de Conexión', 'Calibración', 'Alimentación', 'Conector Averiado', 'Daño de Componente'],
+        'Medidor de Oxígeno': ['Falla de medicion', 'Error de Conexión', 'Calibración', 'Alimentación', 'Conector Averiado', 'Daño de Componente'],
+        'Medidor de Alcohol': ['Falla de medicion', 'Error de Conexión', 'Calibración', 'Alimentación', 'Conector Averiado', 'Daño de Componente'],
+        'Medidor de Extracto': ['Falla de medicion', 'Error de Conexión', 'Calibración', 'Alimentación', 'Conector Averiado', 'Daño de Componente'],
+        'Medidor de Turbidez': ['Falla de medicion', 'Error de Conexión', 'Calibración', 'Alimentación', 'Conector Averiado', 'Daño de Componente'],
+        'Medidor de Densidad': ['Falla de medicion', 'Error de Conexión', 'Calibración', 'Alimentación', 'Conector Averiado', 'Daño de Componente'],
+        'Medidor de AntonPar': ['Falla de programa', 'Falla de medicion', 'Error de Conexión', 'Calibración', 'Alimentación', 'Conector Averiado', 'Daño de Componente'],
         'Interruptor': ['Corto Circuito', 'SobreTension', 'SobreCorriente', 'Fallo de componente', 'Falla de cableado', 'Falla de Contacto', 'Alimentacion'],
         'Guardamotor': ['Corto Circuito', 'SobreTension', 'SobreCorriente', 'Fallo de componente', 'Falla de cableado', 'Falla de Contacto', 'Alimentacion'],
         'Cableado': ['Corto Circuito', 'SobreTension', 'SobreCorriente', 'Fallo de componente', 'Daño de aislamiento', 'Falla de Conexión'],
@@ -255,6 +275,23 @@ function ICReport() {
         'Correas': ['Falta de Lubricación', 'Exceso de Lubricación', 'Desgaste', 'Alta Temperatura', 'Baja de Temperatura', 'Vibraciones', 'Condiciones del Ambiente', 'Olguras', 'Alogamientos', 'Fractura', 'Corrosión', 'Falla de alineación']
 
     }
+
+    const machines = [
+        'Filtro Prensa',
+        'PreMacerador',
+        'Macerador 1',
+        'Macerador 2',
+        'Cocedor de Adjuntos',
+        'Tanque de Espera',
+        'Cocedor de Mosto',
+        'Whirlpool',
+        'Enfriador',
+
+    ]
+
+    useEffect(() => {
+        dataReportProductionContext(dataReport)
+    }, [dataReport])
 
 
     /*    useEffect(() => {
@@ -483,6 +520,12 @@ function ICReport() {
             system: value
         }))
         setData(!data);
+        setOptionComponent([])
+        setOptionModeFailure([])
+        setOptionSubSystem([])
+        setDataComponent([])
+        setDataMachines([])
+        setDataModeFail([])
 
         if (subsystemsBySystem[value]) {
             setOptionSubSystem(subsystemsBySystem[value])
@@ -522,6 +565,7 @@ function ICReport() {
 
         if (failureModesByComponent[value]) {
             setOptionModeFailure(failureModesByComponent[value])
+            setOptionMachine(machines)
         } else {
             setOptionModeFailure([])
         }
@@ -540,6 +584,16 @@ function ICReport() {
         setData(!data);
 
     }
+    const handledChangeMachines = (e) => {
+        const value = e.target.value;
+        setDataMachines(value);
+        setDataReport(prevState => ({
+            ...prevState,
+            dataMachines: value
+        }))
+        setData(!data);
+
+    }
     const handledChangeInputSolution = (e) => {
         const value = e.target.value;
         setDataSolution(value);
@@ -550,6 +604,8 @@ function ICReport() {
         setData(!data);
 
     }
+
+
 
 
     return (
@@ -600,7 +656,7 @@ function ICReport() {
                                         <option>Averías de Equipamiento</option>
                                         <option>Falta de Personal</option>
                                         <option>Paros de Calidad</option>
-                                        <option>Paros Menores</option>
+                                        
                                     </select>
                                 </div>
 
@@ -663,9 +719,9 @@ function ICReport() {
                         <div className="field pl-2">
                             <label className="label custom-label">Máquina</label>
                             <div className="select is-small">
-                                <select className="is-hovered custom-width-add-report-averia " name="sistema" id="sistem" value={dataModeFail} onChange={handledChangeInputModeFail}>
+                                <select className="is-hovered custom-width-add-report-averia " name="sistema" id="sistem" value={dataMachines} onChange={handledChangeMachines}>
                                     <option value=' '> </option>
-                                    {optionModeFailure.map((option, index) => (
+                                    {optionMachine.map((option, index) => (
                                         <option key={index} value={option} >
                                             {option}
                                         </option>
