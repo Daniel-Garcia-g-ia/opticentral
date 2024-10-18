@@ -316,3 +316,19 @@
 .is-custom-add-report-icon:hover span {
     cursor: pointer;
 }
+
+.is-custom-add-production-report {
+    padding-top: 2.5rem;
+}
+
+.custom-report-title-add-production {
+
+    color: #4a4a4a; /* Color verde suave */
+    font-weight: bold; /* Negrita para resaltar */
+    text-transform: uppercase; /* Todo en mayúsculas */
+    letter-spacing: 1px; /* Espaciado entre letras */
+    
+    font-size: 24px; /* Tamaño ajustable según tu diseño */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+
+}

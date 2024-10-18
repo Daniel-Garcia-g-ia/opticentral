@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import { ReportContext } from "../context/ReportContext";
 import { calculateTimeDifference } from "../services/calculateTimeDifference";
 
@@ -14,22 +14,153 @@ function DPAReport() {
     const [dataTypeStop, setDataTypeStop] = useState('');
     const [dataSubTypeStop, setDataSubTypeStop] = useState('');
     const [dataModeFailure, setDataModeFailure] = useState('');
-    const [dataSolution, setDataSolution]= useState('');
+    const [dataSolution, setDataSolution] = useState('');
     const [optionSubType, setOptionSubType] = useState([]);
-    const [optionFailureMode, setOptionFailureMode] = useState([]);
+    const [specification, setSpecification] = useState([]);
+    const [time, setTime] = useState(0);
     const [dataReport, setDataReport] = useState({
         startTime: null,
         endTime: null,
         totalTime: null,
         typeStop: null,
         subTypeStop: null,
-        failureMode: null,
-        solution: null
+        specification: null,
+        solution: null,
+        type:null
 
-       
+
 
     });
-    
+
+    const optionSubTypeInput = {
+        'Cambio de Marca': [
+            'CIP Adicional',
+            'Toma de muestra',
+            'Analisis de parámetros'
+        ],
+        'Mantenimiento': [
+            'Ventanas de Mtto',
+            'Intervención Mtto interno',
+            'Intervención Mtto Externo',
+        ],
+        'NONA': [
+            'No Orden, No Actividad',
+            'Limpieza',
+            '5s',
+            'Orden',
+            'Reuniones Extras',
+
+
+        ],
+        'Paro Programado': [
+            'Esterilizaciones',
+            'Fin de Producción',
+            'Ensayos',
+            'Ventanas de MTTO',
+            'Reuniones',
+        ]
+
+
+    }
+
+    const optionSpecification = {
+        'CIP Adicional': [
+            'CIP 3 pasos',
+            'CIP 5 pasos',
+
+        ],
+        'Toma de muestra': [
+            'Analisis de Muestra',
+            'Espera de resultados',
+            'Repetir Muestra',
+
+        ],
+        'Analisis de parámetros': [
+            'Fuera de Especificación',
+            'Parámetros en Estudio',
+            'Sin Parametros',
+        ],
+        'Ventanas de Mtto': [
+            'Mtto programado'
+        ],
+        'Intervención Mtto interno': [
+            'Mtto Interno de pruebas'
+
+        ],
+        'Intervención Mtto Externo': [
+            'Mtto Externo de pruebas'
+
+        ],
+        'No Orden, No Actividad':[
+            'NoNa'
+        ],
+        'Limpieza':[
+            'LILA'
+        ],
+        '5s':[
+            'Auditoria',
+            'Orden'
+        ],
+        'Orden':[
+            'Orden Y Aseo'
+
+        ],
+        'Reuniones Extras':[
+            'Reuniones Extras'
+        ],
+        'Esterilizaciones':[
+           'CIP 3 Pasos',
+           'CIP 5 Pasos',
+           'Esterilizaciones',
+           'CIP Autoamtico',
+           'CIP Vencido',
+           'COP',
+           'Fin de Producción'
+
+
+        ],
+        'Fin de Producción':[
+            'Fin de Producción'
+        ],
+        'Ensayos':[
+            'Nuevo Producto',
+            'Cambio de Producto'       
+
+        ],
+        'Ventanas de MTTO':[
+            'MTTO programado'
+
+        ],
+        'Reuniones':[
+            'Reunion Programada'
+        ]
+
+
+
+    }
+
+
+
+
+    useEffect(() => {
+        dataReportProductionContext(dataReport)
+    }, [dataReport])
+
+
+    useEffect(() => {
+        setTime(timeDifference)
+
+
+    }, [timeDifference])
+
+    useEffect(() => {
+        setDataReport(prevState => ({
+            ...prevState,
+            totalTime: time
+        }))
+
+    }, [time])
+
     const handledChangeInputStart = (e) => {
         const value = e.target.value;
         setStartTime(value);
@@ -61,9 +192,16 @@ function DPAReport() {
         setDataTypeStop(value);
         setDataReport(prevState => ({
             ...prevState,
-            typeStop: value
+            typeStop: value,
+            type:'DPA'
         }))
         setData(!data);
+
+        if (optionSubTypeInput[value]){
+            setOptionSubType(optionSubTypeInput[value])
+        }else{
+            setOptionSubType([])
+        }
 
 
     }
@@ -75,6 +213,13 @@ function DPAReport() {
             subTypeStop: value
         }))
         setData(!data);
+
+        if (optionSpecification[value]){
+            setSpecification(optionSpecification[value])
+        }else {
+            setSpecification([])
+
+        }
     }
 
     const handledChangeInputModeFailure = (e) => {
@@ -82,7 +227,7 @@ function DPAReport() {
         setDataModeFailure(value);
         setDataReport(prevState => ({
             ...prevState,
-            failureMode: value
+            specification: value
         }))
         setData(!data);
 
@@ -141,9 +286,9 @@ function DPAReport() {
                                     <select className="is-hovered custom-width-add-report-averia " name="sistema" id="sistem" value={dataTypeStop} onChange={handledChangeInputTypeStop}>
                                         <option> </option>
                                         <option>Cambio de Marca</option>
-                                        <option>Mantenimiento Autónomo</option>
+                                        <option>Mantenimiento</option>
                                         <option>NONA</option>
-                                        <option>Parada Programada</option>                                        
+                                        <option>Paro Programado</option>
                                     </select>
                                 </div>
 
@@ -164,11 +309,11 @@ function DPAReport() {
 
                             </div>
                             <div className="field pl-2">
-                                <label className="label custom-label">Modo de Fallo</label>
+                                <label className="label custom-label">Especificación</label>
                                 <div className="select is-small">
                                     <select className="is-hovered custom-width-add-report-averia " name="subSytem" id="subSystem" value={dataModeFailure} onChange={handledChangeInputModeFailure}>
                                         <option value='' > </option>
-                                        {optionFailureMode.map((option, index) => (
+                                        {specification.map((option, index) => (
                                             <option key={index} value={option}>
                                                 {option}
                                             </option>

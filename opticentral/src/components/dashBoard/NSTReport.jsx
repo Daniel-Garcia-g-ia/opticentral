@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import { ReportContext } from "../context/ReportContext";
 import { calculateTimeDifference } from "../services/calculateTimeDifference";
 
@@ -15,15 +15,50 @@ function NSTReport() {
     const [dataSubTypeStop, setDataSubTypeStop] = useState('');
     const [dataSolution, setDataSolution] = useState('');
     const [optionSubType, setOptionSubType] = useState([]);
+    const [time, setTime] = useState(0);
     const [dataReport, setDataReport] = useState({
         startTime: null,
         endTime: null,
         totalTime: null,
         typeStop: null,
         subTypeStop: null,
-        solution: null
+        solution: null,
+        type:null
 
     });
+
+    const optionSubTypeInput = {
+        'Turno No Programado': [
+            'Turno No Programado'
+
+        ],
+        'Intervención de Ingeniería': [
+            'Intervención de Ingeniería'
+
+        ]
+
+
+    }
+
+    useEffect(() => {
+        dataReportProductionContext(dataReport)
+    }, [dataReport])
+
+
+    useEffect(() => {
+        setTime(timeDifference)
+
+
+    }, [timeDifference])
+
+    useEffect(() => {
+        setDataReport(prevState => ({
+            ...prevState,
+            totalTime: time
+        }))
+
+    }, [time])
+
 
     const handledChangeInputStart = (e) => {
         const value = e.target.value;
@@ -56,9 +91,16 @@ function NSTReport() {
         setDataTypeStop(value);
         setDataReport(prevState => ({
             ...prevState,
-            typeStop: value
+            typeStop: value,
+            type:'NST'
         }))
         setData(!data);
+        if(optionSubTypeInput[value]){
+            setOptionSubType(optionSubTypeInput[value]);
+        }else{
+            setOptionSubType([]);
+
+        }
 
 
     }

@@ -34,7 +34,7 @@ function eventBasic(icon, message) {
 }
 
 
-function processingAction(title,html,activate) {
+function processingAction(title,html) {
   let timerInterval;
 
 

@@ -4,7 +4,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { NavbarContext } from "../context/NavbarContext";
 import { DateContext } from "../context/DateContext";
 import { findMaxBrewId } from "../services/preData";
-import { basicMessage, eventBasic } from "../services/alerts";
+import { basicMessage, eventBasic, processingAction, closeSwal } from "../services/alerts";
 import { dataBrands } from "../../assets/data/data";
 import { getLocalStorage } from "../services/LocalStorage";
 import { fetchData, fetchSetReport } from "../services/fetchData";
@@ -32,17 +32,17 @@ function FreeProduction({ equipmentId, equipmentName, location }) {
 
         const authData = getLocalStorage('authData')
         if (!authData || !authData.auth && !authData.token) {
-
-
             navigate('/');
 
         } else {
-            fetchData('https://backendopticentral.onrender.com/app/v1/mostRecentReport/0001', authData.token)
+            
+            fetchData('http://localhost:3000/app/v1/mostRecentReport/0001', authData.token)
                 .then(data => {
                     if (!data.body.auth) {
                         navigate('/');
                     } else {
                         if (!data.body.data) {
+                            
                             basicMessage('Sin reportes registrados')
 
                         } else {
@@ -95,12 +95,14 @@ function FreeProduction({ equipmentId, equipmentName, location }) {
             navigate('/');
 
         } else {
+            processingAction('Procesando Información','Por favor, espere ...')
 
-
-            fetchSetReport('https://backendopticentral.onrender.com/app/v1/processData/addProduction', authData.token, report
+            fetchSetReport('http://localhost:3000/app/v1/processData/addProduction', authData.token, report
             ).then(response => {
+                closeSwal()
                 eventBasic('success', 'Producción Liberada!')
             }).catch(error => {
+                closeSwal()
                 eventBasic('error', error)
             })
         }
@@ -140,7 +142,7 @@ function FreeProduction({ equipmentId, equipmentName, location }) {
                 </div>
                 <div className="columns">
                     <div className="column pt-5 pl-5 is-flex">
-                        <span className="">Cantidad Filtraciones: </span>
+                        <span className="">Cantidad Cocimientos: </span>
                         <div className="field pl-6">
                             <div className="control is-custom-small-amount">
                                 <input className="input is-small" type="number" value={amountProductions} onChange={handledChangeAmountProduction} min="0" max="5" step="1" />

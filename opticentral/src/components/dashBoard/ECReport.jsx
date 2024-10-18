@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useContext } from "react";
+import { useState, useEffect,useContext } from "react";
 import { ReportContext } from "../context/ReportContext";
 import { calculateTimeDifference } from "../services/calculateTimeDifference";
 
@@ -13,9 +13,10 @@ function ECReport() {
     const [data, setData] = useState(false);
     const [dataSubTypeStop, setDataSubTypeStop] = useState('');
     const [dataModeFailure, setDataModeFailure] = useState('');
-    const [dataSolution, setDataSolution]= useState('');
+    const [dataSolution, setDataSolution] = useState('');
     const [optionSubType, setOptionSubType] = useState([]);
     const [optionFailureMode, setOptionFailureMode] = useState([]);
+    const [time, setTime] = useState(0);
     const [dataReport, setDataReport] = useState({
         startTime: null,
         endTime: null,
@@ -23,12 +24,215 @@ function ECReport() {
         typeStop: null,
         subTypeStop: null,
         failureMode: null,
-        solution: null
+        solution: null,
+        type:null
 
     });
 
 
+    const optionSubTypeInput = {
+        'Falla de Comunicación': [
+            'Falla en el sistema de comunicación',
+            'Comunicación BBT a Envasado',
 
+        ],
+        'Falta de TFM': [
+            'Disponibilidad de Tanques',
+            'Cellar Ocupado'
+        ],
+        'Logistica Interna': [
+            'Materia Prima Malta',
+            'Materia Prima Arroz',
+            'HMS',
+            'Dextrosa',
+            'Insumos',
+            'Silica Gel',
+            'PVPP'
+        ],
+        'Logistica Externa': [
+            'Materia Prima Malta',
+            'Materia Prima Arroz',
+            'HMS',
+            'Dextrosa',
+            'Insumos',
+            'Silica Gel',
+            'PVPP'
+        ],
+        'Muestras de Calidad': [
+            'Muestras BBT',
+            'Muestra TFM',
+            'Muestra PVPP',
+            'Muestra DAW',
+        ],
+        'Servicios Industriales': [
+            'Falta de CO2',
+            'Falta de Agua Sobrecalentada',
+            'Falta de Aire Comprimido',
+            'Falta de Agua',
+            'Falta de Energía Eléctrica'
+        ]
+
+    }
+
+    const optionModeFailure = {
+        'Falla en el sistema de comunicación': [
+            'Caida de Energía',
+            'Falla en Botec',
+            'UPS en falla',
+        ],
+        'Comunicación BBT a Envasado': [
+            'Caida de Energía',
+            'Falla en Botec',
+            'UPS en falla',
+        ],
+        'Disponibilidad de Tanques': [
+            'Tanques llenos',
+            'Tanque en MTTO',
+            'Disponibilidad'
+        ],
+        'Cellar Ocupado': [
+            'CIP',
+            'Cocecha Levadura',
+            'Mantenimiento'
+        ],
+        'Materia Prima Malta': [
+            'Liberación',
+            'Disponibilidad',
+            'Sin Inventario'
+        ],
+        'Materia Prima Arroz': [
+            'Liberación',
+            'Disponibilidad',
+            'Sin Inventario'
+        ],
+        'HMS': [
+            'Liberación',
+            'Disponibilidad',
+            'Sin Inventario'
+
+        ],
+        'Dextrosa': [
+            'Liberación',
+            'Disponibilidad',
+            'Sin Inventario'
+        ],
+        'Insumos': [
+            'Liberación',
+            'Disponibilidad',
+            'Sin Inventario'
+        ],
+        'Silica Gel': [
+            'Liberación',
+            'Disponibilidad',
+            'Sin Inventario'
+        ],
+        'PVPP': [
+            'Liberación',
+            'Disponibilidad',
+            'Sin Inventario'
+        ],
+        'Muestras BBT': [
+            'PH',
+            'Oxígeno',
+            'TPO',
+            'Espuma',
+            'Extracto',
+            'Color',
+            'Sensorial',
+
+        ],
+        'Muestra TFM': [
+            'PH',
+            'Oxígeno',
+            'TPO',
+            'Espuma',
+            'Extracto',
+            'Color',
+            'Sensorial',
+
+        ],
+        'Muestra PVPP': [
+            'PH',
+            'Oxígeno',
+            'TPO',
+            'Espuma',
+            'Extracto',
+            'Color',
+            'Sensorial',
+
+        ],
+        'Muestra DAW': [
+            'PH',
+            'Oxígeno',
+            'TPO',
+            'Espuma',
+            'Extracto',
+            'Color',
+            'Sensorial',
+
+        ],
+        'Falta de CO2':[
+            'Corte de Energía',
+            'Falla en el Sitema',
+            'No disponible',
+            'Sin Inventario',
+            'Intervención'
+
+        ],
+
+        'Falta de Agua Sobrecalentada':[
+            'Corte de Energía',
+            'Falla en el Sitema',
+            'No disponible',
+            'Sin Inventario',
+            'Intervención'
+
+        ],
+        'Falta de Aire Comprimido':[
+            'Corte de Energía',
+            'Falla en el Sitema',
+            'No disponible',
+            'Sin Inventario',
+            'Intervención'
+
+        ],
+        'Falta de Agua':[
+            'Corte de Energía',
+            'Falla en el Sitema',
+            'No disponible',
+            'Sin Inventario',
+            'Intervención'
+
+        ],
+        'Falta de Energía Eléctrica':[
+            'Corte de Energía',
+            'Falla en el Sitema',
+            'Falla de Transferencia',
+            'Falla UPS',
+            'Intervención'
+
+        ]
+
+    }
+
+    useEffect(() => {
+        dataReportProductionContext(dataReport)
+    }, [dataReport])  
+   
+
+    useEffect(() => {
+        setTime(timeDifference)
+
+
+    }, [timeDifference])
+
+    useEffect(() => {
+        setDataReport(prevState => ({
+            ...prevState,
+            totalTime: time
+        }))
+
+    }, [time])
 
 
 
@@ -65,9 +269,15 @@ function ECReport() {
         setDataTypeStop(value);
         setDataReport(prevState => ({
             ...prevState,
-            typeStop: value
+            typeStop: value,
+            type:'EC'
         }))
         setData(!data);
+        if (optionSubTypeInput[value]) {
+            setOptionSubType(optionSubTypeInput[value])
+        } else {
+            setOptionSubType([])
+        }
 
 
     }
@@ -79,6 +289,14 @@ function ECReport() {
             subTypeStop: value
         }))
         setData(!data);
+
+        if (optionModeFailure[value]) {
+            setOptionFailureMode(optionModeFailure[value])
+        } else {
+            setOptionFailureMode([])
+        }
+
+        
     }
 
     const handledChangeInputModeFailure = (e) => {
@@ -101,7 +319,7 @@ function ECReport() {
         setData(!data);
 
     }
-    
+
 
 
     return (
@@ -148,7 +366,7 @@ function ECReport() {
                                     <select className="is-hovered custom-width-add-report-averia " name="sistema" id="sistem" value={dataTypeStop} onChange={handledChangeInputTypeStop}>
                                         <option> </option>
                                         <option>Falla de Comunicación</option>
-                                        <option>Falta de Producto</option>
+                                        <option>Falta de TFM</option>
                                         <option>Logistica Interna</option>
                                         <option>Logistica Externa</option>
                                         <option>Muestras de Calidad</option>

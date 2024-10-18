@@ -3,7 +3,7 @@ import { useState } from "react";
 import { IoIosAddCircleOutline } from "react-icons/io";
 
 
-function TotalReportTime({ data, setActivateReportExt }) {
+function TotalReportTime({ data, setActivateReportExt, activeAddIcon }) {
 
     
 
@@ -32,11 +32,11 @@ function TotalReportTime({ data, setActivateReportExt }) {
                     <p><span style={{ color: getColor() }}>{data} h</span></p>
 
                 </div>
-                <div className='is-custom-add-report-icon' onClick={handledClickAdd}  >
+                { activeAddIcon &&<div className='is-custom-add-report-icon' onClick={handledClickAdd} disabled >
 
-                    <span><IoIosAddCircleOutline size={34} /></span>
+                   <span><IoIosAddCircleOutline size={34} /></span>
                     
-                </div>
+                </div>}
 
 
             </div>

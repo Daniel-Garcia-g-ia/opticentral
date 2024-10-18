@@ -47,7 +47,7 @@ function AddProduction() {
         const value = e.target.value;
         setStartTime(value);
         const differenceTime = calculateTimeDifference(value, endTime);
-        setTimeDifference(differenceTime);       
+        setTimeDifference(differenceTime);
         setDataReport(prevState => ({
             ...prevState,
             startTime: value
@@ -61,7 +61,7 @@ function AddProduction() {
         const value = e.target.value;
         setEndTime(value);
         const differenceTime = calculateTimeDifference(startTime, value);
-        setTimeDifference(differenceTime);       
+        setTimeDifference(differenceTime);
         setDataReport(prevState => ({
             ...prevState,
             endTime: value
@@ -80,18 +80,25 @@ function AddProduction() {
 
     }
 
-   
+
 
 
 
     return (
         <>
+             
             <section className="columns is-centered">
                 <label className="custom-label-total-report">Tiempo Total de Reporte: {timeDifference} h</label>
-                
 
-                <div className="columns is-centered has-text-centered">
-                    <div className="column">
+
+
+                <div className="columns is-centered has-text-centered is-custom-add-production-report">
+
+
+                    <div className="column">                       
+                           
+
+                        
                         <div className="field is-horizontal pt-5">
 
                             <div className="field">
@@ -123,7 +130,7 @@ function AddProduction() {
 
                             </div>
 
-                           
+
 
 
 

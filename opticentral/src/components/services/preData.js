@@ -1,3 +1,4 @@
+import { all } from "axios";
 import { LiaEtsy } from "react-icons/lia";
 import { SiTruenas, SiTrueup } from "react-icons/si";
 
@@ -39,15 +40,19 @@ function dataNewReport(equipmentId, equipmentName, location, processData) {
                 endTime: processData.production[index].dateEnd,
                 release: processData.production[index].release,
                 report: [{
-                    productionReportItem: [],
-                    productionFaultItem: [],
-                    productionExternalStopItmem: [],
-                    productionUnscheduled: [],
+                    productionReportItem: []
 
                 }
 
                 ]
-            }))
+            })),
+            OPI: [{
+                IC: [],
+                EC: []
+
+            }]
+
+
         }
 
         ]
@@ -84,8 +89,8 @@ function preDatafreeProduction(date, turn, inputValues) {
 
 function preDataReportItemProduction(dataIds, dataReportProdcution) {
     return {
-        productionReportItem:"productionReportItem",
-        typeReport:"production",
+        productionReportItem: "productionReportItem",
+        typeReport: "production",
         processDataId: dataIds.processDataId,
         productionId: dataIds.productionId,
         reportId: dataIds.reportId,
@@ -98,65 +103,78 @@ function preDataReportItemProduction(dataIds, dataReportProdcution) {
 
 }
 
-function preDataReportItemfault(dataIds,dataReportFault){
-    return{
-        productionFaultItem:"productionFaultItem",
-        typeReport:"fault",
-        processDataId: dataIds.processDataId,
-        productionId: dataIds.productionId,
-        reportId: dataIds.reportId,
-        startTime: dataReportFault.startTime,
-        endTime: dataReportFault.endTime,
-        totalTime: dataReportFault.totalTime,
-        system: dataReportFault.system,
-        subSystem: dataReportFault.subSystem,
-        component: dataReportFault.component,
-        failureMode: dataReportFault.failureMode,
-        solution: dataReportFault.solution,
-        
+function preDataReportItemIc(dataIds, dataReportIc) {
+    return {
+        productionICItem: "Equipamento",
+        typeReport: dataReportIc.type,
+        processDataId: dataIds.processId,
+        startTime: dataReportIc.startTime,
+        endTime: dataReportIc.endTime,
+        totalTime: dataReportIc.totalTime,
+        system: dataReportIc.system,
+        subSystem: dataReportIc.subSystem,
+        component: dataReportIc.component,
+        failureMode: dataReportIc.failureMode,
+        machine: dataReportIc.machine,
+        solution: dataReportIc.solution,
+
     }
 }
-function preDataReportItemExternalStop(dataIds,dataReportExternalStop){
-    return{
-        productionExternalStopItem:"productionExternalStopItem",
-        typeReport:"external",
-        processDataId: dataIds.processDataId,
-        productionId: dataIds.productionId,
-        reportId: dataIds.reportId,
-        startTime:dataReportExternalStop.startTime,
-        endTime:dataReportExternalStop.endTime,
-        totalTime:dataReportExternalStop.totalTime,
-        typeStop: dataReportExternalStop.typeStop,
-        detailStop: dataReportExternalStop.detailStop,
-        descriptionStop: dataReportExternalStop.descriptionStop,
-        solution: dataReportExternalStop.solution
+function preDataReportItemEc(dataIds, dataReportEc) {
+    console.log(dataReportEc)
+    return {
+        
+        productionEcItem: "Externo",
+        typeReport: dataReportEc.type,
+        processDataId: dataIds.processId,        
+        startTime: dataReportEc.startTime,
+        endTime: dataReportEc.endTime,
+        totalTime: dataReportEc.totalTime,
+        typeStop: dataReportEc.typeStop,
+        subTypeStop: dataReportEc.subTypeStop,
+        failureMode: dataReportEc.failureMode,
+        solution: dataReportEc.solution
     }
 }
-function preDataReportItemUnscheduled(dataIds,dataReportUnschedule){
-    return{
-        productionUnscheduledItem:"productionUnscheduledItem",
-        typeReport:"Unscheduled",
-        processDataId: dataIds.processDataId,
-        productionId: dataIds.productionId,
-        reportId: dataIds.reportId,
-        startTime:dataReportUnschedule.startTime,
-        endTime:dataReportUnschedule.endTime,
-        totalTime:dataReportUnschedule.totalTime,        
-        
+function preDataReportItemDPA(dataIds, dataReportDPA) {
+    return {
+        productionDPAItem: "Paro Programado",
+        typeReport: dataReportDPA.type,
+        processDataId: dataIds.processId,        
+        startTime: dataReportDPA.startTime,
+        endTime: dataReportDPA.endTime,
+        totalTime: dataReportDPA.totalTime,
+        typeStop: dataReportDPA.typeStop,
+        subTypeStop: dataReportDPA.subTypeStop,
+        specification: dataReportDPA.specification,
+        solution: dataReportDPA.solution,
+
+
+    }
+}
+function preDataReportItemNST(dataIds, dataReportNST) {
+    return {
+        productionNSTItem: "No Programado",
+        typeReport: dataReportNST.type,
+        processDataId: dataIds.processId,        
+        startTime: dataReportNST.startTime,
+        endTime: dataReportNST.endTime,
+        totalTime: dataReportNST.totalTime,
+        typeStop: dataReportNST.typeStop,
+        subTypeStop: dataReportNST.subTypeStop,        
+        solution: dataReportNST.solution,
+
+
     }
 }
 
 function validateDataWhithoutNull(data) {
 
-    return Object.values(data).some(value => value === null || value ==='');
+    return Object.values(data).some(value => value === null || value === '');
 
 
 
 }
-
-
-
-
 
 // Función para transformar un array de reportes en el formato deseado
 function transformReportItems(reportItems, name, bg, marca, brewId) {
@@ -165,15 +183,17 @@ function transformReportItems(reportItems, name, bg, marca, brewId) {
         tiempoTotal: item.totalTime,
         inicio: item.startTime,
         fin: item.endTime,
-        bg: bg,  
+        bg: bg,
         marca: marca,
         brewId: brewId
 
-       
+
     }));
 }
 
+
 function sortReportsByStartTime(reports) {
+
     return reports.sort((a, b) => {
         const timeA = new Date(`1970-01-01T${a.inicio}:00`);
         const timeB = new Date(`1970-01-01T${b.inicio}:00`);
@@ -184,24 +204,40 @@ function sortReportsByStartTime(reports) {
 //funcion extraer los reportes
 
 function extractedReportData(data) {
-    let allTransformedData = [];
 
-    data.forEach(dataItem => {
-        const report = dataItem.report[0]; // Acceder al reporte en el dataItem actual
-        
-        // Transformar cada tipo de reporte (producción, avería, etc.) y agregarlo al array
-        const transformedData = [            
-            ...transformReportItems(report.productionReportItem, 'Producción', '#A5DD9B', dataItem.brand, dataItem.brewId),
-            ...transformReportItems(report.productionFaultItem, 'Avería', '#F68D2B', dataItem.brand, dataItem.brewId),
-            ...transformReportItems(report.productionExternalStopItem, 'Paro Externo', '#4B6DAE', dataItem.brand, dataItem.brewId),
-            ...transformReportItems(report.productionUnscheduledItem, 'No Programado', '#BB8493', dataItem.brand, dataItem.brewId)
-        ];
+    const production = data.production    
+    const OPI = data.OPI
+    let allTransformedData1 = [];
+    let allTransformedData2= [];
 
-        allTransformedData = allTransformedData.concat(transformedData); // Agregar los datos transformados al array total
-    });
 
-    // Ordenar todos los reportes transformados por la hora de inicio
-    return sortReportsByStartTime(allTransformedData);
+    OPI.forEach((item) => {
+
+        const transformData = [
+            ...transformReportItems(item.IC, 'Averia', '#F68D2B', 'Averia Equipamento', '01'),
+            ...transformReportItems(item.EC, 'Paro Externo', '#4B6DAE', 'Paro Externo', '01'),
+            ...transformReportItems(item.DPA, 'Paro Programado', '#D9DB4A', 'Paro Programado', '01'),
+            ...transformReportItems(item.NST, 'No Programado', '#BB8493', 'No Programado', '01')
+
+        ]
+        allTransformedData1 = transformData.concat(allTransformedData1)
+
+    })
+
+    production.forEach(dataItem=>{
+       const report = dataItem.report[0];
+
+       const transformData = [
+        ...transformReportItems(report.productionReportItem, 'Producción', '#A5DD9B', dataItem.brand, dataItem.brewId)
+       ]
+       allTransformedData2 = transformData.concat(allTransformedData2)
+
+    })
+    
+    const allTransformedData=[...allTransformedData1, ...allTransformedData2];    
+
+    return sortReportsByStartTime(allTransformedData)
+   
 }
 
 // Función separada para calcular el tiempo total
@@ -219,9 +255,10 @@ export {
     dataNewReport,
     preDatafreeProduction,
     preDataReportItemProduction,
-    preDataReportItemfault,
-    preDataReportItemExternalStop,
-    preDataReportItemUnscheduled,
+    preDataReportItemIc,
+    preDataReportItemEc,
+    preDataReportItemDPA,
+    preDataReportItemNST,
     validateDataWhithoutNull,
     extractedReportData,
     extractedTotalTime

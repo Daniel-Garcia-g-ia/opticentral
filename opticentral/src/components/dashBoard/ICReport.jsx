@@ -35,6 +35,7 @@ function ICReport() {
         failureMode: null,
         machine: null,
         solution: null,
+        type:null
 
     });
 
@@ -288,187 +289,11 @@ function ICReport() {
         'Enfriador',
 
     ]
-
+    //Informacion para el reporte, lo guarda en el contex
     useEffect(() => {
         dataReportProductionContext(dataReport)
-    }, [dataReport])
-
-
-    /*    useEffect(() => {
+    }, [dataReport])  
    
-           if (dataSystem === 'Averías de Equipamiento') {
-               setOptionSubSystem([
-                   'Automatización',
-                   'Metrología',
-                   'Eléctrico',
-                   'Electrónico',
-                   'Hidráulico',
-                   'Lubricación',
-                   'Mecánico',
-                   'Neumático',
-                   'Transmisión',
-   
-               ])
-           } else {
-               setOptionSubSystem([])
-           }
-   
-   
-           if (dataSubSystem === 'Automatización') {
-               setOptionComponent([
-                   'BOTEC',
-                   'PLC',
-                   'Sensores',
-                   'Actuadores Eléctricos',
-                   'Pantallas',
-                   'Comunicación',
-                   'Reles',
-                   'Variadores',
-                   'Periferias'
-   
-               ])
-           } else if (dataSubSystem === 'Metrología') {
-               setOptionComponent([
-                   'Presión',
-                   'Temperatura',
-                   'Nivel',
-                   'Peso',
-                   'CO2',
-                   'Oxigeno',
-                   'Alcohol',
-                   'Extracto',
-                   'Turbidez',
-                   'Densidad',
-                   'AntonPar'
-   
-               ])
-           } else if (dataSubSystem === 'Eléctrico') {
-   
-               setOptionComponent([
-                   'Interruptor',
-                   'Guardamotor',
-                   'Cableado',
-                   'Transformador',
-                   'Motor',
-                   'Contactos',
-                   'Tablero',
-                   'Variadores',
-                   'Reles Termicos',
-                   'PILZ',
-                   'Conectores',
-   
-               ])
-           } else if (dataSubSystem === 'Electrónico') {
-   
-               setOptionComponent([
-                   'Controlador',
-                   'Bus de Comunicación',
-                   'Sensores Electrónicos',
-                   'Fuentes de Alimentación'
-               ])
-           }
-           else if (dataSubSystem === 'Hidráulico') {
-   
-               setOptionComponent([
-                   'Bomba Hidráulica',
-                   'Cilindro Hidráulico',
-                   'Válvulas Direccionales',
-                   'Filtro Hidráulica',
-                   'Acumuladores',
-                   'Mangueras',
-                   'Tuberias',
-                   'Conexiones',
-                   'Acoples Rapidos',
-                   'Manómetros',
-                   'Aceite',
-                   'Empaques'
-               ])
-           } else if (dataSubSystem === 'Lubricación') {
-   
-               setOptionComponent([
-                   'Bomba de Lubricación',
-                   'Filtros de Aceite',
-                   'Sistema de Lubricación Centralizado',
-                   'Aceites de lubricación',
-                   'Grasa de Lubricación',
-                   'Inyectores',
-                   'Depósito',
-                   'Sistema de Recirculación'
-   
-               ])
-           } else if (dataSubSystem === 'Mecánico') {
-   
-               setOptionComponent([
-                   'Rodamientos',
-                   'Engranajes',
-                   'Chumaceras',
-                   'Cadenas',
-                   'Poleas',
-                   'Tornillos y Tuercas',
-                   'Cojinetes',
-                   'Ejes',
-                   'Acoplamientos',
-                   'Juntas Toricas',
-                   'Sellos Mecánicos',
-                   'Bombas',
-                   'Tuberia',
-                   'Soldaduras',
-                   'flanches',
-                   'Empaques',
-                   'Válvulas',
-                   'Actuador',
-                   'Prensa Estopa'
-   
-   
-               ])
-           } else if (dataSubSystem === 'Neumático') {
-   
-               setOptionComponent([
-                   'Cilindro',
-                   'Actuador neumático',
-                   'Válvula',
-                   'Unidad de Mantenimiento',
-                   'filtros',
-                   'Lubricadores de Aire',
-                   'Reguladores de Presión',
-                   'Mangueras',
-                   'Tuberías',
-                   'Acoples',
-                   'Racores',
-                   'Manómetros',
-               ])
-           } else if (dataSubSystem === 'Transmisión') {
-   
-               setOptionComponent([
-                   'Cajas Reductoras',
-                   'Acoples Flexibles',
-                   'Acoples Rígidos',
-                   'Elastomeros',
-                   'Ejes de transmisión',
-                   'Correas',
-                   'Cadenas',
-   
-   
-               ])
-           }
-           else {
-               setOptionComponent([])
-           }
-   
-       
-   
-   
-   
-   
-   
-       }, [dataSystem, dataSubSystem, dataComponent])
-    */
-    useEffect(() => {
-        // The Effect of information management
-
-        dataReportProductionContext(dataReport)
-
-    }, [dataReport])
 
     useEffect(() => {
         setTime(timeDifference)
@@ -517,7 +342,8 @@ function ICReport() {
         setDataSystem(value);
         setDataReport(prevState => ({
             ...prevState,
-            system: value
+            system: value,
+            type:'IC'
         }))
         setData(!data);
         setOptionComponent([])
@@ -589,7 +415,7 @@ function ICReport() {
         setDataMachines(value);
         setDataReport(prevState => ({
             ...prevState,
-            dataMachines: value
+            machine: value
         }))
         setData(!data);
 

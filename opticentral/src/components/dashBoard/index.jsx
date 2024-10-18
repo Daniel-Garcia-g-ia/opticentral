@@ -22,6 +22,7 @@ import { DateContext } from "../context/DateContext";
 
 import { basicMessage, textUnderMessage, processingAction, closeSwal, eventBasic } from "../services/alerts";
 import { ImInsertTemplate } from "react-icons/im";
+import { CgOpenCollective } from "react-icons/cg";
 
 
 
@@ -48,6 +49,7 @@ function DashBoard() {
     const [reportLength, setReportLength] = useState(0);
     const [dataExtractedReport, setDataExtractedReport] = useState(0);
     const [report_id, setReport_id] = useState([]);
+    const [dataAveria, setDataAveria] = useState({});
     const [processDataId, setProcessDataId] = useState([]);
     const [productionId, setProductionId] = useState([]);
     const [reportId, setReportId] = useState([]);
@@ -58,6 +60,7 @@ function DashBoard() {
     const { id, code, name, place } = equipment;
     const [dataSelected, setDataSelected] = useState();
     const [totalTimeExtraxtesReport, setTotalTimeExtractedReport] = useState(0)
+    const [activateAddIcon, setActivateAddIcon] = useState(true)
 
     const [activeAddReport, setActiveAddReport] = useState(false)
     const [activateReportExt, setActivateReportExt] = useState(false)
@@ -65,9 +68,9 @@ function DashBoard() {
     const brands = dataBrands()
 
     useEffect(() => {
-        
+
         if (!isFirstRender1.current) {
-            isFirstRender1.current = true;           
+            isFirstRender1.current = true;
             return;
         }
         if (permissonsRole) {
@@ -88,11 +91,11 @@ function DashBoard() {
             isFirstRender2.current = true;
             return;
         }
-        
+
         dateContext(date)
         turnContext(dataTurn)
-        
-        
+
+
         if (!permissonsRole) {
 
             const authData = getLocalStorage('authData')
@@ -100,20 +103,21 @@ function DashBoard() {
             if (!authData || !authData.auth && !authData.token) {
                 navigate('/')
             } else if (!activateReportExt && date && dataTurn) {
-                processingAction('Validando información','Por favor espere...',true)
-                 //Peticion GET ApI   
-                
+                processingAction('Validando información', 'Por favor espere...', true)
+                //Peticion GET ApI   
 
-                fetchOneData('https://backendopticentral.onrender.com/app/v1/processData', code, date, dataTurn, authData.token).then(result => {
-                    
+
+
+                fetchOneData('http://localhost:3000/app/v1/processData', code, date, dataTurn, authData.token).then(result => {
+
                     if (!result.body.auth) {
-                        
+
                         navigate('/')
 
                     } else {
                         closeSwal()
-                        
-                        
+
+
                         if (result.body && result.body.data && result.body.data.length > 0) {
                             if (!result.body.data[0].processData[0].release) {
                                 textUnderMessage('Producción sin liberar', 'Informar al líder de turno', 'warning')
@@ -123,8 +127,11 @@ function DashBoard() {
                                 setActiveTime(true)
 
 
-                                const extractedReport = extractedReportData(result.body.data[0].processData[0].production)
+                                const extractedReport = extractedReportData(result.body.data[0].processData[0])
 
+
+                            
+                               
                                 setReportLength(extractedReport.length)
                                 setDataExtractedReport(extractedReport)
                                 const totalTimeExtracted = extractedTotalTime(extractedReport)
@@ -189,34 +196,36 @@ function DashBoard() {
 
                             }
 
-                        } else {          
-                            
+                        } else {
+
                             setDataLength(result.body.data.length)
                             setActiveTime(false)
                             setReportLength(0)
                             basicMessage('Sin datos registrados')
-                            
+
 
                         }
                     }
                 }).catch(error => {
-                    processingAction(null,null,false)
-                    eventBasic('error',`error: ${error}`)
+                    console.log(error)
+                    processingAction(null, null, false)
+                    eventBasic('error', `error: ${error}`)
                     navigate('/')
                 })
-            }else{
+            } else {
                 setActiveTime(false)
             }
 
         }
 
 
-    }, [selectedDate])
+    }, [selectedDate, activateReportExt])
 
     const handledClickAdd = (data) => {
         setActivateDetailsProduction(!activateDeatilProduction)
         setActiveAddReport(true)
-        setDataSelected(data)        
+        setActivateAddIcon(false)
+        setDataSelected(data)
         /* setSelectedDate(!selectedDate) */
     }
     const handledOnChangeDate = (e) => {
@@ -239,12 +248,12 @@ function DashBoard() {
                             <div className="field is-horizontal">
 
                                 <div className="control is-expanded">
-                                    <input className="input" type="date" value={date} onChange={handledOnChangeDate} disabled={activateReportExt} />
+                                    <input className="input" type="date" value={date} onChange={handledOnChangeDate} disabled={activateReportExt || activeAddReport} />
                                 </div>
 
                                 <p className="control pl-2">
                                     <span className="select">
-                                        <select name="turn" id="turn-select" value={dataTurn} onChange={handledOnChangeTurn} disabled={activateReportExt} >
+                                        <select name="turn" id="turn-select" value={dataTurn} onChange={handledOnChangeTurn} disabled={activateReportExt || activeAddReport} >
                                             <option>Turno 1</option>
                                             <option>Turno 2</option>
                                             <option>Turno 3</option>
@@ -281,7 +290,7 @@ function DashBoard() {
                             <div className="box is-custom-box-detail">
 
                                 {activeTotalTime &&
-                                    <TotalReportTime data={totalTimeExtraxtesReport} setActivateReportExt={setActivateReportExt} />
+                                    <TotalReportTime data={totalTimeExtraxtesReport} setActivateReportExt={setActivateReportExt} activeAddIcon={activateAddIcon} />
                                 }
 
                                 {activateDeatilProduction && Array.from({ length: dataLength }, (_, index) => (
@@ -298,16 +307,17 @@ function DashBoard() {
                                     location={place} />}
 
                                 {activeAddReport && <AddReport
-                                    activeAddReport={activeAddReport}
                                     setActiveAddReport={setActiveAddReport}
                                     setActivateDetailsProduction={setActivateDetailsProduction}
                                     setSelectedDate={setSelectedDate}
                                     selectedDate={selectedDate}
+                                    setActivateAddIcon={setActivateAddIcon}
                                     data={dataSelected} />}
 
-                                {activateReportExt && <AddReportExt 
-                                setActivateDetailsProduction={setActivateDetailsProduction} 
-                                setActivateReportExt={setActivateReportExt}
+                                {activateReportExt && <AddReportExt
+                                    setActivateDetailsProduction={setActivateDetailsProduction}
+                                    setActivateReportExt={setActivateReportExt}
+                                    data={{ id: report_id[0], processId: processDataId[0] }}
                                 />
 
                                 }

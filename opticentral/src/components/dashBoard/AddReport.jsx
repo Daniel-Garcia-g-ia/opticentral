@@ -1,102 +1,50 @@
 import React from "react";
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect, useRef } from "react";
 import { ReportContext } from "../context/ReportContext";
 import { getLocalStorage } from "../services/LocalStorage";
 import { fetchUpdateReportProduction } from "../services/fetchData";
-import { preDataReportItemProduction, validateDataWhithoutNull, preDataReportItemfault, preDataReportItemExternalStop, preDataReportItemUnscheduled } from "../services/preData";
-import { eventBasic, textUnderMessage } from "../services/alerts";
+import { preDataReportItemProduction, validateDataWhithoutNull } from "../services/preData";
+import { eventBasic, textUnderMessage, processingAction, closeSwal } from "../services/alerts";
 import AddProduction from "./AddProduction";
 
 import ParoExterno from "./ParoExterno";
 import TurnoNoProgramado from "./TurnoNoProgramado";
 
-function AddReport({ activeAddReport, setActiveAddReport, setActivateDetailsProduction, setSelectedDate, selectedDate, data }) {
+function AddReport({ setActiveAddReport, setActivateDetailsProduction, setSelectedDate, selectedDate, setActivateAddIcon, data }) {
     const { dataReportProduction } = useContext(ReportContext)
-    const [typereport, setTypeReport] = useState();
-    const [saveReport, setSaveReport] = useState(false);
-    const [activeSetProductionReport, setActiveProductionReport] = useState(false);
-    const [activeAveriaReport, setActiveAveriaReport] = useState(false);
-    const [activeParoExterno, setActiveParoExterno] = useState(false);
-    const [activeTurnoNoProgramado, setActiveTurnoNoProgramado] = useState(false);
-    const [dataFetch, setDataFetch] = useState({})
-
-    const [productionReport, setProductionReport] = useState(false);
+    const [saveReport, setSaveReport] = useState(false);    
+    const [dataFetch, setDataFetch] = useState({})   
     const [brand, setBrand] = useState(data.brand);
 
 
-
-
-
+ 
 
     useEffect(() => {
 
-        // Effect active report production
-
-
-        if (typereport === 'Producción') {
-            setActiveTurnoNoProgramado(false);
-            setActiveAveriaReport(false);
-            setActiveParoExterno(false);
-            setActiveAveriaReport(false);
-            setActiveProductionReport(!activeSetProductionReport);
-        }
-
-        if (typereport === 'Avería') {
-            setActiveTurnoNoProgramado(false);
-            setActiveAveriaReport(false);
-            setActiveProductionReport(false);
-            setActiveParoExterno(false);
-            setActiveAveriaReport(!activeAveriaReport);
-        }
-
-        if (typereport === 'Paro Externo') {
-            setActiveTurnoNoProgramado(false);
-            setActiveProductionReport(false);
-            setActiveAveriaReport(false);
-            setActiveParoExterno(!activeParoExterno);
-        }
-        if (typereport === 'Turno no Programado') {
-            setActiveProductionReport(false);
-            setActiveAveriaReport(false);
-            setActiveParoExterno(false);
-            setActiveTurnoNoProgramado(!activeTurnoNoProgramado);
-        }
-
-
-
-
-
-    }, [typereport])
-
-    useEffect(() => {
-        
 
         // Validate user login token
 
         const authData = getLocalStorage('authData')
-
-        
-        
-
         // Validate the token and run the put fetch request
 
         if (!authData || !authData.auth && !authData.token) {
             console.log('sin token')
-            
+
         } else if (!dataFetch || Object.keys(dataFetch).length === 0) {
             // Verificar si dataFetch está vacío
             console.log('Sin datos en dataFetch');
-        }else {
-            
-            
-            fetchUpdateReportProduction('https://backendopticentral.onrender.com/app/v1/updateData', data._id, authData.token, dataFetch)
-            
+        } else {
+            processingAction('Procesando Información', 'Por favor, espere ...')
+
+            fetchUpdateReportProduction('http://localhost:3000/app/v1/updateData', data._id, authData.token, dataFetch)
+
                 .then(result => {
+                    closeSwal()
                     eventBasic('success', 'Reporte, ¡Guardado con exito!')
-                    
-                })
-                .then(()=>{
-                    setSelectedDate(!selectedDate)
+                    setActivateDetailsProduction(true);
+                    setActivateAddIcon(true);
+                    setActiveAddReport(false);
+                    setSelectedDate(!selectedDate);
                 })
                 .catch(error =>
                     textUnderMessage('ERROR', `${error}, 1001`, 'error')
@@ -110,45 +58,28 @@ function AddReport({ activeAddReport, setActiveAddReport, setActivateDetailsProd
 
 
     const HandledClickDismiss = () => {
-        setActivateDetailsProduction(true)
-        setActiveAddReport(false)
-        
+        setActivateDetailsProduction(true);
+        setActivateAddIcon(true);
+        setActiveAddReport(false);
+
     }
     const handledClickSaveReport = () => {
-         
-        
+
+
         const validateReport = validateDataWhithoutNull(dataReportProduction)
         if (validateReport) {
             textUnderMessage("¡Validar Información!", "Por favor, ingrese información válida y completa !", "warning")
 
         } else {
+
+            console.log(data)
+            setDataFetch(preDataReportItemProduction(data, dataReportProduction));
+            setSaveReport(!saveReport);
             
-
-            if (typereport === 'Producción') {              
-                setDataFetch(preDataReportItemProduction(data, dataReportProduction));
-                setSaveReport(!saveReport);
-                
-            }else if (typereport === 'Avería') {
-                 setDataFetch(preDataReportItemfault(data, dataReportProduction));
-                 setSaveReport(!saveReport);
-             } else if (typereport === 'Paro Externo') {
-                 setDataFetch(preDataReportItemExternalStop(data, dataReportProduction));
-                 setSaveReport(!saveReport); 
-             }else if (typereport ==='Turno no Programado'){
-                
-                setDataFetch(preDataReportItemUnscheduled(data,dataReportProduction));
-                setSaveReport(!saveReport); 
-               
-
-             }
-             
-             
         }
     }
 
-    const HandledChanceReport = (e) => {
-        setTypeReport(e.target.value)
-    }
+
     return (
         <>
 
@@ -164,32 +95,8 @@ function AddReport({ activeAddReport, setActiveAddReport, setActivateDetailsProd
 
                 <div className="column custom-addreport ">
 
-                    <div className="column is-flex is-justify-content-center">
-                        <div className="field is-horizontal">
 
-                            <div className="field ">
-                                <label className="label custom-label">Reportar</label>
-                                <div className="select is-small ">
-                                    <select className="is-hovered custom-width-add-report " onChange={HandledChanceReport} value={typeReport}  >
-                                        <option> </option>
-                                        <option>Producción</option>
-                                        <option>Avería</option>
-                                        <option>Paro Externo</option>
-                                        <option>Turno no Programado</option>
-                                    </select>
-                                </div>
-
-                            </div>
-
-
-                        </div>
-
-
-                    </div>
-                    {activeSetProductionReport && <AddProduction />}
-                    {/* {activeAveriaReport && <AveriaReport />} */}
-                    {activeParoExterno && <ParoExterno />}
-                    {activeTurnoNoProgramado && <TurnoNoProgramado />}
+                    <AddProduction />          
 
 
 
