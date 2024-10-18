@@ -1,49 +1,49 @@
-import React, { useState } from "react";
-import { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Card from "../card"
+import Card from "../card";
 import prensa from "../../assets/images/filtroPrensa.png";
-import bmf from "../../assets/images/bmf.png"
-import { flatArray } from "../services/preData";
-
+import { flatArray } from "../services/preData"; // Asumo que esta función está bien definida.
 
 function CardMachine({ equipmentData }) {
     const navigate = useNavigate();
-    const [equipmentId, setEquipmentId] = useState('')
-    const [equipmentArray, setEquipmentArray] = useState([])
-    const [equipments, setEquipments] = useState([])
+    const [equipmentsMachine, setEquipmentsMachine] = useState([]);
 
     useEffect(() => {
-        setEquipmentArray(Object.values(equipmentData));
-
-        setEquipments(flatArray(equipmentArray));
-
+        if (equipmentData && Object.keys(equipmentData).length > 0) {
+            // Convertimos los datos de equipment a un array y los "aplanamos"
+            const equipmentArray = Object.values(equipmentData);
+            const flattenedArray = flatArray(equipmentArray);
+            setEquipmentsMachine(flattenedArray); // Actualizamos el estado de la máquina aplanada
+        }
     }, [equipmentData]);
 
-    const handledCardClick = (equipment) => {        
-        
-        navigate('/dashboard',{state:{equipment}})
-    }
+    const handledCardClick = (equipment) => {
+        navigate('/dashboard', { state: { equipment } });
+    };
 
     return (
-        <>
-            <div className=" pt-6">
-                <div className="columns is-centered pt-6 ">
-                    {equipments.map((equipment, index) => (
+        <div className="pt-6">
+            <div className="columns is-centered pt-6">
+                {equipmentsMachine.length > 0 ? (
+                    equipmentsMachine.map((equipment, index) => (
                         <div key={index} className="column is-one-fifth">
                             {equipment && (
-                                <Card image={prensa} place={equipment.place} title={equipment.name} onClick={() => handledCardClick(equipment)} />
+                                <Card
+                                    image={prensa}
+                                    place={equipment.place}
+                                    title={equipment.name}
+                                    onClick={() => handledCardClick(equipment)}
+                                />
                             )}
                         </div>
-                    ))}
-                </div>
-
+                    ))
+                ) : (
+                    <div>No hay datos disponibles.</div> // Mensaje de respaldo si no hay equipos
+                )}
             </div>
-
-        </>
+        </div>
     );
 }
 
 export default CardMachine;
-
 

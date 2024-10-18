@@ -8,10 +8,10 @@ import App from "./src/App/App"
 const root = ReactDOM.createRoot(document.getElementById("app"));
 root.render(
 
-    <StrictMode>
+    //<StrictMode>
 
         <App />
-   </StrictMode> 
+  // </StrictMode> 
 
 
 

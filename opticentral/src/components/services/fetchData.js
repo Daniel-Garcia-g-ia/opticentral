@@ -14,9 +14,11 @@ function fetchData(url, token) {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
+                console.log(response)
                 return response.json();
             })
             .then(data => {
+                console.log(data)
                 resolve(data);
             })
             .catch(error => {
@@ -160,7 +162,7 @@ async function fetchUpdateReportProduction(url, reportId, token, data) {
             throw error; // para que la llamada pueda manejar el error
         }
     } */
-    
+
 
 
 
