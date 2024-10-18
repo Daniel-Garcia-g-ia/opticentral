@@ -22,7 +22,7 @@ function HomeRoute() {
         } else {
             //Peticion GET ApI
            
-            fetchData('http://localhost:3000/app/v1/equipments',authData.token).then(data =>{
+            fetchData('https://backendopticentral.onrender.com/app/v1/equipments',authData.token).then(data =>{
                 if(!data.body.auth){
                     closeSwal()
                     eventBasic('Error de conexión','No se encuentra área en DB')

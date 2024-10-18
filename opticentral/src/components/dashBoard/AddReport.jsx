@@ -36,7 +36,7 @@ function AddReport({ setActiveAddReport, setActivateDetailsProduction, setSelect
         } else {
             processingAction('Procesando Información', 'Por favor, espere ...')
 
-            fetchUpdateReportProduction('http://localhost:3000/app/v1/updateData', data._id, authData.token, dataFetch)
+            fetchUpdateReportProduction('https://backendopticentral.onrender.com/app/v1/updateData', data._id, authData.token, dataFetch)
 
                 .then(result => {
                     closeSwal()

@@ -43,7 +43,7 @@ function AddReportExt({ setActivateDetailsProduction, setActivateReportExt, setS
 
             console.log(data.id, dataFetch)
 
-            fetchUpdateReportProduction('http://localhost:3000/app/v1/updateData', data.id, authData.token, dataFetch)
+            fetchUpdateReportProduction('https://backendopticentral.onrender.com/app/v1/updateData', data.id, authData.token, dataFetch)
                 .then(result => {
                     closeSwal()
                     eventBasic('success', 'Reporte, ¡Guardado con exito!')
