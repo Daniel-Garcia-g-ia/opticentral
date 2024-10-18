@@ -1,4 +1,5 @@
 import { all } from "axios";
+import { GiConsoleController } from "react-icons/gi";
 import { LiaEtsy } from "react-icons/lia";
 import { SiTruenas, SiTrueup } from "react-icons/si";
 
@@ -48,7 +49,9 @@ function dataNewReport(equipmentId, equipmentName, location, processData) {
             })),
             OPI: [{
                 IC: [],
-                EC: []
+                EC: [],
+                DPA: [],
+                NST:[],
 
             }]
 
@@ -178,6 +181,7 @@ function validateDataWhithoutNull(data) {
 
 // Función para transformar un array de reportes en el formato deseado
 function transformReportItems(reportItems, name, bg, marca, brewId) {
+    console.log(reportItems, name, bg,marca.brewId)
     return reportItems.map(item => ({
         name,
         tiempoTotal: item.totalTime,
@@ -205,6 +209,7 @@ function sortReportsByStartTime(reports) {
 
 function extractedReportData(data) {
 
+    console.log(data)
     const production = data.production    
     const OPI = data.OPI
     let allTransformedData1 = [];

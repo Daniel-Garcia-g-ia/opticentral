@@ -61,6 +61,7 @@ function DashBoard() {
     const [dataSelected, setDataSelected] = useState();
     const [totalTimeExtraxtesReport, setTotalTimeExtractedReport] = useState(0)
     const [activateAddIcon, setActivateAddIcon] = useState(true)
+    const [activateFreeProduction, setActivateFreeProduction]= useState(false);
 
     const [activeAddReport, setActiveAddReport] = useState(false)
     const [activateReportExt, setActivateReportExt] = useState(false)
@@ -219,7 +220,7 @@ function DashBoard() {
         }
 
 
-    }, [selectedDate, activateReportExt])
+    }, [selectedDate, activateReportExt, activateFreeProduction])
 
     const handledClickAdd = (data) => {
         setActivateDetailsProduction(!activateDeatilProduction)
@@ -304,7 +305,11 @@ function DashBoard() {
                                 {permissonsRole && <FreeProduction
                                     equipmentId={code}
                                     equipmentName={name}
-                                    location={place} />}
+                                    location={place}
+                                    activateFreeProduction={activateFreeProduction}
+                                    setActivateFreeProduction={ setActivateFreeProduction}
+
+                                     />}
 
                                 {activeAddReport && <AddReport
                                     setActiveAddReport={setActiveAddReport}

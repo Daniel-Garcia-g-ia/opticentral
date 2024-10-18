@@ -11,7 +11,7 @@ import { fetchData, fetchSetReport } from "../services/fetchData";
 import InputsFreeProduction from "./InputsFreeProduction";
 import { dataNewReport, preDatafreeProduction } from "../services/preData";
 
-function FreeProduction({ equipmentId, equipmentName, location }) {
+function FreeProduction({ equipmentId, equipmentName, location, activateFreeProduction, setActivateFreeProduction }) {
 
 
     const { discardProduction } = useContext(NavbarContext)
@@ -36,7 +36,7 @@ function FreeProduction({ equipmentId, equipmentName, location }) {
 
         } else {
             
-            fetchData('http://localhost:3000/app/v1/mostRecentReport/0001', authData.token)
+            fetchData('https://backendopticentral.onrender.com/app/v1/mostRecentReport/0001', authData.token)
                 .then(data => {
                     if (!data.body.auth) {
                         navigate('/');
@@ -106,6 +106,8 @@ function FreeProduction({ equipmentId, equipmentName, location }) {
                 eventBasic('error', error)
             })
         }
+        setActivateFreeProduction(!activateFreeProduction)
+        discardProduction()
 
 
 
@@ -126,6 +128,7 @@ function FreeProduction({ equipmentId, equipmentName, location }) {
     }
 
     const handledClickDiscard = () => {
+        
         discardProduction()
     }
 
