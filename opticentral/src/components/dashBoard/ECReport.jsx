@@ -335,14 +335,14 @@ function ECReport() {
                             <div className="field">
                                 <label className="label custom-label">Inicio</label>
                                 <div className="control">
-                                    <input className="input is-small" type="time" value={startTime} onChange={handledChangeInputStart} />
+                                    <input className="input is-small" type="time" value={startTime} onChange={handledChangeInputStart} step='60' min="00:00" max='23:59' />
                                 </div>
                             </div>
 
                             <div className="field pl-3">
                                 <label className="label custom-label">Fin</label>
                                 <div className="control">
-                                    <input className="input is-small" type="time" value={endTime} onChange={handledChangeInputEnd} />
+                                    <input className="input is-small" type="time" value={endTime} onChange={handledChangeInputEnd} step='60' min="00:00" max='23:59' />
                                 </div>
                             </div>
 

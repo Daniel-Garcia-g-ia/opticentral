@@ -74,14 +74,14 @@ function AddReportExt({ setActivateDetailsProduction, setActivateReportExt, setS
 
     useEffect(() => {
 
-        if (typeReport === 'IC') {
+        if (typeReport === 'Causa Interna (IC)') {
 
             setActivateICReport(true);
             setActivateECReport(false);
             setActivateDPAReport(false);
             setAcvateNSTReport(false);
 
-        } else if (typeReport === 'EC') {
+        } else if (typeReport === 'Causa Externa (EC)') {
 
             setActivateECReport(true);
             setActivateICReport(false);
@@ -89,14 +89,14 @@ function AddReportExt({ setActivateDetailsProduction, setActivateReportExt, setS
             setAcvateNSTReport(false);
 
 
-        } else if (typeReport === 'DPA') {
+        } else if (typeReport === 'Actividad Planeada (DPA)') {
             setActivateDPAReport(true);
             setActivateECReport(false);
             setActivateICReport(false);
             setAcvateNSTReport(false);
 
 
-        } else if (typeReport === 'NST') {
+        } else if (typeReport === 'No Programado (NST)') {
             setAcvateNSTReport(true);
             setActivateDPAReport(false);
             setActivateECReport(false);
@@ -130,17 +130,17 @@ function AddReportExt({ setActivateDetailsProduction, setActivateReportExt, setS
 
         } else {
 
-            if (typeReport === 'IC') {
+            if (typeReport === 'Causa Interna (IC)') {
                 setDataFetch(preDataReportItemIc(data, dataReportProduction));
-            } else if (typeReport === 'EC') {
+            } else if (typeReport === 'Causa Externa (EC)') {
                 setDataFetch(preDataReportItemEc(data, dataReportProduction));
                 console.log(data)
                 console.log(dataFetch)
-            } else if (typeReport === 'DPA') {
+            } else if (typeReport === 'Actividad Planeada (DPA)') {
                 setDataFetch(preDataReportItemDPA(data, dataReportProduction));
                 console.log(data)
                 console.log(dataFetch)
-            }else if(typeReport === 'NST'){
+            }else if(typeReport === 'No Programado (NST)'){
                 setDataFetch(preDataReportItemNST(data, dataReportProduction));
                 console.log(data)
                 console.log(dataFetch)
@@ -182,10 +182,10 @@ function AddReportExt({ setActivateDetailsProduction, setActivateReportExt, setS
                                     <div className="select is-small ">
                                         <select className="is-hovered custom-width-add-report " onChange={handledChance} value={typeReport} >
                                             <option> </option>
-                                            <option>IC</option>
-                                            <option>EC</option>
-                                            <option>DPA</option>
-                                            <option>NST</option>
+                                            <option>Causa Interna (IC)</option>
+                                            <option>Causa Externa (EC)</option>
+                                            <option>Actividad Planeada (DPA)</option>
+                                            <option>No Programado (NST)</option>
                                         </select>
                                     </div>
 

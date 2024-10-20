@@ -40,6 +40,7 @@ function ICReport() {
     });
 
     const subsystemsBySystem = {
+
         'Averías de Equipamiento': [
             'Automatización',
             'Metrología',
@@ -50,6 +51,17 @@ function ICReport() {
             'Mecánico',
             'Neumático',
             'Transmisión',
+        ],
+        'Pérdida de Velocidad':[
+           'Automatización',
+            'Metrología',
+            'Eléctrico',
+            'Electrónico',
+            'Hidráulico',
+            'Lubricación',
+            'Mecánico',
+            'Neumático',
+            'Transmisión', 
         ],
         'Falta de Personal': [
             'Personal Insuficiente'
@@ -195,7 +207,7 @@ function ICReport() {
         'Reles': ['Falla eléctrica', 'Falla de Bobina', 'Falla de Contactos', 'Falla del componente'],
         'Variadores': ['Falla Alimentacion', 'Falla de Parametros', 'Sobretensión', 'falla Eléctrica', 'Parada segura', 'Estado en Manual'],
         'Perisferias': ['Falla Alimentacion', 'Falla de Parametros', 'Sobretensión', 'falla Eléctrica', 'Falla de Cableado'],
-        'Presión': ['Falla de medicion', 'Error de medición', 'Calibración', 'Alimentación', 'Conector Averiado', 'Daño de Componente'],
+        'Medidor de Presión': ['Falla de medicion', 'Error de medición', 'Calibración', 'Alimentación', 'Conector Averiado', 'Daño de Componente'],
         'Medidor de Temperatura': ['Falla de medicion', 'Error de Conexión', 'Calibración', 'Alimentación', 'Conector Averiado', 'Daño de Componente'],
         'Medidor de Nivel': ['Falla de medicion', 'Error de Conexión', 'Calibración', 'Alimentación', 'Conector Averiado', 'Daño de Componente'],
         'Medidor de Peso': ['Falla de medicion', 'Error de Conexión', 'Calibración', 'Alimentación', 'Conector Averiado', 'Daño de Componente'],
@@ -279,6 +291,7 @@ function ICReport() {
 
     const machines = [
         'Filtro Prensa',
+        'Molienda',
         'PreMacerador',
         'Macerador 1',
         'Macerador 2',
@@ -448,14 +461,14 @@ function ICReport() {
                             <div className="field">
                                 <label className="label custom-label">Inicio</label>
                                 <div className="control">
-                                    <input className="input is-small" type="time" value={startTime} onChange={handledChangeInputStart} />
+                                    <input className="input is-small" type="time" value={startTime} onChange={handledChangeInputStart} step='60' min="00:00" max='23:59' />
                                 </div>
                             </div>
 
                             <div className="field pl-3">
                                 <label className="label custom-label">Fin</label>
                                 <div className="control">
-                                    <input className="input is-small" type="time" value={endTime} onChange={handledChangeInputEnd} />
+                                    <input className="input is-small" type="time" value={endTime} onChange={handledChangeInputEnd} step='60' min="00:00" max='23:59' />
                                 </div>
                             </div>
 
@@ -480,6 +493,7 @@ function ICReport() {
                                     <select className="is-hovered custom-width-add-report-averia " name="sistema" id="sistem" value={dataSystem} onChange={handledChangeInputSystem}>
                                         <option> </option>
                                         <option>Averías de Equipamiento</option>
+                                        <option>Pérdida de Velocidad</option>
                                         <option>Falta de Personal</option>
                                         <option>Paros de Calidad</option>
                                         

@@ -38,6 +38,13 @@ function DPAReport() {
             'Toma de muestra',
             'Analisis de parámetros'
         ],
+        'Inicio de Producción':[
+            'Inicio de Producción'
+
+        ],
+        'Fin de Producción':[
+            'Fin de Producción'
+        ],
         'Mantenimiento': [
             'Ventanas de Mtto',
             'Intervención Mtto interno',
@@ -121,6 +128,10 @@ function DPAReport() {
         ],
         'Fin de Producción':[
             'Fin de Producción'
+        ],
+        'Inicio de Producción':[
+            'Inicio de Producción',
+            'Molienda'
         ],
         'Ensayos':[
             'Nuevo Producto',
@@ -256,14 +267,14 @@ function DPAReport() {
                             <div className="field">
                                 <label className="label custom-label">Inicio</label>
                                 <div className="control">
-                                    <input className="input is-small" type="time" value={startTime} onChange={handledChangeInputStart} />
+                                    <input className="input is-small" type="time" value={startTime} onChange={handledChangeInputStart} step='60' min="00:00" max='23:59' />
                                 </div>
                             </div>
 
                             <div className="field pl-3">
                                 <label className="label custom-label">Fin</label>
                                 <div className="control">
-                                    <input className="input is-small" type="time" value={endTime} onChange={handledChangeInputEnd} />
+                                    <input className="input is-small" type="time" value={endTime} onChange={handledChangeInputEnd} step='60' min="00:00" max='23:59' />
                                 </div>
                             </div>
 
@@ -286,6 +297,8 @@ function DPAReport() {
                                     <select className="is-hovered custom-width-add-report-averia " name="sistema" id="sistem" value={dataTypeStop} onChange={handledChangeInputTypeStop}>
                                         <option> </option>
                                         <option>Cambio de Marca</option>
+                                        <option>Inicio de Producción</option>
+                                        <option>Fin de Producción</option>
                                         <option>Mantenimiento</option>
                                         <option>NONA</option>
                                         <option>Paro Programado</option>

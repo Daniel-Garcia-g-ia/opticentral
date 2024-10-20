@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import TimePicker from "react-time-picker";
 import { dataBrands } from "../../assets/data/data";
 
 function InputsFreeProduction({ brewId, index, onInputChange }) {
@@ -8,7 +9,7 @@ function InputsFreeProduction({ brewId, index, onInputChange }) {
         volume: 0,
         dateInit: '',
         dateEnd: '',
-        release: false // Set initial release value to false
+        release: true // Set initial release value to false
     });
 
     const brands = dataBrands();
@@ -24,6 +25,8 @@ function InputsFreeProduction({ brewId, index, onInputChange }) {
 
         onInputChange(index, name, updatedValue);
     };
+
+
 
     return (
         <>
@@ -68,23 +71,23 @@ function InputsFreeProduction({ brewId, index, onInputChange }) {
                             <div className="field pl-3">
                                 <label>Inicio</label>
                                 <div className="control">
-                                    <input className="input is-small" type="time" name="dateInit" onChange={handledChange} />
+                                    <input className="input is-small" type="time" name="dateInit" onChange={handledChange} step='60' min="00:00" max='23:59' />
                                 </div>
                             </div>
                             <div className="field pl-3">
                                 <label>Fin</label>
                                 <div className="control">
-                                    <input className="input is-small" type="time" name="dateEnd" onChange={handledChange} />
+                                    <input className="input is-small" type="time" name="dateEnd" onChange={handledChange} step='60' min="00:00" max='23:59' />
                                 </div>
                             </div>
-                            <div className="field pl-3 pt-5">
+                            {/* <div className="field pl-3 pt-5">
                                 <div className="field pl-3">
                                     <label className="checkbox">
                                         <input type="checkbox" name="release" checked={formValue.release} onChange={handledChange} />
                                         Liberar
                                     </label>
                                 </div>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                 </div>
