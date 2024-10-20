@@ -1,4 +1,5 @@
 import React from "react";
+import config from "../../../config";
 import { useState, useContext, useEffect, useRef } from "react";
 import { ReportContext } from "../context/ReportContext";
 import { getLocalStorage } from "../services/LocalStorage";
@@ -11,6 +12,7 @@ import ParoExterno from "./ParoExterno";
 import TurnoNoProgramado from "./TurnoNoProgramado";
 
 function AddReport({ setActiveAddReport, setActivateDetailsProduction, setSelectedDate, selectedDate, setActivateAddIcon, data }) {
+   
     const { dataReportProduction } = useContext(ReportContext)
     const [saveReport, setSaveReport] = useState(false);    
     const [dataFetch, setDataFetch] = useState({})   
@@ -19,7 +21,7 @@ function AddReport({ setActiveAddReport, setActivateDetailsProduction, setSelect
 
  
 
-    useEffect(() => {
+    useEffect(() => {     
 
 
         // Validate user login token
@@ -36,7 +38,7 @@ function AddReport({ setActiveAddReport, setActivateDetailsProduction, setSelect
         } else {
             processingAction('Procesando Información', 'Por favor, espere ...')
 
-            fetchUpdateReportProduction('https://backendopticentral.onrender.com/app/v1/updateData', data._id, authData.token, dataFetch)
+            fetchUpdateReportProduction(`${config.apiUrl}/app/v1/updateData`, data._id, authData.token, dataFetch)
 
                 .then(result => {
                     closeSwal()

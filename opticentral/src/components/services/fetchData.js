@@ -47,34 +47,6 @@ async function fetchOneData(url, equipmentId, date, turn, token) {
     }
 }
 
-
-/* function fetchOneData(url, equipmentId, date, turn, token) {
-    return new Promise((resolve, reject) => {
-        fetch(`${url}/${equipmentId}/${date}/${turn}`, {
-            headers: {
-                "Content-Type": "application/json",
-                "x-access-token": token
-            }
-
-        }).then(response => {
-            if (!response.ok) {
-                console.log(response)
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        }).then(data => {
-            resolve(data);
-
-        }).catch(error => {
-            reject(error)
-        })
-
-
-
-    })
-
-} */
-
 function fetchSetReport(url, token, data) {
     return new Promise((resolve, reject) => {
 
@@ -114,54 +86,6 @@ async function fetchUpdateReportProduction(url, reportId, token, data) {
     }
 }
 
-/* function fetchUpdateReportProduction(url, reportId, token, data) {
-    
-    
-    return new Promise((resolve, reject) => {
-        fetch(`${url}/${reportId}`, {
-            method: 'PUT',
-            headers: {
-                "Content-Type": "application/json",
-                "x-access-token": token
-            },
-            body: JSON.stringify(data)
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => resolve(data))
-        .catch(error => {
-            console.error('Fetch error:', error);
-            reject(error);
-        });
-    });
-} */
-
-/*     async function fetchUpdateReportProduction(url, reportId, token, data) {
-        try {
-            const response = await fetch(`${url}/${reportId}`, {
-                method: 'PUT',
-                headers: {
-                    "Content-Type": "application/json",
-                    "x-access-token": token
-                },
-                body: JSON.stringify(data)
-            });
-    
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-    
-            const result = await response.json();
-            return result;
-        } catch (error) {
-            console.error('Fetch error:', error);
-            throw error; // para que la llamada pueda manejar el error
-        }
-    } */
 
 
 

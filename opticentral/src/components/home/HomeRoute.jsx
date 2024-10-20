@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
+import config from '../../../config';
 import { Navigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import { getLocalStorage } from '../services/LocalStorage';
@@ -7,6 +8,7 @@ import { fetchData } from '../services/fetchData';
 import { processingAction, eventBasic, closeSwal } from '../services/alerts';
 
 function HomeRoute() {
+    
     const { isLoggedIn } = useContext(AuthContext);
 
     const [redirect, setRedirect] = useState(false);
@@ -22,7 +24,7 @@ function HomeRoute() {
             setRedirect(true);
         } else {
             // Petición GET a la API
-            fetchData('https://backendopticentral.onrender.com/app/v1/equipments', authData.token)
+            fetchData(`${config.apiUrl}/app/v1/equipments`, authData.token)
                 .then(data => {
                     if (!data.body.auth) {
                         closeSwal();

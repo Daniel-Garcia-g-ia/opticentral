@@ -1,4 +1,5 @@
 import React from "react";
+import config from "../../../config";
 import { useState, useEffect, useContext } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { NavbarContext } from "../context/NavbarContext";
@@ -12,6 +13,7 @@ import InputsFreeProduction from "./InputsFreeProduction";
 import { dataNewReport, preDatafreeProduction } from "../services/preData";
 
 function FreeProduction({ equipmentId, equipmentName, location, activateFreeProduction, setActivateFreeProduction }) {
+    
 
 
     const { discardProduction } = useContext(NavbarContext)
@@ -36,7 +38,7 @@ function FreeProduction({ equipmentId, equipmentName, location, activateFreeProd
 
         } else {
             
-            fetchData('https://backendopticentral.onrender.com/app/v1/mostRecentReport/0001', authData.token)
+            fetchData(`${config.apiUrl}/app/v1/mostRecentReport/0001`, authData.token)
                 .then(data => {
                     if (!data.body.auth) {
                         navigate('/');
@@ -97,7 +99,7 @@ function FreeProduction({ equipmentId, equipmentName, location, activateFreeProd
         } else {
             processingAction('Procesando Información','Por favor, espere ...')
 
-            fetchSetReport('https://backendopticentral.onrender.com/app/v1/processData/addProduction', authData.token, report
+            fetchSetReport(`${config.apiUrl}/app/v1/processData/addProduction`, authData.token, report
             ).then(response => {
                 closeSwal()
                 eventBasic('success', 'Producción Liberada!')

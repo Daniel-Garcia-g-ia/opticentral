@@ -1,4 +1,5 @@
 import React from "react";
+import config from "../../../config";
 import { useState, useEffect, useRef, useContext } from "react";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -28,10 +29,7 @@ import { CgOpenCollective } from "react-icons/cg";
 
 
 
-function DashBoard() {
-
-
-
+function DashBoard() {    
     const navigate = useNavigate();
     const location = useLocation();
     const isFirstRender1 = useRef();
@@ -109,7 +107,7 @@ function DashBoard() {
 
 
 
-                fetchOneData('https://backendopticentral.onrender.com/app/v1/processData', code, date, dataTurn, authData.token).then(result => {
+                fetchOneData(`${config.apiUrl}/app/v1/processData`, code, date, dataTurn, authData.token).then(result => {
 
                     if (!result.body.auth) {
 

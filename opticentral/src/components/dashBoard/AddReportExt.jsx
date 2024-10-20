@@ -1,4 +1,5 @@
 import React from "react";
+import config from "../../../config";
 import { useState, useEffect, useContext } from "react";
 import './index.css';
 import { ReportContext } from "../context/ReportContext";
@@ -12,6 +13,7 @@ import DPAReport from "./DPAReport";
 import NSTReport from "./NSTReport";
 
 function AddReportExt({ setActivateDetailsProduction, setActivateReportExt, setSelectedDate, selectedDate, data }) {
+    
     const { dataReportProduction } = useContext(ReportContext);
     const [activateICReport, setActivateICReport] = useState(false);
     const [activateECReport, setActivateECReport] = useState(false);
@@ -26,7 +28,7 @@ function AddReportExt({ setActivateDetailsProduction, setActivateReportExt, setS
 
     useEffect(() => {
         // Validate user login token
-
+        
 
 
         const authData = getLocalStorage('authData')
@@ -43,7 +45,7 @@ function AddReportExt({ setActivateDetailsProduction, setActivateReportExt, setS
 
             console.log(data.id, dataFetch)
 
-            fetchUpdateReportProduction('https://backendopticentral.onrender.com/app/v1/updateData', data.id, authData.token, dataFetch)
+            fetchUpdateReportProduction(`${config.apiUrl}/app/v1/updateData`, data.id, authData.token, dataFetch)
                 .then(result => {
                     closeSwal()
                     eventBasic('success', 'Reporte, ¡Guardado con exito!')

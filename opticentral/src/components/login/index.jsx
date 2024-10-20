@@ -1,4 +1,5 @@
 import React from "react";
+import config from "../../../config";
 import './index.css';
 import {processingAction, eventBasic,closeSwal} from "../services/alerts"
 
@@ -15,6 +16,7 @@ import { MdPassword } from "react-icons/md";
 
 
 function Login() {
+    
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -30,7 +32,7 @@ function Login() {
 
         processingAction('Validando Usuario','Por favor espere...',true)
         try {
-            const userData = await fetchLogin("https://backendopticentral.onrender.com/app/v1/loginUser", email, password)              
+            const userData = await fetchLogin(`${config.apiUrl}/app/v1/loginUser`, email, password)              
                     
 
             if(userData.status!=200){                 
