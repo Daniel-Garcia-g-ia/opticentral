@@ -68,14 +68,14 @@ function InputsFreeProduction({ brewId, index, onInputChange }) {
                             <div className="field pl-3">
                                 <label>Inicio</label>
                                 <div className="control">
-                                    <input className="input is-small" type="time" name="dateInit" onChange={handledChange} step='60' min="00:00" max='23:59' readOnly/>
+                                    <input className="input is-small" type="time" name="dateInit" onChange={handledChange} step='60' min="00:00" max='23:59'/>
 
                                 </div>
                             </div>
                             <div className="field pl-3">
                                 <label>Fin</label>
                                 <div className="control">
-                                    <input className="input is-small" type="time" name="dateEnd" onChange={handledChange} step='60' min="00:00" max='23:59' readOnly />
+                                    <input className="input is-small" type="time" name="dateEnd" onChange={handledChange} step='60' min="00:00" max='23:59'/>
                                 </div>
                             </div>
                                         
