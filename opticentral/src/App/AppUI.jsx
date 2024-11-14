@@ -7,17 +7,18 @@ import { AuthProvider } from "../components/context/AuthContext";
 import { NavbarProvider } from "../components/context/NavbarContext";
 import { DateProvider } from "../components/context/DateContext";
 import { ReportProvider } from "../components/context/ReportContext";
+import { UpdateProvider } from "../components/context/UpdateContext";
 
 function AppUI() {
 
 
-    return (       <>
+    return (<>
 
-            <ReportProvider>
-                <NavbarProvider>
-                    <DateProvider>
-                        <AuthProvider>
-
+        <ReportProvider>
+            <NavbarProvider>
+                <DateProvider>
+                    <AuthProvider>
+                        <UpdateProvider>
                             <Router>
                                 <Routes>
                                     <Route path="/" element={<Login />} />
@@ -26,14 +27,14 @@ function AppUI() {
 
                                 </Routes>
                             </Router>
+                        </UpdateProvider>
+                    </AuthProvider>
+                </DateProvider>
+            </NavbarProvider>
+        </ReportProvider>
 
-                        </AuthProvider>
-                    </DateProvider>
-                </NavbarProvider>
-            </ReportProvider>
 
-
-        </>
+    </>
     )
 }
 

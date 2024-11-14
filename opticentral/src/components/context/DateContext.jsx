@@ -10,6 +10,7 @@ const DateProvider = ({ children }) => {
 
     const [dateSelected, setDateSelected]= useState("");
     const [turnSelected, setTurnSelected]= useState("");
+    const [valueTimeContext, setValueTimeContext]= useState(0);
 
     const dateContext =(info)=>{
         setDateSelected(info)
@@ -19,12 +20,17 @@ const DateProvider = ({ children }) => {
     const turnContext = (info)=>{
         setTurnSelected(info)
     }
+
+    const totalTimeContext=(info)=>{
+        setValueTimeContext(info)
+    }
+
     
 
 
     return (
 
-        <DateContext.Provider  value ={{dateContext, dateSelected, turnContext, turnSelected}}>
+        <DateContext.Provider  value ={{dateContext, dateSelected, turnContext, turnSelected, totalTimeContext, valueTimeContext}}>
             {children}
 
         </DateContext.Provider>

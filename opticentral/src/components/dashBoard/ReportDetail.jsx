@@ -1,8 +1,33 @@
 import React from "react";
+import { useState, useEffect } from "react";
+import { LiaEditSolid } from "react-icons/lia";
+import EditReport from "../modal/EditReport";
+import CardDetailProduction from "./CardDetailProduction";
+import CardDetailExtern from "./CardDetailExtern";
+import { TbRuler } from "react-icons/tb";
+import { SiNamemc } from "react-icons/si";
 
 function ReportDetail({ data, setActiveDetail }) {
 
-    const { inicio, fin, name, tiempoTotal, bg } = data
+    const [activateEditModal, setActivateEditModal] = useState(false);
+    const [activeExternal, setActiveExternal] = useState(false);
+    const [activeProduction, setActiveProduction] = useState(false);
+    const [dataReportExtern, setDataReportExtern] = useState({});
+
+
+
+    useEffect(() => {
+
+        if (data.type !== 'EBT') {
+            setActiveExternal(true)
+            setDataReportExtern(data)      
+
+        }        
+        else if (data.type === 'EBT') {
+            setActiveProduction(true);
+        }
+
+    }, [])
 
 
     const handledHover = () => {
@@ -13,50 +38,30 @@ function ReportDetail({ data, setActiveDetail }) {
         setActiveDetail(false)
     }
 
+    const handleClickEdit = () => {
+        setActivateEditModal(true)
+
+    }
+
 
 
     return (
         <>
-            <div className="card is-custom-card-model-detail"
-                onMouseEnter={handledHover}
-                onMouseLeave={handledOut}
-            >
+            {activeProduction &&
+                <CardDetailProduction data={data} handledHover={handledHover}
+                    handledOut={handledOut} setActiveDetail={setActiveDetail}
+                    activateEditModal={activateEditModal} handleClickEdit={handleClickEdit}
+                />}
 
-                <header className="is-flex is-justify-content-space-between pl-5 pr-5 pt-3 pb-3">
-                    <div className="is-flex-direction-column">
-                        <p className="">Inicio: <span className="pl-3">{inicio}</span>  </p>
-                        <p>Fin: <span className="pl-3">{fin}</span>   </p>
+            {activeExternal &&
+                <CardDetailExtern data={data} handledHover={handledHover}
+                    handledOut={handledOut} setActiveDetail={setActiveDetail}
+                    activateEditModal={activateEditModal} handleClickEdit={handleClickEdit}
 
-                    </div>
-                    <div className="">
-                        <span>Total: {tiempoTotal} h</span>
-
-                    </div>
+                />}
 
 
-                </header>
-
-                <div className="is-custom-separator ml-5 mr-5" >
-                </div>
-                <div className=" is-flex is-justify-content-end pr-5">
-                    <p className="subtitle" style={{color:`${bg}`}}>{name}</p>
-                </div>
-                 
-
-                <div className="card-content">
-                    {/* <p className="">Reporte: <span className="pl-3">{ }</span>  </p> */}
-                    <p className="">Marca: <span className="pl-3">{data.marca }</span>  </p>
-                    <p className="">BrewId: <span className="pl-3">{ data.brewId}</span>  </p>
-
-
-                </div>
-
-
-
-
-
-
-            </div>
+            {activateEditModal && <EditReport data={data} setActiveDetail={setActiveDetail} />}
 
 
         </>
