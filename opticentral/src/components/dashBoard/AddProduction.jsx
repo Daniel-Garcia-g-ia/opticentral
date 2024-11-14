@@ -3,21 +3,19 @@ import { useState, useEffect, useContext } from "react";
 import { ReportContext } from "../context/ReportContext";
 import { calculateTimeDifference } from "../services/calculateTimeDifference";
 
-function AddProduction() {
+function AddProduction({ values, typeReport }) {
 
     const { dataReportProductionContext } = useContext(ReportContext);
-
-    const [startTime, setStartTime] = useState(0);
-    const [endTime, setEndTime] = useState(0);
-    const [volume, setVolume] = useState('');
-    const [timeDifference, setTimeDifference] = useState(null);
+    const [startTime, setStartTime] = useState(values?.startTime || 0);
+    const [endTime, setEndTime] = useState(values?.endTime || 0);
+    const [volume, setVolume] = useState(values?.volume || '');
+    const [timeDifference, setTimeDifference] = useState(values?.totalTime || null);
     const [time, setTime] = useState(0);
-
     const [dataReport, setDataReport] = useState({
-        startTime: null,
-        endTime: null,
-        totalTime: null,
-        volume: null
+        startTime: values?.startTime || null,
+        endTime: values?.endTime || null,
+        totalTime: values?.totalTime || null,
+        volume: values?.volume || null
     })
 
     useEffect(() => {
@@ -86,7 +84,7 @@ function AddProduction() {
 
     return (
         <>
-             
+
             <section className="columns is-centered">
                 <label className="custom-label-total-report">Tiempo Total de Reporte: {timeDifference} h</label>
 
@@ -95,10 +93,10 @@ function AddProduction() {
                 <div className="columns is-centered has-text-centered is-custom-add-production-report">
 
 
-                    <div className="column">                       
-                           
+                    <div className="column">
 
-                        
+
+
                         <div className="field is-horizontal pt-5">
 
                             <div className="field">

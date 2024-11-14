@@ -12,7 +12,7 @@ function TotalReportTime({ data, setActivateReportExt, activeAddIcon }) {
     const getColor = () => {
         if (time < 8) {
             return 'red'
-        } else if (time === 8) {
+        } else if (time >=8) {
             return 'green'
         } else {
             return 'black'

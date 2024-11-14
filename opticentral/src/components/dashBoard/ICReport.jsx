@@ -1,41 +1,43 @@
 import React from "react";
 import { useState, useEffect, useContext } from "react";
 import { ReportContext } from "../context/ReportContext";
+import { DateContext } from "../context/DateContext";
 import { calculateTimeDifference } from "../services/calculateTimeDifference";
+import { validateTurn } from "../services/valideDataTurn";
+
+function ICReport({ values, typeReport }) {
 
 
-
-
-
-function ICReport() {
     const { dataReportProductionContext } = useContext(ReportContext);
-
-    const [startTime, setStartTime] = useState('');
-    const [endTime, setEndTime] = useState('');
+    const { turnSelected } = useContext(DateContext);
+    const [startTime, setStartTime] = useState(values?.startTime || '');
+    const [endTime, setEndTime] = useState(values?.endTime || '');
     const [timeDifference, setTimeDifference] = useState(null);
-    const [dataSystem, setDataSystem] = useState('');
-    const [dataSubSystem, setDataSubSystem] = useState('');
-    const [dataComponent, setDataComponent] = useState('');
-    const [dataModeFail, setDataModeFail] = useState('');
-    const [dataSolution, setDataSolution] = useState('');
-    const [dataMachines, setDataMachines] = useState('');
+    const [dataSystem, setDataSystem] = useState(values?.system || '');
+    const [dataSubSystem, setDataSubSystem] = useState(values?.subSystem || '');
+    const [dataComponent, setDataComponent] = useState(values?.component || '');
+    const [dataModeFail, setDataModeFail] = useState(values?.failureMode || '');
+    const [dataSolution, setDataSolution] = useState(values?.solution || '');
+    const [dataMachines, setDataMachines] = useState(values?.machine || '');
     const [optionSubSystem, setOptionSubSystem] = useState([])
     const [optionComponet, setOptionComponent] = useState([]);
     const [optionMachine, setOptionMachine] = useState([]);
     const [optionModeFailure, setOptionModeFailure] = useState([])
     const [data, setData] = useState(false);
-    const [time, setTime] = useState(0);
+    const [time, setTime] = useState(values?.totalTime || 0);
+    const [min, setMin] = useState();
+    const [max, setMax] = useState();
     const [dataReport, setDataReport] = useState({
-        startTime: null,
-        endTime: null,
-        totalTime: null,
-        system: null,
-        subSystem: null,
-        component: null,
-        failureMode: null,
-        machine: null,
-        solution: null,
-        type:null
+        startTime: values?.startTime || null,
+        endTime: values?.endTime || null,
+        totalTime: values?.totalTime || null,
+        system: values?.system || null,
+        subSystem: values?.subSystem || null,
+        component: values?.component || null,
+        failureMode: values?.failureMode || null,
+        machine: values?.machine || null,
+        solution: values?.solution || null,
+        type: typeReport || null
 
     });
 
@@ -52,8 +54,8 @@ function ICReport() {
             'Neumático',
             'Transmisión',
         ],
-        'Pérdida de Velocidad':[
-           'Automatización',
+        'Pérdida de Velocidad': [
+            'Automatización',
             'Metrología',
             'Eléctrico',
             'Electrónico',
@@ -61,7 +63,7 @@ function ICReport() {
             'Lubricación',
             'Mecánico',
             'Neumático',
-            'Transmisión', 
+            'Transmisión',
         ],
         'Falta de Personal': [
             'Personal Insuficiente'
@@ -74,7 +76,7 @@ function ICReport() {
     }
     const componentsBySubsystem = {
 
-        'Producto en Observación':[
+        'Producto en Observación': [
             'Producto en Observación', 'Oxígeno', 'Espuma', 'Alcohol', 'Extracto'
         ],
         'Producto fuera de especificación': [
@@ -304,14 +306,28 @@ function ICReport() {
     ]
     //Informacion para el reporte, lo guarda en el contex
     useEffect(() => {
+        if (typeReport === 'IC') {
+            setOptionSubSystem(subsystemsBySystem[dataSystem]);
+            setOptionComponent(componentsBySubsystem[dataSubSystem]);
+            setOptionModeFailure(failureModesByComponent[dataComponent]);
+            setOptionMachine(machines)
+            setTimeDifference(values.totalTime)
+            dataReportProductionContext(dataReport)
+        }
+
+        const valueTime = validateTurn(turnSelected);
+        setMin(valueTime.min)
+        setMax(valueTime.max)
+
+    }, [])
+
+    useEffect(() => {
         dataReportProductionContext(dataReport)
-    }, [dataReport])  
-   
+    }, [dataReport])
+
 
     useEffect(() => {
         setTime(timeDifference)
-
-
     }, [timeDifference])
 
     useEffect(() => {
@@ -326,29 +342,64 @@ function ICReport() {
 
     const handledChangeInputStart = (e) => {
         const value = e.target.value;
-        setStartTime(value);
-        const totalTimeDifference = calculateTimeDifference(value, endTime);
-        setTimeDifference(totalTimeDifference)
-        setDataReport(prevState => ({
-            ...prevState,
-            startTime: value
-        }))
-        setData(!data);
 
-    }
+        // Obtener los valores de min y max para el turno actual
+        const { min, max, min1, max1, min2, max2 } = validateTurn(turnSelected);
+
+        // Verificar si el valor está dentro del rango, incluyendo el caso especial para Turno 3
+        if ((min && max && value >= min && value <= max) ||
+            (min1 && max1 && min2 && max2 && ((value >= min1 && value <= max1) || (value >= min2 && value <= max2)))) {
+
+            setStartTime(value);
+
+            // Calcular la diferencia de tiempo si el valor es válido
+            const totalTimeDifference = calculateTimeDifference(value, endTime);
+            setTimeDifference(totalTimeDifference);
+
+            // Actualizar el estado de `dataReport`
+            setDataReport(prevState => ({
+                ...prevState,
+                startTime: value
+            }));
+
+            // Cambiar el estado de `data`
+            setData(!data);
+        } else {
+            alert(`El horario debe estar entre ${min || `${min1} - ${max1} y ${min2} - ${max2}`}.`);
+        }
+    };
+
 
     const handledChangeInputEnd = (e) => {
         const value = e.target.value;
-        setEndTime(value);
-        const totalTimeDifference = calculateTimeDifference(startTime, value);
-        setTimeDifference(totalTimeDifference);
-        setDataReport(prevState => ({
-            ...prevState,
-            endTime: value
-        }))
-        setData(!data);
 
-    }
+        // Obtener los valores de min y max para el turno actual
+        const { min, max, min1, max1, min2, max2 } = validateTurn(turnSelected);
+
+        // Verificar si el valor está dentro del rango, incluyendo el caso especial para Turno 3
+        if ((min && max && value >= min && value <= max) ||
+            (min1 && max1 && min2 && max2 && ((value >= min1 && value <= max1) || (value >= min2 && value <= max2)))) {
+
+            setEndTime(value);
+
+            // Calcular la diferencia de tiempo si el valor es válido
+            const totalTimeDifference = calculateTimeDifference(startTime, value);
+            setTimeDifference(totalTimeDifference);
+
+            // Actualizar el estado de `dataReport`
+            setDataReport(prevState => ({
+                ...prevState,
+                endTime: value
+            }));
+
+            // Cambiar el estado de `data`
+            setData(!data);
+        } else {
+            alert(`El horario debe estar entre ${min || `${min1} - ${max1} y ${min2} - ${max2}`}.`);
+        }
+    };
+
+
 
     const handledChangeInputSystem = (e) => {
         const value = e.target.value;
@@ -356,7 +407,7 @@ function ICReport() {
         setDataReport(prevState => ({
             ...prevState,
             system: value,
-            type:'IC'
+            type: 'IC'
         }))
         setData(!data);
         setOptionComponent([])
@@ -461,14 +512,14 @@ function ICReport() {
                             <div className="field">
                                 <label className="label custom-label">Inicio</label>
                                 <div className="control">
-                                    <input className="input is-small" type="time" value={startTime} onChange={handledChangeInputStart} step='60' min="00:00" max='23:59' />
+                                    <input className="input is-small" type="time" value={startTime} onChange={handledChangeInputStart} step='60' min={min} max={max} />
                                 </div>
                             </div>
 
                             <div className="field pl-3">
                                 <label className="label custom-label">Fin</label>
                                 <div className="control">
-                                    <input className="input is-small" type="time" value={endTime} onChange={handledChangeInputEnd} step='60' min="00:00" max='23:59' />
+                                    <input className="input is-small" type="time" value={endTime} onChange={handledChangeInputEnd} step='60' min={min} max={max} />
                                 </div>
                             </div>
 
@@ -496,7 +547,7 @@ function ICReport() {
                                         <option>Pérdida de Velocidad</option>
                                         <option>Falta de Personal</option>
                                         <option>Paros de Calidad</option>
-                                        
+
                                     </select>
                                 </div>
 

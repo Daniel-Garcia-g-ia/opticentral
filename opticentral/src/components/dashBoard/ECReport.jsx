@@ -1,31 +1,36 @@
 import React from "react";
-import { useState, useEffect,useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import { ReportContext } from "../context/ReportContext";
+import { DateContext } from "../context/DateContext";
 import { calculateTimeDifference } from "../services/calculateTimeDifference";
+import { validateTurn } from "../services/valideDataTurn";
 
+function ECReport({ values, typeReport }) {
 
-function ECReport() {
     const { dataReportProductionContext } = useContext(ReportContext);
+    const { turnSelected } = useContext(DateContext);
     const [timeDifference, setTimeDifference] = useState(null);
-    const [startTime, setStartTime] = useState('');
-    const [endTime, setEndTime] = useState('');
-    const [dataTypeStop, setDataTypeStop] = useState('');
+    const [startTime, setStartTime] = useState(values?.startTime || '');
+    const [endTime, setEndTime] = useState(values?.endTime || '');
+    const [dataTypeStop, setDataTypeStop] = useState(values?.typeStop || '');
+    const [dataSubTypeStop, setDataSubTypeStop] = useState(values?.subTypeStop || '');
+    const [dataModeFailure, setDataModeFailure] = useState(values?.failureMode || '');
+    const [dataSolution, setDataSolution] = useState(values?.solution || '');
     const [data, setData] = useState(false);
-    const [dataSubTypeStop, setDataSubTypeStop] = useState('');
-    const [dataModeFailure, setDataModeFailure] = useState('');
-    const [dataSolution, setDataSolution] = useState('');
     const [optionSubType, setOptionSubType] = useState([]);
     const [optionFailureMode, setOptionFailureMode] = useState([]);
     const [time, setTime] = useState(0);
+    const [min, setMin] = useState();
+    const [max, setMax] = useState();
     const [dataReport, setDataReport] = useState({
-        startTime: null,
-        endTime: null,
-        totalTime: null,
-        typeStop: null,
-        subTypeStop: null,
-        failureMode: null,
-        solution: null,
-        type:null
+        startTime: values?.startTime || null,
+        endTime: values?.endTime || null,
+        totalTime: values?.totalTime || null,
+        typeStop: values?.typeStop || null,
+        subTypeStop: values?.subTypeStop || null,
+        failureMode: values?.failureMode || null,
+        solution: values?.solution || null,
+        type: typeReport || null
 
     });
 
@@ -171,7 +176,7 @@ function ECReport() {
             'Sensorial',
 
         ],
-        'Falta de CO2':[
+        'Falta de CO2': [
             'Corte de Energía',
             'Falla en el Sitema',
             'No disponible',
@@ -180,7 +185,7 @@ function ECReport() {
 
         ],
 
-        'Falta de Agua Sobrecalentada':[
+        'Falta de Agua Sobrecalentada': [
             'Corte de Energía',
             'Falla en el Sitema',
             'No disponible',
@@ -188,7 +193,7 @@ function ECReport() {
             'Intervención'
 
         ],
-        'Falta de Aire Comprimido':[
+        'Falta de Aire Comprimido': [
             'Corte de Energía',
             'Falla en el Sitema',
             'No disponible',
@@ -196,7 +201,7 @@ function ECReport() {
             'Intervención'
 
         ],
-        'Falta de Agua':[
+        'Falta de Agua': [
             'Corte de Energía',
             'Falla en el Sitema',
             'No disponible',
@@ -204,7 +209,7 @@ function ECReport() {
             'Intervención'
 
         ],
-        'Falta de Energía Eléctrica':[
+        'Falta de Energía Eléctrica': [
             'Corte de Energía',
             'Falla en el Sitema',
             'Falla de Transferencia',
@@ -216,9 +221,23 @@ function ECReport() {
     }
 
     useEffect(() => {
+        if (typeReport === 'EC') {
+
+            setOptionSubType(optionSubTypeInput[dataTypeStop]);
+            setOptionFailureMode(optionModeFailure[dataSubTypeStop]);
+            setTimeDifference(values.totalTime)
+            dataReportProductionContext(dataReport)
+        }
+        const valueTime = validateTurn(turnSelected);
+        setMin(valueTime.min)
+        setMax(valueTime.max)
+
+    }, [])
+
+    useEffect(() => {
         dataReportProductionContext(dataReport)
-    }, [dataReport])  
-   
+    }, [dataReport])
+
 
     useEffect(() => {
         setTime(timeDifference)
@@ -239,27 +258,61 @@ function ECReport() {
 
     const handledChangeInputStart = (e) => {
         const value = e.target.value;
-        setStartTime(value);
-        const totalTimeDifference = calculateTimeDifference(value, endTime);
-        setTimeDifference(totalTimeDifference)
-        setDataReport(prevState => ({
-            ...prevState,
-            startTime: value
-        }))
-        setData(!data);
+
+        // Obtener los valores de min y max para el turno actual
+        const { min, max, min1, max1, min2, max2 } = validateTurn(turnSelected);
+
+        // Verificar si el valor está dentro del rango, incluyendo el caso especial para Turno 3
+        if ((min && max && value >= min && value <= max) ||
+            (min1 && max1 && min2 && max2 && ((value >= min1 && value <= max1) || (value >= min2 && value <= max2)))) {
+
+            setStartTime(value);
+
+            // Calcular la diferencia de tiempo si el valor es válido
+            const totalTimeDifference = calculateTimeDifference(value, endTime);
+            setTimeDifference(totalTimeDifference);
+
+            // Actualizar el estado de `dataReport`
+            setDataReport(prevState => ({
+                ...prevState,
+                startTime: value
+            }));
+
+            // Cambiar el estado de `data`
+            setData(!data);
+        } else {
+            alert(`El horario debe estar entre ${min || `${min1} - ${max1} y ${min2} - ${max2}`}.`);
+        }
 
     }
 
     const handledChangeInputEnd = (e) => {
         const value = e.target.value;
-        setEndTime(value);
-        const totalTimeDifference = calculateTimeDifference(startTime, value);
-        setTimeDifference(totalTimeDifference);
-        setDataReport(prevState => ({
-            ...prevState,
-            endTime: value
-        }))
-        setData(!data);
+
+        // Obtener los valores de min y max para el turno actual
+        const { min, max, min1, max1, min2, max2 } = validateTurn(turnSelected);
+
+        // Verificar si el valor está dentro del rango, incluyendo el caso especial para Turno 3
+        if ((min && max && value >= min && value <= max) ||
+            (min1 && max1 && min2 && max2 && ((value >= min1 && value <= max1) || (value >= min2 && value <= max2)))) {
+
+            setEndTime(value);
+
+            // Calcular la diferencia de tiempo si el valor es válido
+            const totalTimeDifference = calculateTimeDifference(startTime, value);
+            setTimeDifference(totalTimeDifference);
+
+            // Actualizar el estado de `dataReport`
+            setDataReport(prevState => ({
+                ...prevState,
+                endTime: value
+            }));
+
+            // Cambiar el estado de `data`
+            setData(!data);
+        } else {
+            alert(`El horario debe estar entre ${min || `${min1} - ${max1} y ${min2} - ${max2}`}.`);
+        }
 
     }
 
@@ -270,7 +323,7 @@ function ECReport() {
         setDataReport(prevState => ({
             ...prevState,
             typeStop: value,
-            type:'EC'
+            type: 'EC'
         }))
         setData(!data);
         if (optionSubTypeInput[value]) {
@@ -296,7 +349,7 @@ function ECReport() {
             setOptionFailureMode([])
         }
 
-        
+
     }
 
     const handledChangeInputModeFailure = (e) => {
@@ -326,7 +379,7 @@ function ECReport() {
         <>
 
             <section className="columns is-centered" >
-                <label className="custom-label-total-report-averia">Tiempo Total de Avería: {timeDifference} h</label>
+                <label className="custom-label-total-report-stop">Tiempo Total de Avería: {timeDifference} h</label>
 
                 <div className="columns is-centered has-text-centered">
                     <div className="column">
@@ -335,14 +388,14 @@ function ECReport() {
                             <div className="field">
                                 <label className="label custom-label">Inicio</label>
                                 <div className="control">
-                                    <input className="input is-small" type="time" value={startTime} onChange={handledChangeInputStart} step='60' min="00:00" max='23:59' />
+                                    <input className="input is-small" type="time" value={startTime} onChange={handledChangeInputStart} step='60' min={min} max={max} />
                                 </div>
                             </div>
 
                             <div className="field pl-3">
                                 <label className="label custom-label">Fin</label>
                                 <div className="control">
-                                    <input className="input is-small" type="time" value={endTime} onChange={handledChangeInputEnd} step='60' min="00:00" max='23:59' />
+                                    <input className="input is-small" type="time" value={endTime} onChange={handledChangeInputEnd} step='60' min={min} max={max} />
                                 </div>
                             </div>
 

@@ -3,9 +3,10 @@ import config from "../../../config";
 import { useState, useEffect, useContext } from "react";
 import './index.css';
 import { ReportContext } from "../context/ReportContext";
+import { DateContext } from "../context/DateContext";
 import { getLocalStorage } from "../services/LocalStorage";
 import { fetchUpdateReportProduction } from "../services/fetchData";
-import { validateDataWhithoutNull, preDataReportItemIc, preDataReportItemEc, preDataReportItemDPA, preDataReportItemNST} from "../services/preData";
+import { validateDataWhithoutNull, preDataReportItemIc, preDataReportItemEc, preDataReportItemDPA, preDataReportItemNST } from "../services/preData";
 import { eventBasic, textUnderMessage, processingAction, closeSwal } from "../services/alerts";
 import ICReport from "./ICReport";
 import ECReport from "./ECReport";
@@ -13,14 +14,18 @@ import DPAReport from "./DPAReport";
 import NSTReport from "./NSTReport";
 
 function AddReportExt({ setActivateDetailsProduction, setActivateReportExt, setSelectedDate, selectedDate, data }) {
-    
+
     const { dataReportProduction } = useContext(ReportContext);
+    const { dataReportProductionContext } = useContext(ReportContext);
+    const { valueTimeContext } = useContext(DateContext);
     const [activateICReport, setActivateICReport] = useState(false);
     const [activateECReport, setActivateECReport] = useState(false);
     const [activateDPAReport, setActivateDPAReport] = useState(false);
     const [activateNSTReport, setAcvateNSTReport] = useState(false);
-    const [saveReport, setSaveReport] = useState(false)
-    const [dataFetch, setDataFetch] = useState({})
+    const [saveReport, setSaveReport] = useState(false);
+    const [dataFetch, setDataFetch] = useState({});
+    const [releaseAddReport, setReleaseAddReport] = useState(false);
+    const [validateRelease, setValidateRelease] = useState(false);
 
     const [typeReport, setTypeReport] = useState(' ')
 
@@ -28,9 +33,6 @@ function AddReportExt({ setActivateDetailsProduction, setActivateReportExt, setS
 
     useEffect(() => {
         // Validate user login token
-        
-
-
         const authData = getLocalStorage('authData')
         // Validate the token and run the put fetch request
 
@@ -42,9 +44,6 @@ function AddReportExt({ setActivateDetailsProduction, setActivateReportExt, setS
             return
         } else {
             processingAction('Procesando Información', 'Por favor, espere ...')
-
-            console.log(data.id, dataFetch)
-
             fetchUpdateReportProduction(`${config.apiUrl}/app/v1/updateData`, data.id, authData.token, dataFetch)
                 .then(result => {
                     closeSwal()
@@ -58,9 +57,6 @@ function AddReportExt({ setActivateDetailsProduction, setActivateReportExt, setS
                         closeSwal()
 
                 })
-
-
-
         }
 
     }, [saveReport])
@@ -68,7 +64,31 @@ function AddReportExt({ setActivateDetailsProduction, setActivateReportExt, setS
 
     useEffect(() => {
         setActivateDetailsProduction(false);
+
+
     }, []);
+    useEffect(() => {
+        if (releaseAddReport) {
+
+            const sumaTotalTime = Number(valueTimeContext) + Number(dataFetch.totalTime)
+
+            if (sumaTotalTime <= 8) {
+                setSaveReport(!saveReport)
+
+            } else {
+                setReleaseAddReport(false);
+                dataReportProductionContext({ data: null });
+                textUnderMessage("¡Validar Información!", "Tiempo superado del turno !", "warning")
+
+            }
+
+        }else{
+            return
+        }
+
+
+
+    }, [validateRelease]);
 
 
 
@@ -116,121 +136,123 @@ function AddReportExt({ setActivateDetailsProduction, setActivateReportExt, setS
     };
 
     const handledClickDismiss = () => {
+        dataReportProductionContext({ data: null });
         setActivateReportExt(false);
         setActivateDetailsProduction(true);
+
+
 
     };
 
     const handledClickReportSave = () => {
-        const validateDataNull = validateDataWhithoutNull(dataReportProduction);
+
+        if (valueTimeContext <= 8) {
+            const validateDataNull = validateDataWhithoutNull(dataReportProduction);
+
+            if (validateDataNull) {
+                textUnderMessage("¡Validar Información!", "Por favor, ingrese información válida y completa !", "warning")
+
+            } else {
+                if (typeReport === 'Causa Interna (IC)') {
+                    setDataFetch(preDataReportItemIc(data, dataReportProduction));
+                } else if (typeReport === 'Causa Externa (EC)') {
+                    setDataFetch(preDataReportItemEc(data, dataReportProduction));
 
 
-        if (validateDataNull) {
-            textUnderMessage("¡Validar Información!", "Por favor, ingrese información válida y completa !", "warning")
+                } else if (typeReport === 'Actividad Planeada (DPA)') {
+                    setDataFetch(preDataReportItemDPA(data, dataReportProduction));
+
+
+                } else if (typeReport === 'No Programado (NST)') {
+                    setDataFetch(preDataReportItemNST(data, dataReportProduction));
+                }
+
+                setReleaseAddReport(true);
+                setValidateRelease(!validateRelease);
+            };
 
         } else {
 
-            if (typeReport === 'Causa Interna (IC)') {
-                setDataFetch(preDataReportItemIc(data, dataReportProduction));
-            } else if (typeReport === 'Causa Externa (EC)') {
-                setDataFetch(preDataReportItemEc(data, dataReportProduction));
-                console.log(data)
-                console.log(dataFetch)
-            } else if (typeReport === 'Actividad Planeada (DPA)') {
-                setDataFetch(preDataReportItemDPA(data, dataReportProduction));
-                console.log(data)
-                console.log(dataFetch)
-            }else if(typeReport === 'No Programado (NST)'){
-                setDataFetch(preDataReportItemNST(data, dataReportProduction));
-                console.log(data)
-                console.log(dataFetch)
+            textUnderMessage("¡Validar Información!", "Tiempo superado del turno !", "warning")
+        }
 
-            }
-
-
-
-            setSaveReport(!saveReport)
-            
-
-
-        };
 
     }
 
 
 
 
-        return (
-            <>
-                <section className=" custom-section-add-report columns is-centered has-text-centered">
+    return (
+        <>
+            <section className=" custom-section-add-report columns is-centered has-text-centered">
 
-                    <div className=" custom-brand-add-report is-flex pt-5 is-justify-content-start ">
-                        <p className="">
-                            <span className="brand-title title is-6 is-custom-brand-add-report" > Nuevo Reporte </span>
-                        </p>
+                <div className=" custom-brand-add-report is-flex pt-5 is-justify-content-start ">
+                    <p className="">
+                        <span className="brand-title title is-6 is-custom-brand-add-report" > Nuevo Reporte </span>
+                    </p>
 
 
-                    </div>
+                </div>
 
-                    <div className="column custom-addreport ">
+                <div className="column custom-addreport ">
 
-                        <div className="column is-flex is-justify-content-center">
-                            <div className="field is-horizontal">
+                    <div className="column is-flex is-justify-content-center">
+                        <div className="field is-horizontal">
 
-                                <div className="field ">
-                                    <label className="label custom-label">Reporte</label>
-                                    <div className="select is-small ">
-                                        <select className="is-hovered custom-width-add-report " onChange={handledChance} value={typeReport} >
-                                            <option> </option>
-                                            <option>Causa Interna (IC)</option>
-                                            <option>Causa Externa (EC)</option>
-                                            <option>Actividad Planeada (DPA)</option>
-                                            <option>No Programado (NST)</option>
-                                        </select>
-                                    </div>
-
+                            <div className="field ">
+                                <label className="label custom-label">Reporte</label>
+                                <div className="select is-small ">
+                                    <select className="is-hovered custom-width-add-report " onChange={handledChance} value={typeReport} >
+                                        <option> </option>
+                                        <option>Causa Interna (IC)</option>
+                                        <option>Causa Externa (EC)</option>
+                                        <option>Actividad Planeada (DPA)</option>
+                                        <option>No Programado (NST)</option>
+                                    </select>
                                 </div>
-
 
                             </div>
 
 
                         </div>
 
-                        {activateICReport && <ICReport />}
-                        {activateECReport && <ECReport />}
-                        {activateDPAReport && <DPAReport />}
-                        {activateNSTReport && <NSTReport />}
+
+                    </div>
+
+                    {activateICReport && <ICReport values={''} typeReport={''} />}
+                    {activateECReport && <ECReport />}
+                    {activateDPAReport && <DPAReport />}
+                    {activateNSTReport && <NSTReport />}
 
 
 
 
 
 
-                        <div className="column is-flex is-justify-content-center">
-                            <div className="field is-grouped">
-                                <div className="control ">
-                                    <button className="button is-link" onClick={handledClickReportSave}>Guardar</button>
-                                </div>
-                                <div className="control ">
-                                    <button className="button is-link is-light" onClick={handledClickDismiss} >Descartar</button>
-                                </div>
+                    <div className="column is-flex is-justify-content-center">
+                        <div className="field is-grouped">
+                            <div className="control ">
+                                <button className="button is-link" onClick={handledClickReportSave}>Guardar</button>
                             </div>
-
-
+                            <div className="control ">
+                                <button className="button is-link is-light" onClick={handledClickDismiss} >Descartar</button>
+                            </div>
                         </div>
-
-
 
 
                     </div>
 
 
 
-                </section>
-            </>
-        )
-    }
+
+                </div>
+
+
+
+            </section>
+        </>
+    )
+}
 
 
 export default AddReportExt

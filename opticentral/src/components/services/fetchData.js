@@ -14,11 +14,10 @@ function fetchData(url, token) {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
-                console.log(response)
+                
                 return response.json();
             })
-            .then(data => {
-                console.log(data)
+            .then(data => {                
                 resolve(data);
             })
             .catch(error => {

@@ -1,32 +1,38 @@
 import React from "react";
 import { useState, useEffect, useContext } from "react";
 import { ReportContext } from "../context/ReportContext";
+import { DateContext } from "../context/DateContext";
 import { calculateTimeDifference } from "../services/calculateTimeDifference";
+import { validateTurn } from "../services/valideDataTurn";
 
+function DPAReport({ values, typeReport }) {
 
-function DPAReport() {
+   
 
     const { dataReportProductionContext } = useContext(ReportContext);
+    const { turnSelected } = useContext(DateContext);
     const [timeDifference, setTimeDifference] = useState(null);
-    const [startTime, setStartTime] = useState('');
-    const [endTime, setEndTime] = useState('');
+    const [startTime, setStartTime] = useState(values?.startTime || '');
+    const [endTime, setEndTime] = useState(values?.endTime || '');
+    const [dataTypeStop, setDataTypeStop] = useState(values?.typeStop || '');
+    const [dataSubTypeStop, setDataSubTypeStop] = useState(values?.subTypeStop || '');
+    const [dataSpecification, setdataSpecification] = useState(values?.specification || '');
+    const [dataSolution, setDataSolution] = useState(values?.solution || '');
     const [data, setData] = useState(false);
-    const [dataTypeStop, setDataTypeStop] = useState('');
-    const [dataSubTypeStop, setDataSubTypeStop] = useState('');
-    const [dataModeFailure, setDataModeFailure] = useState('');
-    const [dataSolution, setDataSolution] = useState('');
     const [optionSubType, setOptionSubType] = useState([]);
     const [specification, setSpecification] = useState([]);
     const [time, setTime] = useState(0);
+    const [min, setMin] = useState();
+    const [max, setMax] = useState();
     const [dataReport, setDataReport] = useState({
-        startTime: null,
-        endTime: null,
-        totalTime: null,
-        typeStop: null,
-        subTypeStop: null,
-        specification: null,
-        solution: null,
-        type:null
+        startTime: values?.startTime || null,
+        endTime: values?.endTime || null,
+        totalTime: values?.totalTime || null,
+        typeStop: values?.typeStop || null,
+        subTypeStop: values?.subTypeStop || null,
+        specification: values?.specification || null,
+        solution: values?.solution || null,
+        type: typeReport || null
 
 
 
@@ -38,11 +44,11 @@ function DPAReport() {
             'Toma de muestra',
             'Analisis de parámetros'
         ],
-        'Inicio de Producción':[
+        'Inicio de Producción': [
             'Inicio de Producción'
 
         ],
-        'Fin de Producción':[
+        'Fin de Producción': [
             'Fin de Producción'
         ],
         'Mantenimiento': [
@@ -98,57 +104,71 @@ function DPAReport() {
             'Mtto Externo de pruebas'
 
         ],
-        'No Orden, No Actividad':[
+        'No Orden, No Actividad': [
             'NoNa'
         ],
-        'Limpieza':[
+        'Limpieza': [
             'LILA'
         ],
-        '5s':[
+        '5s': [
             'Auditoria',
             'Orden'
         ],
-        'Orden':[
+        'Orden': [
             'Orden Y Aseo'
 
         ],
-        'Reuniones Extras':[
+        'Reuniones Extras': [
             'Reuniones Extras'
         ],
-        'Esterilizaciones':[
-           'CIP 3 Pasos',
-           'CIP 5 Pasos',
-           'Esterilizaciones',
-           'CIP Autoamtico',
-           'CIP Vencido',
-           'COP',
-           'Fin de Producción'
+        'Esterilizaciones': [
+            'CIP 3 Pasos',
+            'CIP 5 Pasos',
+            'Esterilizaciones',
+            'CIP Autoamtico',
+            'CIP Vencido',
+            'COP',
+            'Fin de Producción'
 
 
         ],
-        'Fin de Producción':[
+        'Fin de Producción': [
             'Fin de Producción'
         ],
-        'Inicio de Producción':[
+        'Inicio de Producción': [
             'Inicio de Producción',
             'Molienda'
         ],
-        'Ensayos':[
+        'Ensayos': [
             'Nuevo Producto',
-            'Cambio de Producto'       
+            'Cambio de Producto'
 
         ],
-        'Ventanas de MTTO':[
+        'Ventanas de MTTO': [
             'MTTO programado'
 
         ],
-        'Reuniones':[
+        'Reuniones': [
             'Reunion Programada'
         ]
 
 
 
     }
+
+    useEffect(() => {
+        if (typeReport === 'DPA') {
+
+            setOptionSubType(optionSubTypeInput[dataTypeStop]);
+            setSpecification(optionSpecification[dataSubTypeStop]);
+            setTimeDifference(values.totalTime)
+            dataReportProductionContext(dataReport)
+        }
+        const valueTime = validateTurn(turnSelected);
+        setMin(valueTime.min)
+        setMax(valueTime.max)
+
+    }, [])
 
 
 
@@ -174,27 +194,61 @@ function DPAReport() {
 
     const handledChangeInputStart = (e) => {
         const value = e.target.value;
-        setStartTime(value);
-        const totalTimeDifference = calculateTimeDifference(value, endTime);
-        setTimeDifference(totalTimeDifference)
-        setDataReport(prevState => ({
-            ...prevState,
-            startTime: value
-        }))
-        setData(!data);
+
+        // Obtener los valores de min y max para el turno actual
+        const { min, max, min1, max1, min2, max2 } = validateTurn(turnSelected);
+
+        // Verificar si el valor está dentro del rango, incluyendo el caso especial para Turno 3
+        if ((min && max && value >= min && value <= max) ||
+            (min1 && max1 && min2 && max2 && ((value >= min1 && value <= max1) || (value >= min2 && value <= max2)))) {
+
+            setStartTime(value);
+
+            // Calcular la diferencia de tiempo si el valor es válido
+            const totalTimeDifference = calculateTimeDifference(value, endTime);
+            setTimeDifference(totalTimeDifference);
+
+            // Actualizar el estado de `dataReport`
+            setDataReport(prevState => ({
+                ...prevState,
+                startTime: value
+            }));
+
+            // Cambiar el estado de `data`
+            setData(!data);
+        } else {
+            alert(`El horario debe estar entre ${min || `${min1} - ${max1} y ${min2} - ${max2}`}.`);
+        }
 
     }
 
     const handledChangeInputEnd = (e) => {
         const value = e.target.value;
-        setEndTime(value);
-        const totalTimeDifference = calculateTimeDifference(startTime, value);
-        setTimeDifference(totalTimeDifference);
-        setDataReport(prevState => ({
-            ...prevState,
-            endTime: value
-        }))
-        setData(!data);
+
+        // Obtener los valores de min y max para el turno actual
+        const { min, max, min1, max1, min2, max2 } = validateTurn(turnSelected);
+
+        // Verificar si el valor está dentro del rango, incluyendo el caso especial para Turno 3
+        if ((min && max && value >= min && value <= max) ||
+            (min1 && max1 && min2 && max2 && ((value >= min1 && value <= max1) || (value >= min2 && value <= max2)))) {
+
+            setEndTime(value);
+
+            // Calcular la diferencia de tiempo si el valor es válido
+            const totalTimeDifference = calculateTimeDifference(startTime, value);
+            setTimeDifference(totalTimeDifference);
+
+            // Actualizar el estado de `dataReport`
+            setDataReport(prevState => ({
+                ...prevState,
+                endTime: value
+            }));
+
+            // Cambiar el estado de `data`
+            setData(!data);
+        } else {
+            alert(`El horario debe estar entre ${min || `${min1} - ${max1} y ${min2} - ${max2}`}.`);
+        }
 
     }
 
@@ -204,13 +258,13 @@ function DPAReport() {
         setDataReport(prevState => ({
             ...prevState,
             typeStop: value,
-            type:'DPA'
+            type: 'DPA'
         }))
         setData(!data);
 
-        if (optionSubTypeInput[value]){
+        if (optionSubTypeInput[value]) {
             setOptionSubType(optionSubTypeInput[value])
-        }else{
+        } else {
             setOptionSubType([])
         }
 
@@ -225,9 +279,9 @@ function DPAReport() {
         }))
         setData(!data);
 
-        if (optionSpecification[value]){
+        if (optionSpecification[value]) {
             setSpecification(optionSpecification[value])
-        }else {
+        } else {
             setSpecification([])
 
         }
@@ -235,7 +289,7 @@ function DPAReport() {
 
     const handledChangeInputModeFailure = (e) => {
         const value = e.target.value;
-        setDataModeFailure(value);
+        setdataSpecification(value);
         setDataReport(prevState => ({
             ...prevState,
             specification: value
@@ -258,7 +312,7 @@ function DPAReport() {
         <>
 
             <section className="columns is-centered" >
-                <label className="custom-label-total-report-averia">Tiempo Total de Avería: {timeDifference} h</label>
+                <label className="custom-label-total-report-DPA">Tiempo Total de Avería: {timeDifference} h</label>
 
                 <div className="columns is-centered has-text-centered">
                     <div className="column">
@@ -267,14 +321,14 @@ function DPAReport() {
                             <div className="field">
                                 <label className="label custom-label">Inicio</label>
                                 <div className="control">
-                                    <input className="input is-small" type="time" value={startTime} onChange={handledChangeInputStart} step='60' min="00:00" max='23:59' />
+                                    <input className="input is-small" type="time" value={startTime} onChange={handledChangeInputStart} step='60' min={min} max={max} />
                                 </div>
                             </div>
 
                             <div className="field pl-3">
                                 <label className="label custom-label">Fin</label>
                                 <div className="control">
-                                    <input className="input is-small" type="time" value={endTime} onChange={handledChangeInputEnd} step='60' min="00:00" max='23:59' />
+                                    <input className="input is-small" type="time" value={endTime} onChange={handledChangeInputEnd} step='60' min={min} max={max} />
                                 </div>
                             </div>
 
@@ -324,7 +378,7 @@ function DPAReport() {
                             <div className="field pl-2">
                                 <label className="label custom-label">Especificación</label>
                                 <div className="select is-small">
-                                    <select className="is-hovered custom-width-add-report-averia " name="subSytem" id="subSystem" value={dataModeFailure} onChange={handledChangeInputModeFailure}>
+                                    <select className="is-hovered custom-width-add-report-averia " name="subSytem" id="subSystem" value={dataSpecification} onChange={handledChangeInputModeFailure}>
                                         <option value='' > </option>
                                         {specification.map((option, index) => (
                                             <option key={index} value={option}>

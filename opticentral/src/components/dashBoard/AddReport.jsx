@@ -2,26 +2,28 @@ import React from "react";
 import config from "../../../config";
 import { useState, useContext, useEffect, useRef } from "react";
 import { ReportContext } from "../context/ReportContext";
+import { DateContext } from "../context/DateContext";
 import { getLocalStorage } from "../services/LocalStorage";
 import { fetchUpdateReportProduction } from "../services/fetchData";
 import { preDataReportItemProduction, validateDataWhithoutNull } from "../services/preData";
 import { eventBasic, textUnderMessage, processingAction, closeSwal } from "../services/alerts";
+
 import AddProduction from "./AddProduction";
 
 import ParoExterno from "./ParoExterno";
 import TurnoNoProgramado from "./TurnoNoProgramado";
 
 function AddReport({ setActiveAddReport, setActivateDetailsProduction, setSelectedDate, selectedDate, setActivateAddIcon, data }) {
-   
+    const { valueTimeContext } = useContext(DateContext);
     const { dataReportProduction } = useContext(ReportContext)
-    const [saveReport, setSaveReport] = useState(false);    
-    const [dataFetch, setDataFetch] = useState({})   
+    const [saveReport, setSaveReport] = useState(false);
+    const [dataFetch, setDataFetch] = useState({})
     const [brand, setBrand] = useState(data.brand);
 
 
- 
 
-    useEffect(() => {     
+
+    useEffect(() => {
 
 
         // Validate user login token
@@ -61,6 +63,7 @@ function AddReport({ setActiveAddReport, setActivateDetailsProduction, setSelect
 
     const HandledClickDismiss = () => {
         setActivateDetailsProduction(true);
+
         setActivateAddIcon(true);
         setActiveAddReport(false);
 
@@ -69,15 +72,18 @@ function AddReport({ setActiveAddReport, setActivateDetailsProduction, setSelect
 
 
         const validateReport = validateDataWhithoutNull(dataReportProduction)
+        
         if (validateReport) {
             textUnderMessage("¡Validar Información!", "Por favor, ingrese información válida y completa !", "warning")
 
         } else {
 
-            console.log(data)
+
             setDataFetch(preDataReportItemProduction(data, dataReportProduction));
+            console.log(valueTimeContext)
+
             setSaveReport(!saveReport);
-            
+
         }
     }
 
@@ -98,7 +104,7 @@ function AddReport({ setActiveAddReport, setActivateDetailsProduction, setSelect
                 <div className="column custom-addreport ">
 
 
-                    <AddProduction />          
+                    <AddProduction />
 
 
 

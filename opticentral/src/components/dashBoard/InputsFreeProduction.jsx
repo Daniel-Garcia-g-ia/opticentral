@@ -13,17 +13,15 @@ function InputsFreeProduction({ brewId, index, onInputChange }) {
     });
 
     const brands = dataBrands();
-
     const handledChange = (e) => {
-        const { name, value, type, checked } = e.target;
+        const { name, value } = e.target;
 
-        const updatedValue = type === 'checkbox' ? checked : value;
         setFormValue((prevState) => ({
             ...prevState,
-            [name]: updatedValue
+            [name]: value
         }));
 
-        onInputChange(index, name, updatedValue);
+        onInputChange(index, name, value);
     };
 
 

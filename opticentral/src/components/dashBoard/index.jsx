@@ -12,12 +12,11 @@ import TotalReportTime from "./TotalReportTime";
 import { dataBrands } from "../../assets/data/data"
 import AddReportExt from "./AddReportExt";
 
-import { IoMdAddCircleOutline } from "react-icons/io";
-import { fetchData } from "../services/fetchData";
 import { fetchOneData } from "../services/fetchData";
 import { getLocalStorage } from "../services/LocalStorage";
 import { extractedReportData, extractedTotalTime } from "../services/preData"
 import { NavbarContext } from "../context/NavbarContext";
+import { UpdateContext } from "../context/UpdateContext";
 import Gannt from "./Gannt";
 import { DateContext } from "../context/DateContext";
 
@@ -35,19 +34,20 @@ function DashBoard() {
     const isFirstRender1 = useRef();
     const isFirstRender2 = useRef();
     const { production } = useContext(NavbarContext);
-    const { permissonsRole } = useContext(NavbarContext)
+    const {chanceData}= useContext(UpdateContext);
+    const { permissonsRole } = useContext(NavbarContext);
     const { dateContext } = useContext(DateContext);
-    const { turnContext } = useContext(DateContext)
+    const { turnContext } = useContext(DateContext);
+    const { totalTimeContext } = useContext(DateContext);
     const [activateDeatilProduction, setActivateDetailsProduction] = useState(true)
-    const [activeTotalTime, setActiveTime] = useState(false)
+    const [activeTotalTime, setActiveTime] = useState(false);
     const [date, setDate] = useState('');
     const [dataTurn, setDataTurn] = useState("Turno 1");
     const [selectedDate, setSelectedDate] = useState();
     const [dataLength, setDataLength] = useState(0);
     const [reportLength, setReportLength] = useState(0);
     const [dataExtractedReport, setDataExtractedReport] = useState(0);
-    const [report_id, setReport_id] = useState([]);
-    const [dataAveria, setDataAveria] = useState({});
+    const [report_id, setReport_id] = useState([]);    
     const [processDataId, setProcessDataId] = useState([]);
     const [productionId, setProductionId] = useState([]);
     const [reportId, setReportId] = useState([]);
@@ -103,10 +103,6 @@ function DashBoard() {
                 navigate('/')
             } else if (!activateReportExt && date && dataTurn) {
                 processingAction('Validando información', 'Por favor espere...', true)
-                //Peticion GET ApI   
-
-
-
                 fetchOneData(`${config.apiUrl}/app/v1/processData`, code, date, dataTurn, authData.token).then(result => {
 
                     if (!result.body.auth) {
@@ -124,21 +120,22 @@ function DashBoard() {
                             } else {
                                 //Obtiene informacion para agregar reportes  
                                 setActiveTime(true)
+                                const ids = result.body.data.map(item => item._id)
 
-
-                                const extractedReport = extractedReportData(result.body.data[0].processData[0])
-
-
-                            
+                               
+                                const extractedReport = extractedReportData(result.body.data[0].processData[0],ids)                     
                                
                                 setReportLength(extractedReport.length)
                                 setDataExtractedReport(extractedReport)
+                                
                                 const totalTimeExtracted = extractedTotalTime(extractedReport)
                                 setTotalTimeExtractedReport(totalTimeExtracted)
+                                totalTimeContext(totalTimeExtraxtesReport)
+
                                 setDataLength(result.body.data[0].processData[0].production.length)
 
-                                const ids = result.body.data.map(item => item._id)
-
+                                
+                                
 
                                 setReport_id(ids)
 
@@ -154,7 +151,7 @@ function DashBoard() {
 
                                     )
                                 ))
-                                //console.log('production id',productionIds)
+                               
                                 setProductionId(productionIds)
 
                                 const reportIds = result.body.data.flatMap(item => (
@@ -164,7 +161,7 @@ function DashBoard() {
                                         ))
                                     ))
                                 ))
-                                // console.log('report id', reportIds)
+                                
                                 setReportId(reportIds)
 
 
@@ -206,7 +203,7 @@ function DashBoard() {
                         }
                     }
                 }).catch(error => {
-                    console.log(error)
+                   
                     processingAction(null, null, false)
                     eventBasic('error', `error: ${error}`)
                     navigate('/')
@@ -218,7 +215,7 @@ function DashBoard() {
         }
 
 
-    }, [selectedDate, activateReportExt, activateFreeProduction])
+    }, [selectedDate, activateReportExt, activateFreeProduction, chanceData])
 
     const handledClickAdd = (data) => {
         setActivateDetailsProduction(!activateDeatilProduction)
