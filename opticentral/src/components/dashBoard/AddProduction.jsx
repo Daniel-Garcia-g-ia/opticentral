@@ -99,7 +99,7 @@ function AddProduction({ values, typeReport }) {
 
                         <div className="field is-horizontal pt-5">
 
-                            <div className="field">
+                            <div className="field" lang="en-GB">
                                 <label className="label custom-label">Inicio</label>
                                 <div className="control">
                                     <input className="input is-small" type="time" value={startTime} onChange={handledStartTimeChange} step='60' min="00:00" max='23:59' />
