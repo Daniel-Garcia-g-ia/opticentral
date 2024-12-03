@@ -4,12 +4,13 @@ import { useState, useEffect } from "react";
 function MainDetail({ _id, production, processDataId, productionId, reportId, brand, volume, brewId, handledClickAdd }) {
 
     const [registerProduction, setRegisterProduction] = useState(false);
+    console.log(brewId)
+    useEffect(() => {
 
-    useEffect(() => {        
         production.forEach(item => {
             if (item.productionReportItem.length > 0) {
                 setRegisterProduction(true)
-                
+
             } else {
                 setRegisterProduction(false);
             }
@@ -31,8 +32,8 @@ function MainDetail({ _id, production, processDataId, productionId, reportId, br
 
             <div className="box-custom pt-1"
                 style={{
-                    borderBottom: registerProduction ? 'solid 3px #8CCC85': 'solid 1px #5d5f6448',
-                    
+                    borderBottom: registerProduction ? 'solid 3px #8CCC85' : 'solid 1px #5d5f6448',
+
                 }}
             >
                 <p className="is-flex is-justify-content-end ">
@@ -44,7 +45,7 @@ function MainDetail({ _id, production, processDataId, productionId, reportId, br
                         <span>Brew ID </span>
                         <div className="field ">
                             <p className="control">
-                                <input className="input is-small is-success is-custom-wifth-amount-hl" type="number" name="brewId" defaultValue={brewId} disabled />
+                                <input className="input is-small is-success is-custom-wifth-amount-hl" type="number" name="brewId" value={brewId} disabled />
                             </p>
                         </div>
                     </div>
