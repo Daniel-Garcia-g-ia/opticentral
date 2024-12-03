@@ -8,6 +8,7 @@ const UpdateProvider = ({children})=>{
     const [chanceData, setChanceData]= useState(false);
     const updateData = ()=>{
         setChanceData(!chanceData)
+       
     }
 
 

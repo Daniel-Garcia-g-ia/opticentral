@@ -3,6 +3,7 @@ import config from "../../../config";
 import { useState, useContext, useEffect, useRef } from "react";
 import { ReportContext } from "../context/ReportContext";
 import { DateContext } from "../context/DateContext";
+import { UpdateContext } from "../context/UpdateContext";
 import { getLocalStorage } from "../services/LocalStorage";
 import { fetchUpdateReportProduction } from "../services/fetchData";
 import { preDataReportItemProduction, validateDataWhithoutNull } from "../services/preData";
@@ -14,11 +15,17 @@ import ParoExterno from "./ParoExterno";
 import TurnoNoProgramado from "./TurnoNoProgramado";
 
 function AddReport({ setActiveAddReport, setActivateDetailsProduction, setSelectedDate, selectedDate, setActivateAddIcon, data }) {
+    const { dateSelected } = useContext(DateContext);
+    const { turnSelected } = useContext(DateContext);
     const { valueTimeContext } = useContext(DateContext);
-    const { dataReportProduction } = useContext(ReportContext)
+    const { dataReportProduction } = useContext(ReportContext);
+    const { dataReportProductionContext } = useContext(ReportContext);
+    const { updateData } = useContext(UpdateContext);
     const [saveReport, setSaveReport] = useState(false);
     const [dataFetch, setDataFetch] = useState({})
     const [brand, setBrand] = useState(data.brand);
+    const [releaseAddReport, setReleaseAddReport] = useState(false);
+    const [validateRelease, setValidateRelease] = useState(false);
 
 
 
@@ -40,16 +47,21 @@ function AddReport({ setActiveAddReport, setActivateDetailsProduction, setSelect
         } else {
             processingAction('Procesando Información', 'Por favor, espere ...')
 
+
+
             fetchUpdateReportProduction(`${config.apiUrl}/app/v1/updateData`, data._id, authData.token, dataFetch)
 
                 .then(result => {
+                    console.log(dataFetch)
                     closeSwal()
-                    eventBasic('success', 'Reporte, ¡Guardado con exito!')
-                    setActivateDetailsProduction(true);
+                    eventBasic('success', 'Reporte, ¡Guardado con exito!')                    
                     setActivateAddIcon(true);
                     setActiveAddReport(false);
                     setSelectedDate(!selectedDate);
-                })
+                   
+                }).then(result=>{
+                    updateData();
+                })              
                 .catch(error =>
                     textUnderMessage('ERROR', `${error}, 1001`, 'error')
 
@@ -57,6 +69,29 @@ function AddReport({ setActiveAddReport, setActivateDetailsProduction, setSelect
 
         }
     }, [saveReport])
+
+    useEffect(() => {
+        if (releaseAddReport) {
+
+            const sumaTotalTime = Number(valueTimeContext) + Number(dataFetch.totalTime)
+
+            if (sumaTotalTime <= 8) {
+                setSaveReport(!saveReport)
+
+            } else {
+                setReleaseAddReport(false);
+                dataReportProductionContext({ data: null });
+                textUnderMessage("¡Validar Información!", "Tiempo superado del turno !", "warning")
+
+            }
+
+        } else {
+            return
+        }
+
+
+
+    }, [validateRelease]);
 
 
 
@@ -70,21 +105,32 @@ function AddReport({ setActiveAddReport, setActivateDetailsProduction, setSelect
     }
     const handledClickSaveReport = () => {
 
+        if (valueTimeContext <= 8) {
+            const validateReport = validateDataWhithoutNull(dataReportProduction)
 
-        const validateReport = validateDataWhithoutNull(dataReportProduction)
-        
-        if (validateReport) {
-            textUnderMessage("¡Validar Información!", "Por favor, ingrese información válida y completa !", "warning")
+            if (validateReport) {
+                textUnderMessage("¡Validar Información!", "Por favor, ingrese información válida y completa !", "warning")
+
+            } else {
+
+
+                setDataFetch(preDataReportItemProduction(data, dataReportProduction, dateSelected, turnSelected));
+
+
+
+
+
+            }
+            setReleaseAddReport(true);
+            setValidateRelease(!validateRelease);
 
         } else {
-
-
-            setDataFetch(preDataReportItemProduction(data, dataReportProduction));
-            console.log(valueTimeContext)
-
-            setSaveReport(!saveReport);
-
+            textUnderMessage("¡Validar Información!", "Tiempo superado del turno !", "warning")
         }
+
+
+
+
     }
 
 

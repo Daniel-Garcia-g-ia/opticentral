@@ -125,7 +125,7 @@ function FreeProduction({ equipmentId, equipmentName, location, activateFreeProd
 
         const inputValue = e.target.value;
 
-        if (/^[0-5]$/.test(inputValue) || inputValue === '') {
+        if (/^\d{1,2}$/.test(inputValue)  || inputValue === '') {
             setAmountProductions(inputValue);
         }
 
@@ -152,7 +152,7 @@ function FreeProduction({ equipmentId, equipmentName, location, activateFreeProd
                         <span className="">Cantidad Cocimientos: </span>
                         <div className="field pl-6">
                             <div className="control is-custom-small-amount">
-                                <input className="input is-small" type="number" value={amountProductions} onChange={handledChangeAmountProduction} min="0" max="5" step="1" />
+                                <input className="input is-small" type="number" value={amountProductions} onChange={handledChangeAmountProduction} min="0" max="50" step="1" />
                             </div>
                         </div>
                     </div>

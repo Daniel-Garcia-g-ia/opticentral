@@ -5,6 +5,7 @@ import { fetchUpdateReportProduction } from "../services/fetchData";
 import { ReportContext } from "../context/ReportContext";
 import { UpdateContext } from "../context/UpdateContext";
 import { getLocalStorage } from "../services/LocalStorage";
+import { DateContext } from "../context/DateContext";
 import { eventBasic, textUnderMessage, processingAction, closeSwal } from "../services/alerts";
 import config from "../../../config";
 import ICReport from "../dashBoard/ICReport";
@@ -19,8 +20,10 @@ import AddProduction from "../dashBoard/AddProduction";
 
 function EditReport({ data, setActiveDetail }) {
     const { updateData } = useContext(UpdateContext)
-
     const { dataReportProduction } = useContext(ReportContext);
+    const { dateSelected }= useContext(DateContext);
+    const { turnSelected }= useContext(DateContext);
+
     const [closeModal, setCloseModal] = useState(false);
     const [activeICReport, setActiveICReport] = useState(false);
     const [activeECReport, setActiveECReport] = useState(false);
@@ -104,17 +107,9 @@ function EditReport({ data, setActiveDetail }) {
 
     const handledClickSave = () => {
 
-
-        setDataFetch(preDataUpdateReport(dataReportProduction, data))
-
-        console.log(dataFetch)
-
-
-
+        setDataFetch(preDataUpdateReport(dataReportProduction, data, dateSelected, turnSelected))
         setUpdateReport(!updateReport)
-
-
-
+        
     }
 
 
