@@ -86,7 +86,7 @@ function FreeProduction({ equipmentId, equipmentName, location, activateFreeProd
     const handledClickSave = () => {
        
         
-        if (!inputValues[0]?.brand || !inputValues[0]?.volume || !inputValues[0]?.brewId || !inputValues[0]?.dateEnd || !inputValues[0]?.dateInit ) {
+        if (!inputValues[0]?.brand || !inputValues[0]?.volume || !inputValues[0]?.brewId ) {
             
             textUnderMessage("¡Validar Información!", "Por favor, ingrese información válida y completa !", "warning")
 
