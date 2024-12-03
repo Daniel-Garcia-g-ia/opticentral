@@ -15,7 +15,7 @@ function MainDetail({ _id, production, processDataId, productionId, reportId, br
             }
         })
 
-    }, [])
+    }, [production])
 
     const handledClick = () => {
         handledClickAdd({ brand, _id, processDataId, productionId, reportId })
