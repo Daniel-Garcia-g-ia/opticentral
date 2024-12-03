@@ -72,11 +72,11 @@ function DashBoard() {
 
         if (permissonsRole) {
             setActiveTime(false)
-            /* setActivateDetailsProduction(false) */
+            setActivateDetailsProduction(false)
             return
         } else {
             setActiveTime(true)
-            /* setActivateDetailsProduction(true) */
+            setActivateDetailsProduction(true)
             setSelectedDate(!selectedDate)
 
         }
