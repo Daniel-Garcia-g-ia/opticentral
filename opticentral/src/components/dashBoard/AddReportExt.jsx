@@ -18,6 +18,8 @@ function AddReportExt({ setActivateDetailsProduction, setActivateReportExt, setS
     const { dataReportProduction } = useContext(ReportContext);
     const { dataReportProductionContext } = useContext(ReportContext);
     const { valueTimeContext } = useContext(DateContext);
+    const { dateSelected } = useContext(DateContext);
+    const { turnSelected } = useContext(DateContext);
     const [activateICReport, setActivateICReport] = useState(false);
     const [activateECReport, setActivateECReport] = useState(false);
     const [activateDPAReport, setActivateDPAReport] = useState(false);
@@ -82,7 +84,7 @@ function AddReportExt({ setActivateDetailsProduction, setActivateReportExt, setS
 
             }
 
-        }else{
+        } else {
             return
         }
 
@@ -154,17 +156,17 @@ function AddReportExt({ setActivateDetailsProduction, setActivateReportExt, setS
 
             } else {
                 if (typeReport === 'Causa Interna (IC)') {
-                    setDataFetch(preDataReportItemIc(data, dataReportProduction));
+                    setDataFetch(preDataReportItemIc(data, dataReportProduction, dateSelected, turnSelected));
                 } else if (typeReport === 'Causa Externa (EC)') {
-                    setDataFetch(preDataReportItemEc(data, dataReportProduction));
+                    setDataFetch(preDataReportItemEc(data, dataReportProduction, dateSelected, turnSelected));
 
 
                 } else if (typeReport === 'Actividad Planeada (DPA)') {
-                    setDataFetch(preDataReportItemDPA(data, dataReportProduction));
+                    setDataFetch(preDataReportItemDPA(data, dataReportProduction, dateSelected, turnSelected));
 
 
                 } else if (typeReport === 'No Programado (NST)') {
-                    setDataFetch(preDataReportItemNST(data, dataReportProduction));
+                    setDataFetch(preDataReportItemNST(data, dataReportProduction, dateSelected, turnSelected));
                 }
 
                 setReleaseAddReport(true);

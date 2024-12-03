@@ -193,8 +193,9 @@
 } */
 
 .box-custom {
-    padding-bottom: 0.5rem;
-    border-bottom: solid #5d5f6448;
+padding-bottom: 0.5rem; 
+   border-bottom: solid #5d5f6448; 
+    
 }
 
 .brand-title {
@@ -343,4 +344,12 @@
 }
 .is-custom-edit:hover span{
     cursor: pointer;
+}
+
+.custom-view-box{
+    height: 70vh;
+    overflow-y:auto;
+    overflow-x: hidden;
+    width: fill;
+    padding: 20px;
 }

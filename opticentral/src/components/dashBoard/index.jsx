@@ -28,13 +28,13 @@ import { CgOpenCollective } from "react-icons/cg";
 
 
 
-function DashBoard() {    
+function DashBoard() {
     const navigate = useNavigate();
     const location = useLocation();
     const isFirstRender1 = useRef();
     const isFirstRender2 = useRef();
     const { production } = useContext(NavbarContext);
-    const {chanceData}= useContext(UpdateContext);
+    const { chanceData } = useContext(UpdateContext);
     const { permissonsRole } = useContext(NavbarContext);
     const { dateContext } = useContext(DateContext);
     const { turnContext } = useContext(DateContext);
@@ -47,7 +47,7 @@ function DashBoard() {
     const [dataLength, setDataLength] = useState(0);
     const [reportLength, setReportLength] = useState(0);
     const [dataExtractedReport, setDataExtractedReport] = useState(0);
-    const [report_id, setReport_id] = useState([]);    
+    const [report_id, setReport_id] = useState([]);
     const [processDataId, setProcessDataId] = useState([]);
     const [productionId, setProductionId] = useState([]);
     const [reportId, setReportId] = useState([]);
@@ -59,7 +59,8 @@ function DashBoard() {
     const [dataSelected, setDataSelected] = useState();
     const [totalTimeExtraxtesReport, setTotalTimeExtractedReport] = useState(0)
     const [activateAddIcon, setActivateAddIcon] = useState(true)
-    const [activateFreeProduction, setActivateFreeProduction]= useState(false);
+    const [activateFreeProduction, setActivateFreeProduction] = useState(false);
+    const [dataReport, setDataReport] = useState([])
 
     const [activeAddReport, setActiveAddReport] = useState(false)
     const [activateReportExt, setActivateReportExt] = useState(false)
@@ -68,10 +69,7 @@ function DashBoard() {
 
     useEffect(() => {
 
-        if (!isFirstRender1.current) {
-            isFirstRender1.current = true;
-            return;
-        }
+
         if (permissonsRole) {
             setActiveTime(false)
             setActivateDetailsProduction(false)
@@ -103,7 +101,7 @@ function DashBoard() {
                 navigate('/')
             } else if (!activateReportExt && date && dataTurn) {
                 processingAction('Validando información', 'Por favor espere...', true)
-                fetchOneData(`${config.apiUrl}/app/v1/processData`, code, date, dataTurn, authData.token).then(result => {
+                fetchOneData(`${config.apiUrl}/app/v1/processData`, code, date, '*', authData.token).then(result => {
 
                     if (!result.body.auth) {
 
@@ -117,26 +115,59 @@ function DashBoard() {
                             if (!result.body.data[0].processData[0].release) {
                                 textUnderMessage('Producción sin liberar', 'Informar al líder de turno', 'warning')
                                 setReportLength(0)
+                                setDataReport([])
                             } else {
                                 //Obtiene informacion para agregar reportes  
+
                                 setActiveTime(true)
                                 const ids = result.body.data.map(item => item._id)
 
-                               
-                                const extractedReport = extractedReportData(result.body.data[0].processData[0],ids)                     
-                               
+
+                                const extractedReport = extractedReportData(result.body.data, ids, date, dataTurn)
+
+
                                 setReportLength(extractedReport.length)
                                 setDataExtractedReport(extractedReport)
-                                
+
                                 const totalTimeExtracted = extractedTotalTime(extractedReport)
                                 setTotalTimeExtractedReport(totalTimeExtracted)
                                 totalTimeContext(totalTimeExtraxtesReport)
 
-                                setDataLength(result.body.data[0].processData[0].production.length)
 
-                                
-                                
+                                //structured data for API 
+                                const data = result.body.data;
 
+
+                                const structuredData = data.flatMap((item) =>
+                                    item.processData.flatMap((processData) =>
+                                        processData.production.map((production) => ({
+                                            _id: item._id,
+                                            processDataId: processData._id,
+                                            productionId: production._id,
+                                            reportId: production.report?.[0]?._id || null,
+                                            production: production.report,
+                                            brand: production.brand,
+                                            volume: production.volume,
+                                            brewId: production.brewId,
+                                        }))
+                                    )
+                                )
+
+                                setDataReport(structuredData)
+
+
+
+
+
+                                const totalProductionLength = data.reduce((total, equipment) => {
+                                    return total + equipment.processData.reduce((innerTotal, process) => {
+                                        return innerTotal + process.production.length;
+                                    }, 0);
+                                }, 0);
+
+
+
+                                setDataLength(totalProductionLength)
                                 setReport_id(ids)
 
                                 const processDataIds = result.body.data.flatMap(item => (
@@ -151,7 +182,7 @@ function DashBoard() {
 
                                     )
                                 ))
-                               
+
                                 setProductionId(productionIds)
 
                                 const reportIds = result.body.data.flatMap(item => (
@@ -161,7 +192,7 @@ function DashBoard() {
                                         ))
                                     ))
                                 ))
-                                
+
                                 setReportId(reportIds)
 
 
@@ -190,6 +221,7 @@ function DashBoard() {
 
 
 
+
                             }
 
                         } else {
@@ -198,16 +230,25 @@ function DashBoard() {
                             setActiveTime(false)
                             setReportLength(0)
                             basicMessage('Sin datos registrados')
+                            setDataReport([])
 
 
                         }
                     }
-                }).catch(error => {
-                   
-                    processingAction(null, null, false)
-                    eventBasic('error', `error: ${error}`)
-                    navigate('/')
+
+
+                }).then(() => {
+                    setActivateDetailsProduction(true)
                 })
+
+
+                    .catch(error => {
+
+                        processingAction(null, null, false)
+                        eventBasic('error', `error: ${error}`)
+
+                        /* navigate('/') */
+                    })
             } else {
                 setActiveTime(false)
             }
@@ -284,45 +325,71 @@ function DashBoard() {
 
 
                             <div className="box is-custom-box-detail">
+                                <div className="custom-view-box">
+                                    {activeTotalTime &&
+                                        <TotalReportTime data={totalTimeExtraxtesReport} setActivateReportExt={setActivateReportExt} activeAddIcon={activateAddIcon} />
+                                    }
 
-                                {activeTotalTime &&
-                                    <TotalReportTime data={totalTimeExtraxtesReport} setActivateReportExt={setActivateReportExt} activeAddIcon={activateAddIcon} />
-                                }
+                                    {activateDeatilProduction && dataReport.map((item, index) => (
+                                        <MainDetail
+                                            key={index}
+                                            index={index}
+                                            production={item.production}
+                                            chanceData={chanceData}
+                                            _id={item._id}
+                                            processDataId={item.processDataId}
+                                            productionId={item.productionId}
+                                            reportId={item.reportId}
+                                            brand={item.brand}
+                                            volume={item.volume}
+                                            brewId={item.brewId}
+                                            handledClickAdd={handledClickAdd}
 
-                                {activateDeatilProduction && Array.from({ length: dataLength }, (_, index) => (
-                                    <MainDetail key={index} index={index} _id={report_id[0]} processDataId={processDataId[0]}
-                                        productionId={productionId[index]} reportId={reportId[index]}
-                                        brand={brandName[index]} volume={volumeAmount[index]} brewId={brewId[index]}
-                                        handledClickAdd={handledClickAdd} />
-                                ))}
+                                        />
+                                    ))
+
+                                    }
 
 
-                                {permissonsRole && <FreeProduction
-                                    equipmentId={code}
-                                    equipmentName={name}
-                                    location={place}
-                                    activateFreeProduction={activateFreeProduction}
-                                    setActivateFreeProduction={ setActivateFreeProduction}
+                                    {permissonsRole && <FreeProduction
+                                        equipmentId={code}
+                                        equipmentName={name}
+                                        location={place}
+                                        activateFreeProduction={activateFreeProduction}
+                                        setActivateFreeProduction={setActivateFreeProduction}
 
-                                     />}
+                                    />}
 
-                                {activeAddReport && <AddReport
-                                    setActiveAddReport={setActiveAddReport}
-                                    setActivateDetailsProduction={setActivateDetailsProduction}
-                                    setSelectedDate={setSelectedDate}
-                                    selectedDate={selectedDate}
-                                    setActivateAddIcon={setActivateAddIcon}
-                                    data={dataSelected} />}
+                                    {activeAddReport && <AddReport
+                                        setActiveAddReport={setActiveAddReport}
+                                        setActivateDetailsProduction={setActivateDetailsProduction}
+                                        setSelectedDate={setSelectedDate}
+                                        selectedDate={selectedDate}
+                                        setActivateAddIcon={setActivateAddIcon}
+                                        data={dataSelected}
+                                    />}
 
-                                {activateReportExt && <AddReportExt
-                                    setActivateDetailsProduction={setActivateDetailsProduction}
-                                    setActivateReportExt={setActivateReportExt}
-                                    data={{ id: report_id[0], processId: processDataId[0] }}
-                                />
+                                    {activateReportExt && <AddReportExt
+                                        setActivateDetailsProduction={setActivateDetailsProduction}
+                                        setActivateReportExt={setActivateReportExt}
+                                        data={{
+                                            id: report_id[0], processId: processDataId[0]
 
-                                }
+                                        }}
+
+
+                                    />
+
+                                    }
+
+                                </div>
+
+
 
                             </div>
+
+
+
 
                         </div>
 
@@ -338,7 +405,7 @@ function DashBoard() {
 
 
 
-            </section>
+            </section >
 
         </>
 

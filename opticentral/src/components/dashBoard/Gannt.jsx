@@ -12,6 +12,7 @@ function Gannt({ data }) {
     const heightBar = (75 * totalTime) / 8;
         
     useEffect(() => {
+        
         if (totalTime <= 0.3) {
             setActiveTitle(false);
         }
