@@ -68,12 +68,7 @@ function InputsFreeProduction({ brewId, index, onInputChange }) {
                             <div className="field pl-3">
                                 <label>Inicio</label>
                                 <div className="control">
-<<<<<<< HEAD
-                                    <input className="input is-small" type="time" name="dateInit" onChange={handledChange} step='60' min="00:00" max='23:59'/>
-
-=======
                                     <input className="input is-small" type="time" name="dateInit" onChange={handledChange} formart='HH:mm' step='60' min="00:00" max='23:59' />
->>>>>>> develop
                                 </div>
                             </div>
                             <div className="field pl-3">
