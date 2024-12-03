@@ -5,15 +5,15 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { NavbarContext } from "../context/NavbarContext";
 import { DateContext } from "../context/DateContext";
 import { findMaxBrewId } from "../services/preData";
-import { basicMessage, eventBasic, processingAction, closeSwal } from "../services/alerts";
+import { basicMessage, eventBasic, processingAction, closeSwal, textUnderMessage } from "../services/alerts";
 import { dataBrands } from "../../assets/data/data";
 import { getLocalStorage } from "../services/LocalStorage";
 import { fetchData, fetchSetReport } from "../services/fetchData";
 import InputsFreeProduction from "./InputsFreeProduction";
-import { dataNewReport, preDatafreeProduction } from "../services/preData";
+import { dataNewReport, preDatafreeProduction, validateDataWhithoutNull } from "../services/preData";
 
 function FreeProduction({ equipmentId, equipmentName, location, activateFreeProduction, setActivateFreeProduction }) {
-    
+
 
 
     const { discardProduction } = useContext(NavbarContext)
@@ -37,14 +37,14 @@ function FreeProduction({ equipmentId, equipmentName, location, activateFreeProd
             navigate('/');
 
         } else {
-            
+
             fetchData(`${config.apiUrl}/app/v1/mostRecentReport/0001`, authData.token)
                 .then(data => {
                     if (!data.body.auth) {
                         navigate('/');
                     } else {
                         if (!data.body.data) {
-                            
+
                             basicMessage('Sin reportes registrados')
 
                         } else {
@@ -84,38 +84,44 @@ function FreeProduction({ equipmentId, equipmentName, location, activateFreeProd
 
 
     const handledClickSave = () => {
+       
+        
+        if (!inputValues[0]?.brand || !inputValues[0]?.volume || !inputValues[0]?.brewId || !inputValues[0]?.dateEnd || !inputValues[0]?.dateInit ) {
+            
+            textUnderMessage("¡Validar Información!", "Por favor, ingrese información válida y completa !", "warning")
 
+        }else{
+            const processData = preDatafreeProduction(dateSelected, turnSelected, inputValues)
 
+            const report = dataNewReport(equipmentId, equipmentName, location, processData)
+    
+            console.log(processData)
+    
+            const authData = getLocalStorage('authData')
+            if (!authData || !authData.auth && !authData.token) {
+                navigate('/');
+    
+            } else {
+                processingAction('Procesando Información', 'Por favor, espere ...')
+    
+                fetchSetReport(`${config.apiUrl}/app/v1/processData/addProduction`, authData.token, report
+                ).then(response => {
+                    closeSwal()
+                    eventBasic('success', 'Producción Liberada!')
+                }).catch(error => {
+                    closeSwal()
+                    eventBasic('error', error)
+                })
+            }
+            setActivateFreeProduction(!activateFreeProduction)
+            discardProduction()
+    
+    
+    
+    
 
-
-        const processData = preDatafreeProduction(dateSelected, turnSelected, inputValues)
-
-        const report = dataNewReport(equipmentId, equipmentName, location, processData)
-
-        console.log(processData)
-
-        const authData = getLocalStorage('authData')
-        if (!authData || !authData.auth && !authData.token) {
-            navigate('/');
-
-        } else {
-            processingAction('Procesando Información','Por favor, espere ...')
-
-            fetchSetReport(`${config.apiUrl}/app/v1/processData/addProduction`, authData.token, report
-            ).then(response => {
-                closeSwal()
-                eventBasic('success', 'Producción Liberada!')
-            }).catch(error => {
-                closeSwal()
-                eventBasic('error', error)
-            })
         }
-        setActivateFreeProduction(!activateFreeProduction)
-        discardProduction()
-
-
-
-
+       
 
     }
 
@@ -125,14 +131,14 @@ function FreeProduction({ equipmentId, equipmentName, location, activateFreeProd
 
         const inputValue = e.target.value;
 
-        if (/^\d{1,2}$/.test(inputValue)  || inputValue === '') {
+        if (/^\d{1,2}$/.test(inputValue) || inputValue === '') {
             setAmountProductions(inputValue);
         }
 
     }
 
     const handledClickDiscard = () => {
-        
+
         discardProduction()
     }
 
