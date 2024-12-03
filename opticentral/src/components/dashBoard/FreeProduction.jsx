@@ -4,6 +4,7 @@ import { useState, useEffect, useContext } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { NavbarContext } from "../context/NavbarContext";
 import { DateContext } from "../context/DateContext";
+import { UpdateContext } from "../context/UpdateContext";
 import { findMaxBrewId } from "../services/preData";
 import { basicMessage, eventBasic, processingAction, closeSwal, textUnderMessage } from "../services/alerts";
 import { dataBrands } from "../../assets/data/data";
@@ -20,6 +21,8 @@ function FreeProduction({ equipmentId, equipmentName, location, activateFreeProd
 
     const { dateSelected } = useContext(DateContext)
     const { turnSelected } = useContext(DateContext)
+
+    const { updateData }= useContext(UpdateContext)
 
     const [brewId, setBrewId] = useState(0);
     const [inputValues, setInputValues] = useState({})
@@ -84,44 +87,47 @@ function FreeProduction({ equipmentId, equipmentName, location, activateFreeProd
 
 
     const handledClickSave = () => {
-       
-        
-        if (!inputValues[0]?.brand || !inputValues[0]?.volume || !inputValues[0]?.brewId ) {
-            
+
+
+        if (!inputValues[0]?.brand || !inputValues[0]?.volume || !inputValues[0]?.brewId) {
+
             textUnderMessage("¡Validar Información!", "Por favor, ingrese información válida y completa !", "warning")
 
-        }else{
+        } else {
             const processData = preDatafreeProduction(dateSelected, turnSelected, inputValues)
 
             const report = dataNewReport(equipmentId, equipmentName, location, processData)
-    
+
             console.log(processData)
-    
+
             const authData = getLocalStorage('authData')
             if (!authData || !authData.auth && !authData.token) {
                 navigate('/');
-    
+
             } else {
                 processingAction('Procesando Información', 'Por favor, espere ...')
-    
+
                 fetchSetReport(`${config.apiUrl}/app/v1/processData/addProduction`, authData.token, report
                 ).then(response => {
                     closeSwal()
                     eventBasic('success', 'Producción Liberada!')
-                }).catch(error => {
+                }).then(response=>{
+                    updateData();
+                })
+                .catch(error => {
                     closeSwal()
                     eventBasic('error', error)
                 })
             }
             setActivateFreeProduction(!activateFreeProduction)
             discardProduction()
-    
-    
-    
-    
+
+
+
+
 
         }
-       
+
 
     }
 
