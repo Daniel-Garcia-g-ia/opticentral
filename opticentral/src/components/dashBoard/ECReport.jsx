@@ -64,12 +64,12 @@ function ECReport({ values, typeReport }) {
             'PVPP'
         ],
         'Muestras de Calidad': [
-            'Muestras BBT',
-            'Muestra TFM',
-            'Muestra PVPP',
-            'Muestra DAW',
+
+            'Muestra Sacarificación',
+            'Muestra TFM'
+            
         ],
-        'Servicios Industriales': [
+            'Servicios Industriales': [
             'Falta de CO2',
             'Falta de Agua Sobrecalentada',
             'Falta de Aire Comprimido',
@@ -136,46 +136,19 @@ function ECReport({ values, typeReport }) {
             'Disponibilidad',
             'Sin Inventario'
         ],
-        'Muestras BBT': [
+            'Muestra TFM': [
             'PH',
             'Oxígeno',
             'TPO',
             'Espuma',
             'Extracto',
             'Color',
-            'Sensorial',
-
+            'Sensorial'
         ],
-        'Muestra TFM': [
-            'PH',
-            'Oxígeno',
-            'TPO',
-            'Espuma',
-            'Extracto',
-            'Color',
-            'Sensorial',
-
-        ],
-        'Muestra PVPP': [
-            'PH',
-            'Oxígeno',
-            'TPO',
-            'Espuma',
-            'Extracto',
-            'Color',
-            'Sensorial',
-
-        ],
-        'Muestra DAW': [
-            'PH',
-            'Oxígeno',
-            'TPO',
-            'Espuma',
-            'Extracto',
-            'Color',
-            'Sensorial',
-
-        ],
+        'Muestra sacarificación':[
+            'tiempo de sacarificación',
+            'Extracto'
+        ],         
         'Falta de CO2': [
             'Corte de Energía',
             'Falla en el Sitema',
