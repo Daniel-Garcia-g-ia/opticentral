@@ -145,7 +145,7 @@ function ECReport({ values, typeReport }) {
             'Color',
             'Sensorial'
         ],
-        'Muestra sacarificación':[
+        'Muestra Sacarificación':[
             'tiempo de sacarificación',
             'Extracto'
         ],         
