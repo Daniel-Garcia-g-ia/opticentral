@@ -39,7 +39,7 @@ function AddReportExt({ setActivateDetailsProduction, setActivateReportExt, setS
         // Validate the token and run the put fetch request
 
         if (!authData || !authData.auth && !authData.token) {
-            console.log('sin token')
+            eventBasic('warning', 'sin token')
 
         } else if (!dataFetch || Object.keys(dataFetch).length === 0) {
             // Verificar si dataFetch está vacío

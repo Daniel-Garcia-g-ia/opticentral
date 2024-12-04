@@ -39,11 +39,12 @@ function AddReport({ setActiveAddReport, setActivateDetailsProduction, setSelect
         // Validate the token and run the put fetch request
 
         if (!authData || !authData.auth && !authData.token) {
-            console.log('sin token')
+            eventBasic('warning', 'sin token')
+           
 
         } else if (!dataFetch || Object.keys(dataFetch).length === 0) {
             // Verificar si dataFetch está vacío
-            console.log('Sin datos en dataFetch');
+            eventBasic('warning', 'sin datos')
         } else {
             processingAction('Procesando Información', 'Por favor, espere ...')
 
@@ -52,7 +53,7 @@ function AddReport({ setActiveAddReport, setActivateDetailsProduction, setSelect
             fetchUpdateReportProduction(`${config.apiUrl}/app/v1/updateData`, data._id, authData.token, dataFetch)
 
                 .then(result => {
-                    console.log(dataFetch)
+                    
                     closeSwal()
                     eventBasic('success', 'Reporte, ¡Guardado con exito!')                    
                     setActivateAddIcon(true);

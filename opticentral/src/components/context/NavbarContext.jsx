@@ -20,7 +20,7 @@ const NavbarProvider = ({ children }) => {
 
         }
 
-        console.log(permissonsRole)
+      
     }
 
     const discardProduction =()=>{

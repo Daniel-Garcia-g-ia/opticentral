@@ -3,7 +3,7 @@
 function setLocalStorage (key,data) {
     try{
         localStorage.setItem(key, JSON.stringify(data));
-        console.log('data almacenada')
+        
     }catch(error){
         console.log("Error al guardar AUTH", error)
     }

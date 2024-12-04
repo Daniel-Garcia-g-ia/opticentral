@@ -43,12 +43,7 @@ function HomeRoute() {
         }
     }, []); // Solo corre al cargar el componente
 
-    // Este useEffect se disparará cuando `equipmentData` cambie de valor
-    useEffect(() => {
-        if (equipmentData) {
-            console.log(equipmentData); // Ahora los datos se han actualizado
-        }
-    }, [equipmentData]);
+   
 
     // Si `equipmentData` no se ha cargado, mostramos el mensaje de carga o redirigimos si es necesario
     if (redirect) {

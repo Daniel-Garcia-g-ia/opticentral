@@ -337,17 +337,29 @@ function transformReportItemsEXT(reportItems, type, name, bg, ids, itemId, proce
 
 function sortReportsByStartTime(reports) {
     return reports.sort((a, b) => {
-        // Obtener el tiempo de inicio de 'a', verificando ambos casos
+        // Obtener el tiempo de inicio de 'a' y 'b', verificando ambos casos
         const startTimeA = a.data?.item?.startTime || a.startTime;
         const startTimeB = b.data?.item?.startTime || b.startTime;
 
-        // Crear objetos de fecha para cada tiempo de inicio
-        const timeA = new Date(`1970-01-01T${startTimeA}:00`);
-        const timeB = new Date(`1970-01-01T${startTimeB}:00`);
+        // Determinar si el turno es nocturno y ajustar las horas
+        const adjustedTimeA = adjustTimeForNightShift(startTimeA);
+        const adjustedTimeB = adjustTimeForNightShift(startTimeB);
 
-        // Comparar los tiempos
-        return timeA - timeB;
+        // Comparar las horas ajustadas
+        return adjustedTimeA - adjustedTimeB;
     });
+}
+
+// Ajusta el tiempo si pertenece a un turno nocturno
+function adjustTimeForNightShift(startTime) {
+    const time = new Date(`1970-01-01T${startTime}:00`);
+
+    // Si el tiempo es después de la medianoche (entre 00:00 y 06:00), lo ajustamos
+    if (time.getHours() < 6) {
+        time.setDate(time.getDate() + 1); // Lo trasladamos al día siguiente
+    }
+
+    return time;
 }
 
 

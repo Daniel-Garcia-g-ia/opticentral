@@ -41,7 +41,7 @@ function EditReport({ data, setActiveDetail }) {
 
         const authData = getLocalStorage('authData')
         if (!authData || !authData.auth && !authData.token) {
-            console.log('sin token')
+            eventBasic('warning', 'sin token')
         } else if (!dataFetch || Object.keys(dataFetch).length === 0) {
             // Verificar si dataFetch está vacío           
             return
@@ -95,7 +95,7 @@ function EditReport({ data, setActiveDetail }) {
             setTypeReport(data.type);
             setActiveProductionReport(true);
             setValues(data.data.item);
-            console.log(data)
+          
 
         }
     }, [])

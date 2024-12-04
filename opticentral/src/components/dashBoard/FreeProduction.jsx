@@ -98,7 +98,7 @@ function FreeProduction({ equipmentId, equipmentName, location, activateFreeProd
 
             const report = dataNewReport(equipmentId, equipmentName, location, processData)
 
-            console.log(processData)
+            
 
             const authData = getLocalStorage('authData')
             if (!authData || !authData.auth && !authData.token) {

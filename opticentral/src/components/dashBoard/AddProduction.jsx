@@ -1,22 +1,34 @@
 import React from "react";
 import { useState, useEffect, useContext } from "react";
 import { ReportContext } from "../context/ReportContext";
+import { DateContext } from "../context/DateContext";
 import { calculateTimeDifference } from "../services/calculateTimeDifference";
-
+import { validateTurn } from "../services/valideDataTurn";
 function AddProduction({ values, typeReport }) {
 
     const { dataReportProductionContext } = useContext(ReportContext);
+    const { turnSelected } = useContext(DateContext);
     const [startTime, setStartTime] = useState(values?.startTime || 0);
     const [endTime, setEndTime] = useState(values?.endTime || 0);
     const [volume, setVolume] = useState(values?.volume || '');
     const [timeDifference, setTimeDifference] = useState(values?.totalTime || null);
     const [time, setTime] = useState(0);
+    const [min, setMin] = useState();
+    const [max, setMax] = useState();
     const [dataReport, setDataReport] = useState({
         startTime: values?.startTime || null,
         endTime: values?.endTime || null,
         totalTime: values?.totalTime || null,
         volume: values?.volume || null
     })
+
+    useEffect(() => {        
+
+        const valueTime = validateTurn(turnSelected);
+        setMin(valueTime.min)
+        setMax(valueTime.max)
+
+    }, [])
 
     useEffect(() => {
         setTime(timeDifference)
@@ -43,28 +55,62 @@ function AddProduction({ values, typeReport }) {
 
     const handledStartTimeChange = (e) => {
         const value = e.target.value;
-        setStartTime(value);
-        const differenceTime = calculateTimeDifference(value, endTime);
-        setTimeDifference(differenceTime);
-        setDataReport(prevState => ({
-            ...prevState,
-            startTime: value
 
-        }))
+        // Obtener los valores de min y max para el turno actual
+        const { min, max, min1, max1, min2, max2 } = validateTurn(turnSelected);
+
+        // Verificar si el valor está dentro del rango, incluyendo el caso especial para Turno 3
+        if ((min && max && value >= min && value <= max) ||
+            (min1 && max1 && min2 && max2 && ((value >= min1 && value <= max1) || (value >= min2 && value <= max2)))) {
+
+            setStartTime(value);
+
+            // Calcular la diferencia de tiempo si el valor es válido
+            const totalTimeDifference = calculateTimeDifference(value, endTime);
+            setTimeDifference(totalTimeDifference);
+
+            // Actualizar el estado de `dataReport`
+            setDataReport(prevState => ({
+                ...prevState,
+                startTime: value
+            }));
+
+            // Cambiar el estado de `data`
+            setData(!data);
+        } else {
+            alert(`El horario debe estar entre ${min || `${min1} - ${max1} y ${min2} - ${max2}`}.`);
+        }
 
 
     }
 
     const handledEndTimeChange = (e) => {
         const value = e.target.value;
-        setEndTime(value);
-        const differenceTime = calculateTimeDifference(startTime, value);
-        setTimeDifference(differenceTime);
-        setDataReport(prevState => ({
-            ...prevState,
-            endTime: value
 
-        }))
+        // Obtener los valores de min y max para el turno actual
+        const { min, max, min1, max1, min2, max2 } = validateTurn(turnSelected);
+
+        // Verificar si el valor está dentro del rango, incluyendo el caso especial para Turno 3
+        if ((min && max && value >= min && value <= max) ||
+            (min1 && max1 && min2 && max2 && ((value >= min1 && value <= max1) || (value >= min2 && value <= max2)))) {
+
+            setEndTime(value);
+
+            // Calcular la diferencia de tiempo si el valor es válido
+            const totalTimeDifference = calculateTimeDifference(startTime, value);
+            setTimeDifference(totalTimeDifference);
+
+            // Actualizar el estado de `dataReport`
+            setDataReport(prevState => ({
+                ...prevState,
+                endTime: value
+            }));
+
+            // Cambiar el estado de `data`
+            setData(!data);
+        } else {
+            alert(`El horario debe estar entre ${min || `${min1} - ${max1} y ${min2} - ${max2}`}.`);
+        }
     }
 
     const handledVolumeChange = (e) => {

@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 function MainDetail({ _id, production, processDataId, productionId, reportId, brand, volume, brewId, handledClickAdd }) {
 
     const [registerProduction, setRegisterProduction] = useState(false);
-    console.log(brewId)
+  
     useEffect(() => {
 
         production.forEach(item => {
