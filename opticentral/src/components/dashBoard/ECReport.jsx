@@ -46,6 +46,7 @@ function ECReport({ values, typeReport }) {
             'Cellar Ocupado'
         ],
         'Logistica Interna': [
+            'Levadura',
             'Materia Prima Malta',
             'Materia Prima Arroz',
             'HMS',
@@ -99,6 +100,10 @@ function ECReport({ values, typeReport }) {
             'CIP',
             'Cocecha Levadura',
             'Mantenimiento'
+        ],
+        'Levadura':[
+            'Levadura No Disponible',            
+
         ],
         'Materia Prima Malta': [
             'Liberación',
