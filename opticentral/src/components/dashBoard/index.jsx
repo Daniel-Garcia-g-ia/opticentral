@@ -248,7 +248,7 @@ function DashBoard() {
                         processingAction(null, null, false)
                         eventBasic('error', `error: ${error}`)
 
-                        /* navigate('/') */
+                        navigate('/')
                     })
             } else {
                 setActiveTime(false)
