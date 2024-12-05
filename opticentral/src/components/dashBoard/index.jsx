@@ -21,8 +21,7 @@ import Gannt from "./Gannt";
 import { DateContext } from "../context/DateContext";
 
 import { basicMessage, textUnderMessage, processingAction, closeSwal, eventBasic } from "../services/alerts";
-import { ImInsertTemplate } from "react-icons/im";
-import { CgOpenCollective } from "react-icons/cg";
+
 
 
 
@@ -248,7 +247,7 @@ function DashBoard() {
                         processingAction(null, null, false)
                         eventBasic('error', `error: ${error}`)
 
-                        /* navigate('/') */
+                        navigate('/')
                     })
             } else {
                 setActiveTime(false)

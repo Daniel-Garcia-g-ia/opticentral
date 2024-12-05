@@ -35,7 +35,7 @@ function eventBasic(icon, message) {
 
 
 function processingAction(title,html) {
-  let timerInterval;
+  
 
 
   Swal.fire({

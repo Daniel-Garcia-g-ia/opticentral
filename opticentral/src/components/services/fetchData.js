@@ -14,10 +14,10 @@ function fetchData(url, token) {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
-                
+
                 return response.json();
             })
-            .then(data => {                
+            .then(data => {
                 resolve(data);
             })
             .catch(error => {
