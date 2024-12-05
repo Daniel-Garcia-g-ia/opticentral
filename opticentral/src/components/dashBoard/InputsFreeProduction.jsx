@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-/* import { dataBrands } from "../../assets/data/data"; */
+import { dataBrands } from "../../assets/data/data";
 import config from "../../../config";
 
 function InputsFreeProduction({ brewId, index, onInputChange }) {
@@ -12,7 +12,7 @@ function InputsFreeProduction({ brewId, index, onInputChange }) {
         release: true // Set initial release value to false
     });
 
-    const brands = ['andina'];
+    const brands = dataBrands();
     
     const handledChange = (e) => {
         const { name, value } = e.target;
