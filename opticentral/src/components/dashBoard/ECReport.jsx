@@ -56,6 +56,7 @@ function ECReport({ values, typeReport }) {
             'PVPP'
         ],
         'Logistica Externa': [
+            'Levadura',
             'Materia Prima Malta',
             'Materia Prima Arroz',
             'HMS',
@@ -106,6 +107,8 @@ function ECReport({ values, typeReport }) {
 
         ],
         'Materia Prima Malta': [
+            'Calidad de Malta',
+            'Compactada',            
             'Liberación',
             'Disponibilidad',
             'Sin Inventario'
