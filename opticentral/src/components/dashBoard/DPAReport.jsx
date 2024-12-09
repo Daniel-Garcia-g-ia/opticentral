@@ -40,6 +40,7 @@ function DPAReport({ values, typeReport }) {
 
     const optionSubTypeInput = {
         'Cambio de Marca': [
+            'Cambio de Marca',
             'CIP Adicional',
             'Toma de muestra',
             'Analisis de parámetros'
@@ -77,6 +78,9 @@ function DPAReport({ values, typeReport }) {
     }
 
     const optionSpecification = {
+        'Cambio de Marca':[
+            'Heineken'           
+        ],
         'CIP Adicional': [
             'CIP 3 pasos',
             'CIP 5 pasos',
