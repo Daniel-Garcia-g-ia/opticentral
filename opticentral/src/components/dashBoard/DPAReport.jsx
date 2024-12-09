@@ -39,7 +39,8 @@ function DPAReport({ values, typeReport }) {
     });
 
     const optionSubTypeInput = {
-        'Cambio de Marca': [
+        
+        'Cambio de Marca': [            
             'Cambio de Marca',
             'CIP Adicional',
             'Toma de muestra',
@@ -67,6 +68,7 @@ function DPAReport({ values, typeReport }) {
 
         ],
         'Paro Programado': [
+            'Paro Programado',
             'Esterilizaciones',
             'Fin de Producción',
             'Ensayos',
@@ -78,6 +80,9 @@ function DPAReport({ values, typeReport }) {
     }
 
     const optionSpecification = {
+        'Paro Programado':[
+            'Heineken'
+        ],
         'Cambio de Marca':[
             'Heineken'           
         ],
