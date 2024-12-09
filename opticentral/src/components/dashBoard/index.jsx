@@ -132,6 +132,7 @@ function DashBoard() {
                                 const totalTimeExtracted = extractedTotalTime(extractedReport)
                                 setTotalTimeExtractedReport(totalTimeExtracted)
                                 totalTimeContext(totalTimeExtraxtesReport)
+                                console.log(totalTimeExtraxtesReport)
 
 
                                 //structured data for API 
