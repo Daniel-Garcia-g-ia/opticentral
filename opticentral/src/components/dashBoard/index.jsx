@@ -125,7 +125,7 @@ function DashBoard() {
 
 
                                 const extractedReport = extractedReportData(result.body.data, ids, date, dataTurn)
-
+                                console.log(extractedReport)
 
                                 setReportLength(extractedReport.length)
                                 setDataExtractedReport(extractedReport)
@@ -271,12 +271,12 @@ function DashBoard() {
     const handledOnChangeDate = (e) => {
         setDate(e.target.value)
         setSelectedDate(!selectedDate)
-        console.log(date)
+        
     }
     const handledOnChangeTurn = (e) => {
         setDataTurn(e.target.value);
         setSelectedDate(!selectedDate);
-        console.log(dataTurn)
+        
     }
     return (
         <>
