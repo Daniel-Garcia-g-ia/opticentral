@@ -270,10 +270,12 @@ function DashBoard() {
     const handledOnChangeDate = (e) => {
         setDate(e.target.value)
         setSelectedDate(!selectedDate)
+        console.log(date)
     }
     const handledOnChangeTurn = (e) => {
         setDataTurn(e.target.value);
         setSelectedDate(!selectedDate);
+        console.log(dataTurn)
     }
     return (
         <>
