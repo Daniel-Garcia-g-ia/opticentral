@@ -91,7 +91,7 @@ function DashBoard() {
 
         dateContext(date)
         turnContext(dataTurn)
-        console.log(turnSelected,'aqui')
+        console.log(dataTurn)
 
 
         if (!permissonsRole) {
