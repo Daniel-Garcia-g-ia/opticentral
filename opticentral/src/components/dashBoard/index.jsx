@@ -132,7 +132,7 @@ function DashBoard() {
 
                                 const totalTimeExtracted = extractedTotalTime(extractedReport)
                                 setTotalTimeExtractedReport(totalTimeExtracted)
-                                totalTimeContext(totalTimeExtraxtesReport)
+                                totalTimeContext(totalTimeExtracted)
                                 console.log(totalTimeExtracted)
 
 
