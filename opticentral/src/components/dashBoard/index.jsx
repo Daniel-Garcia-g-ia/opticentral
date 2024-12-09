@@ -91,7 +91,7 @@ function DashBoard() {
 
         dateContext(date)
         turnContext(dataTurn)
-        console.log(dataTurn)
+        console.log(dataTurn,'Aqi')
 
 
         if (!permissonsRole) {
