@@ -73,6 +73,7 @@ function AddReportExt({ setActivateDetailsProduction, setActivateReportExt, setS
         if (releaseAddReport) {
 
             const sumaTotalTime = Number(valueTimeContext) + Number(dataFetch.totalTime)
+            
 
             if (sumaTotalTime <= 8) {
                 setSaveReport(!saveReport)
