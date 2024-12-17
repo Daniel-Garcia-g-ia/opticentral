@@ -104,6 +104,7 @@ function NSTReport({ values, typeReport }) {
             setData(!data);
         } else {
             alert(`El horario debe estar entre ${min || `${min1} - ${max1} y ${min2} - ${max2}`}.`);
+            setStartTime(0)
         }
 
     }
@@ -134,6 +135,7 @@ function NSTReport({ values, typeReport }) {
             setData(!data);
         } else {
             alert(`El horario debe estar entre ${min || `${min1} - ${max1} y ${min2} - ${max2}`}.`);
+            setEndTime(0)
         }
     };
 
