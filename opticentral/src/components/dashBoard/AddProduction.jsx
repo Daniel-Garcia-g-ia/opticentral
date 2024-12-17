@@ -15,6 +15,7 @@ function AddProduction({ values, typeReport }) {
     const [time, setTime] = useState(0);
     const [min, setMin] = useState();
     const [max, setMax] = useState();
+    const [data, setData]= useState(false);
     const [dataReport, setDataReport] = useState({
         startTime: values?.startTime || null,
         endTime: values?.endTime || null,

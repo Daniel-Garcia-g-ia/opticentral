@@ -11,7 +11,7 @@ import { dataBrands } from "../../assets/data/data";
 import { getLocalStorage } from "../services/LocalStorage";
 import { fetchData, fetchSetReport } from "../services/fetchData";
 import InputsFreeProduction from "./InputsFreeProduction";
-import { dataNewReport, preDatafreeProduction, validateDataWhithoutNull } from "../services/preData";
+import { dataNewReport, preDatafreeProduction, validateDataWhithoutNull, dataBrand } from "../services/preData";
 
 function FreeProduction({ equipmentId, equipmentName, location, activateFreeProduction, setActivateFreeProduction }) {
 
@@ -22,16 +22,19 @@ function FreeProduction({ equipmentId, equipmentName, location, activateFreeProd
     const { dateSelected } = useContext(DateContext)
     const { turnSelected } = useContext(DateContext)
 
-    const { updateData }= useContext(UpdateContext)
+    const { updateData } = useContext(UpdateContext)
 
     const [brewId, setBrewId] = useState(0);
-    const [inputValues, setInputValues] = useState({})
+    const [inputValues, setInputValues] = useState({});
+    const [brands, setBrands]= useState({});
     const [redirect, setRedirect] = useState(false);
     const [saveData, setSaveData] = useState(false)
 
     const navigate = useNavigate()
 
     const [amountProductions, setAmountProductions] = useState(0);
+
+
 
     useEffect(() => {
 
@@ -40,6 +43,17 @@ function FreeProduction({ equipmentId, equipmentName, location, activateFreeProd
             navigate('/');
 
         } else {
+
+            fetchData(`${config.apiUrl}/app/v1/brands`, authData.token)
+                .then(result => {                   
+                   const infoBrands= dataBrand(result.body.date)
+                   setBrands(infoBrands)
+                }).catch(error => {
+                    eventBasic('error', error)
+
+                    navigate('/')
+                })
+
 
             fetchData(`${config.apiUrl}/app/v1/mostRecentReport/0001`, authData.token)
                 .then(data => {
@@ -98,7 +112,7 @@ function FreeProduction({ equipmentId, equipmentName, location, activateFreeProd
 
             const report = dataNewReport(equipmentId, equipmentName, location, processData)
 
-            
+
 
             const authData = getLocalStorage('authData')
             if (!authData || !authData.auth && !authData.token) {
@@ -111,13 +125,13 @@ function FreeProduction({ equipmentId, equipmentName, location, activateFreeProd
                 ).then(response => {
                     closeSwal()
                     eventBasic('success', 'Producción Liberada!')
-                }).then(response=>{
+                }).then(response => {
                     updateData();
                 })
-                .catch(error => {
-                    closeSwal()
-                    eventBasic('error', error)
-                })
+                    .catch(error => {
+                        closeSwal()
+                        eventBasic('error', error)
+                    })
             }
             setActivateFreeProduction(!activateFreeProduction)
             discardProduction()
@@ -174,7 +188,7 @@ function FreeProduction({ equipmentId, equipmentName, location, activateFreeProd
                     <div className="column is-flex is-justify-content-center">
                         <div>
                             {Array.from({ length: amountProductions }, (_, index) => (
-                                <InputsFreeProduction key={index} brewId={brewId} index={index} onInputChange={handledInputChange} />
+                                <InputsFreeProduction key={index} brewId={brewId} index={index} onInputChange={handledInputChange} brands={brands} />
                             ))}
                         </div>
                     </div>

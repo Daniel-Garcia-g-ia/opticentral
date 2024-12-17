@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { dataBrands } from "../../assets/data/data";
 import config from "../../../config";
 
-function InputsFreeProduction({ brewId, index, onInputChange }) {
+function InputsFreeProduction({ brewId, index, onInputChange, brands }) {
     const [formValue, setFormValue] = useState({
         brand: null,
         brewId: brewId,
@@ -12,15 +12,19 @@ function InputsFreeProduction({ brewId, index, onInputChange }) {
         release: true // Set initial release value to false
     });
 
-    const brands = dataBrands();
+    
     
     const handledChange = (e) => {
         const { name, value } = e.target;
 
         setFormValue((prevState) => ({
+            
             ...prevState,
             [name]: value
-        }));
+            
+        }
+    ));
+        
 
         onInputChange(index, name, value);
     };
@@ -39,8 +43,8 @@ function InputsFreeProduction({ brewId, index, onInputChange }) {
                                     <select className="select is-small is-custom-with-select" name='brand' onChange={handledChange}>
                                         <option value=""> </option>
                                         {brands.map((brand, index) => (
-                                            <option key={index} value={brand}>
-                                                {brand}
+                                            <option key={index} value={brand.name}>
+                                                {brand.name}
                                             </option>
                                         ))}
                                     </select>

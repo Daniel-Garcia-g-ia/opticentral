@@ -7,7 +7,7 @@ import TurnoNoProgramado from "../dashBoard/TurnoNoProgramado";
 
 function flatArray(data) {
     const newData = data.flat()
-    
+
     return newData
 }
 function findMaxBrewId(processData) {
@@ -96,8 +96,8 @@ function preDataReportItemProduction(dataIds, dataReportProdcution, date, turn) 
     return {
         productionReportItem: "productionReportItem",
         typeReport: "production",
-        date:date,
-        turn:turn,
+        date: date,
+        turn: turn,
         processDataId: dataIds.processDataId,
         productionId: dataIds.productionId,
         reportId: dataIds.reportId,
@@ -115,8 +115,8 @@ function preDataReportItemIc(dataIds, dataReportIc, date, turn) {
         productionICItem: "Equipamento",
         typeReport: dataReportIc.type,
         processDataId: dataIds.processId,
-        date:date,
-        turn:turn,
+        date: date,
+        turn: turn,
         startTime: dataReportIc.startTime,
         endTime: dataReportIc.endTime,
         totalTime: dataReportIc.totalTime,
@@ -137,7 +137,7 @@ function preDataReportItemEc(dataIds, dataReportEc, date, turn) {
         typeReport: dataReportEc.type,
         processDataId: dataIds.processId,
         date: date,
-        turn:turn,
+        turn: turn,
         startTime: dataReportEc.startTime,
         endTime: dataReportEc.endTime,
         totalTime: dataReportEc.totalTime,
@@ -152,8 +152,8 @@ function preDataReportItemDPA(dataIds, dataReportDPA, date, turn) {
         productionDPAItem: "Paro Programado",
         typeReport: dataReportDPA.type,
         processDataId: dataIds.processId,
-        date:date,
-        turn:turn,
+        date: date,
+        turn: turn,
         startTime: dataReportDPA.startTime,
         endTime: dataReportDPA.endTime,
         totalTime: dataReportDPA.totalTime,
@@ -169,9 +169,9 @@ function preDataReportItemNST(dataIds, dataReportNST, date, turn) {
     return {
         productionNSTItem: "No Programado",
         typeReport: dataReportNST.type,
-        processDataId: dataIds.processId, 
-        date: date, 
-        turn:turn,      
+        processDataId: dataIds.processId,
+        date: date,
+        turn: turn,
         startTime: dataReportNST.startTime,
         endTime: dataReportNST.endTime,
         totalTime: dataReportNST.totalTime,
@@ -192,8 +192,8 @@ function preDataUpdateReport(dataReport, data, date, turn) {
             OPI_id: data.idReport[2],
             reportId: data.idReport[3],
             updateData: {
-                date:date,
-                turn:turn,
+                date: date,
+                turn: turn,
                 startTime: dataReport.startTime,
                 endTime: dataReport.endTime,
                 totalTime: dataReport.totalTime,
@@ -214,8 +214,8 @@ function preDataUpdateReport(dataReport, data, date, turn) {
             OPI_id: data.idReport[2],
             reportId: data.idReport[3],
             updateData: {
-                turn:turn,
-                date:date,
+                turn: turn,
+                date: date,
                 startTime: dataReport.startTime,
                 endTime: dataReport.endTime,
                 totalTime: dataReport.totalTime,
@@ -235,8 +235,8 @@ function preDataUpdateReport(dataReport, data, date, turn) {
             OPI_id: data.idReport[2],
             reportId: data.idReport[3],
             updateData: {
-                turn:turn,
-                date:date,
+                turn: turn,
+                date: date,
                 startTime: dataReport.startTime,
                 endTime: dataReport.endTime,
                 totalTime: dataReport.totalTime,
@@ -256,8 +256,8 @@ function preDataUpdateReport(dataReport, data, date, turn) {
             OPI_id: data.idReport[2],
             reportId: data.idReport[3],
             updateData: {
-                turn:turn,
-                date:date,
+                turn: turn,
+                date: date,
                 startTime: dataReport.startTime,
                 endTime: dataReport.endTime,
                 totalTime: dataReport.totalTime,
@@ -277,8 +277,8 @@ function preDataUpdateReport(dataReport, data, date, turn) {
             reportId: data.idReport[3],
             itemReportId: data.idReport[4],
             updateData: {
-                turn:turn,
-                date:date,
+                turn: turn,
+                date: date,
                 startTime: dataReport.startTime,
                 endTime: dataReport.endTime,
                 totalTime: dataReport.totalTime,
@@ -304,9 +304,9 @@ function validateDataWhithoutNull(data) {
 
 // Función para transformar un array de reportes en el formato deseado
 function transformReportItems(reportItems, type, name, bg, ids, marca, brewId, reportId, processDataId, productionId) {
-    
+
     const idsArray = [ids, processDataId, productionId, reportId]
-    return reportItems.map(item => ({        
+    return reportItems.map(item => ({
         idReport: [...idsArray, item._id],
         name,
         data: { item },
@@ -486,6 +486,19 @@ function transformDataMain(data) {
     );
 }
 
+function dataBrand(data) {
+    // Procesar las marcas del primer elemento del array
+    const processedBrands = Object.entries(data[0].brands).map(
+      ([brandName, brandInfo]) => ({
+        name: brandName,
+        theorecalTime: brandInfo.theorecalTime,
+        brandId: brandInfo.brandId,
+      })
+    );
+  
+    return processedBrands;
+  }
+
 
 
 export {
@@ -502,5 +515,6 @@ export {
     extractedReportData,
     extractedTotalTime,
     preDataUpdateReport,
-    transformDataMain
+    transformDataMain,
+    dataBrand
 }

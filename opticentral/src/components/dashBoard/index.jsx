@@ -153,6 +153,8 @@ function DashBoard() {
                                 )
 
                                 setDataReport(structuredData)
+
+                                console.log(structuredData)
                                
 
 
