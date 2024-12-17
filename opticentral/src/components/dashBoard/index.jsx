@@ -249,7 +249,6 @@ function DashBoard() {
 
                         processingAction(null, null, false)
                         eventBasic('error', `error: ${error}`)
-
                         navigate('/')
                     })
             } else {
