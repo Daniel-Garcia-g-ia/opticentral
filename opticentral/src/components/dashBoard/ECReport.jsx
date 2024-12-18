@@ -98,6 +98,7 @@ function ECReport({ values, typeReport }) {
             'Disponibilidad'
         ],
         'Cellar Ocupado': [
+            'Filtración',
             'CIP',
             'Cocecha Levadura',
             'Mantenimiento'
