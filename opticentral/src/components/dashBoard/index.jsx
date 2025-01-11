@@ -90,6 +90,7 @@ function DashBoard() {
 
         dateContext(date)
         turnContext(dataTurn)
+        console.log(dataTurn,'Aqi')
 
 
         if (!permissonsRole) {
@@ -123,14 +124,15 @@ function DashBoard() {
 
 
                                 const extractedReport = extractedReportData(result.body.data, ids, date, dataTurn)
-
+                                console.log(extractedReport)
 
                                 setReportLength(extractedReport.length)
                                 setDataExtractedReport(extractedReport)
 
                                 const totalTimeExtracted = extractedTotalTime(extractedReport)
                                 setTotalTimeExtractedReport(totalTimeExtracted)
-                                totalTimeContext(totalTimeExtraxtesReport)
+                                totalTimeContext(totalTimeExtracted)
+                                console.log(totalTimeExtracted)
 
 
                                 //structured data for API 
@@ -248,7 +250,6 @@ function DashBoard() {
 
                         processingAction(null, null, false)
                         eventBasic('error', `error: ${error}`)
-
                         navigate('/')
                     })
             } else {
@@ -270,10 +271,12 @@ function DashBoard() {
     const handledOnChangeDate = (e) => {
         setDate(e.target.value)
         setSelectedDate(!selectedDate)
+        
     }
     const handledOnChangeTurn = (e) => {
         setDataTurn(e.target.value);
         setSelectedDate(!selectedDate);
+        
     }
     return (
         <>

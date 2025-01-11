@@ -46,6 +46,7 @@ function ECReport({ values, typeReport }) {
             'Cellar Ocupado'
         ],
         'Logistica Interna': [
+            'Levadura',
             'Materia Prima Malta',
             'Materia Prima Arroz',
             'HMS',
@@ -55,6 +56,7 @@ function ECReport({ values, typeReport }) {
             'PVPP'
         ],
         'Logistica Externa': [
+            'Levadura',
             'Materia Prima Malta',
             'Materia Prima Arroz',
             'HMS',
@@ -96,11 +98,18 @@ function ECReport({ values, typeReport }) {
             'Disponibilidad'
         ],
         'Cellar Ocupado': [
+            'Filtración',
             'CIP',
             'Cocecha Levadura',
             'Mantenimiento'
         ],
+        'Levadura':[
+            'Levadura No Disponible',            
+
+        ],
         'Materia Prima Malta': [
+            'Calidad de Malta',
+            'Compactada',            
             'Liberación',
             'Disponibilidad',
             'Sin Inventario'
@@ -255,6 +264,7 @@ function ECReport({ values, typeReport }) {
             setData(!data);
         } else {
             alert(`El horario debe estar entre ${min || `${min1} - ${max1} y ${min2} - ${max2}`}.`);
+            setStartTime(0)
         }
 
     }
@@ -285,6 +295,7 @@ function ECReport({ values, typeReport }) {
             setData(!data);
         } else {
             alert(`El horario debe estar entre ${min || `${min1} - ${max1} y ${min2} - ${max2}`}.`);
+            setEndTime(0)
         }
 
     }

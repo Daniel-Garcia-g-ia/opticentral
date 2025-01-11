@@ -15,7 +15,7 @@ function AddProduction({ values, typeReport }) {
     const [time, setTime] = useState(0);
     const [min, setMin] = useState();
     const [max, setMax] = useState();
-    const [data, setData]= useState(false);
+    const [data, setData] = useState(false);
     const [dataReport, setDataReport] = useState({
         startTime: values?.startTime || null,
         endTime: values?.endTime || null,
@@ -80,6 +80,7 @@ function AddProduction({ values, typeReport }) {
             setData(!data);
         } else {
             alert(`El horario debe estar entre ${min || `${min1} - ${max1} y ${min2} - ${max2}`}.`);
+            setStartTime(0)
         }
 
 
@@ -111,6 +112,7 @@ function AddProduction({ values, typeReport }) {
             setData(!data);
         } else {
             alert(`El horario debe estar entre ${min || `${min1} - ${max1} y ${min2} - ${max2}`}.`);
+            setEndTime(0)
         }
     }
 

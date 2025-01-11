@@ -39,7 +39,9 @@ function DPAReport({ values, typeReport }) {
     });
 
     const optionSubTypeInput = {
-        'Cambio de Marca': [
+        
+        'Cambio de Marca': [            
+            'Cambio de Marca',
             'CIP Adicional',
             'Toma de muestra',
             'Analisis de parámetros'
@@ -66,6 +68,7 @@ function DPAReport({ values, typeReport }) {
 
         ],
         'Paro Programado': [
+            'Paro Programado',
             'Esterilizaciones',
             'Fin de Producción',
             'Ensayos',
@@ -77,6 +80,12 @@ function DPAReport({ values, typeReport }) {
     }
 
     const optionSpecification = {
+        'Paro Programado':[
+            'Heineken'
+        ],
+        'Cambio de Marca':[
+            'Heineken'           
+        ],
         'CIP Adicional': [
             'CIP 3 pasos',
             'CIP 5 pasos',
@@ -218,6 +227,7 @@ function DPAReport({ values, typeReport }) {
             setData(!data);
         } else {
             alert(`El horario debe estar entre ${min || `${min1} - ${max1} y ${min2} - ${max2}`}.`);
+            setStartTime(0)
         }
 
     }
@@ -248,6 +258,7 @@ function DPAReport({ values, typeReport }) {
             setData(!data);
         } else {
             alert(`El horario debe estar entre ${min || `${min1} - ${max1} y ${min2} - ${max2}`}.`);
+            setEndTime(0)
         }
 
     }
