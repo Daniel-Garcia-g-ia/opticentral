@@ -85,6 +85,27 @@ async function fetchUpdateReportProduction(url, reportId, token, data) {
     }
 }
 
+function fetchDataDownLoad (url, token,data){
+    return new Promise ((resolve, reject)=>{
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+                "x-access-token": token
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => resolve(data))
+            .catch(error => reject(error));
+    })
+}
+
 
 
 
@@ -93,6 +114,7 @@ export {
     fetchData,
     fetchOneData,
     fetchSetReport,
-    fetchUpdateReportProduction
+    fetchUpdateReportProduction,
+    fetchDataDownLoad
 
 };

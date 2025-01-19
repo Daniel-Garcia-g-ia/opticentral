@@ -1,14 +1,33 @@
 import React from "react";
-import { useContext } from "react";
+import { useContext, useState, useEffect } from "react";
 import { NavbarContext } from "../context/NavbarContext";
+import { useNavigate } from "react-router-dom";
 
 function Navbar() {
-
+    const navigate=useNavigate()
     const {production}= useContext(NavbarContext)
+    const {report}=useContext(NavbarContext)
+    const {activateReport}=useContext(NavbarContext)
+    const [activate, setActivate]=useState(false);
+
+
+    useEffect(()=>{
+        
+
+        if(activateReport){
+            navigate('/report')
+        }
+
+    },[activate])
 
     const handeldClickProduction =()=>{
 
         production()
+    }
+
+    const handeldClickReport =()=>{
+        report(true)
+        setActivate(!activate)
     }
 
     return (
@@ -39,6 +58,9 @@ function Navbar() {
 
                                 <a className="navbar-item" onClick={handeldClickProduction}>
                                     Producción
+                                </a>
+                                <a className="navbar-item" onClick={handeldClickReport}>
+                                    Reporte
                                 </a>
 
                                 <div className="navbar-item has-dropdown is-hoverable">

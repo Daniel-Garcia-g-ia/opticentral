@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Login from "../components/login";
 import HomeRoute from "../components/home/HomeRoute"
 import DashBoard from "../components/dashBoard";
+import ExcelReport from "../components/reports";
 import { AuthProvider } from "../components/context/AuthContext";
 import { NavbarProvider } from "../components/context/NavbarContext";
 import { DateProvider } from "../components/context/DateContext";
@@ -24,7 +25,7 @@ function AppUI() {
                                     <Route path="/" element={<Login />} />
                                     <Route path="/home" element={<HomeRoute />} />
                                     <Route path="/dashboard" element={<DashBoard />} />
-
+                                    <Route path="/report" element={<ExcelReport />} />
                                 </Routes>
                             </Router>
                         </UpdateProvider>

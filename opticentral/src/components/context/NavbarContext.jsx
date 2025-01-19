@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { createContext } from "react";
 import { useState } from "react";
 import { getLocalStorage } from "../services/LocalStorage";
@@ -7,7 +7,10 @@ const NavbarContext = createContext()
 
 
 const NavbarProvider = ({ children }) => {
+   
     const [permissonsRole, setPermissonsRole]= useState(false)
+    const [activateReport, setActivateReport]= useState(false)
+    
 
     const production = () => {
         
@@ -26,8 +29,16 @@ const NavbarProvider = ({ children }) => {
     const discardProduction =()=>{
         setPermissonsRole(false)
     }
+
+
+    const report = (state)=>{
+        
+        setActivateReport(state)
+              
+        
+    }
     return (
-        <NavbarContext.Provider value={{production, permissonsRole, discardProduction}}>
+        <NavbarContext.Provider value={{production, permissonsRole, discardProduction, report, activateReport}}>
             {children}
 
 

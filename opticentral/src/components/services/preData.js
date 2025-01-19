@@ -489,15 +489,25 @@ function transformDataMain(data) {
 function dataBrand(data) {
     // Procesar las marcas del primer elemento del array
     const processedBrands = Object.entries(data[0].brands).map(
-      ([brandName, brandInfo]) => ({
-        name: brandName,
-        theorecalTime: brandInfo.theorecalTime,
-        brandId: brandInfo.brandId,
-      })
+        ([brandName, brandInfo]) => ({
+            name: brandName,
+            theorecalTime: brandInfo.theorecalTime,
+            brandId: brandInfo.brandId,
+        })
     );
-  
+
     return processedBrands;
-  }
+}
+
+
+function preDataDownLoad(date1, date2) {
+    const data = {
+        date1: date1,
+        date2: date2
+    }
+    return data
+
+}
 
 
 
@@ -516,5 +526,6 @@ export {
     extractedTotalTime,
     preDataUpdateReport,
     transformDataMain,
-    dataBrand
+    dataBrand,
+    preDataDownLoad
 }

@@ -1,0 +1,14 @@
+.custom-box-report{
+    margin-top: 3rem;
+    display: flex;
+    justify-content: center;
+    border-radius: 40px;
+    background-color: #D9D9D9;
+    height: 20vh;
+    width: 90%;
+}
+
+.custom-container-main-report{
+    display: flex;
+    justify-content: center;
+}

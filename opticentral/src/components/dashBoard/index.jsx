@@ -9,6 +9,7 @@ import MainDetail from "./MainDetail";
 import FreeProduction from "./FreeProduction";
 import AddReport from "./AddReport";
 import TotalReportTime from "./TotalReportTime";
+import ExcelReport from "../reports";
 import { dataBrands } from "../../assets/data/data"
 import AddReportExt from "./AddReportExt";
 
@@ -90,7 +91,7 @@ function DashBoard() {
 
         dateContext(date)
         turnContext(dataTurn)
-        console.log(dataTurn,'Aqi')
+
 
 
         if (!permissonsRole) {
@@ -157,7 +158,7 @@ function DashBoard() {
                                 setDataReport(structuredData)
 
                                 console.log(structuredData)
-                               
+
 
 
 
@@ -271,12 +272,12 @@ function DashBoard() {
     const handledOnChangeDate = (e) => {
         setDate(e.target.value)
         setSelectedDate(!selectedDate)
-        
+
     }
     const handledOnChangeTurn = (e) => {
         setDataTurn(e.target.value);
         setSelectedDate(!selectedDate);
-        
+
     }
     return (
         <>
@@ -386,6 +387,8 @@ function DashBoard() {
                                     />
 
                                     }
+
+
 
                                 </div>
 
