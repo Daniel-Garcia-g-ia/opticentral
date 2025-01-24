@@ -254,7 +254,7 @@ function DashBoard() {
                         navigate('/')
                     })
             } else {
-                setActiveTime(false)
+                setActiveTime(true)
             }
 
         }
