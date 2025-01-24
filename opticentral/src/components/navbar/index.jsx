@@ -1,33 +1,48 @@
 import React from "react";
 import { useContext, useState, useEffect } from "react";
 import { NavbarContext } from "../context/NavbarContext";
+import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 function Navbar() {
-    const navigate=useNavigate()
-    const {production}= useContext(NavbarContext)
-    const {report}=useContext(NavbarContext)
-    const {activateReport}=useContext(NavbarContext)
-    const [activate, setActivate]=useState(false);
+    const navigate = useNavigate()
+    const { production } = useContext(NavbarContext)
+    const { isLoggedIn } = useContext(AuthContext)
+    const { report } = useContext(NavbarContext)
+    const { activateReport } = useContext(NavbarContext)
+    const [activate, setActivate] = useState(false);
 
 
-    useEffect(()=>{
-        
+    useEffect(() => {
 
-        if(activateReport){
+
+        if (activateReport) {
             navigate('/report')
         }
 
-    },[activate])
+    }, [activate])
 
-    const handeldClickProduction =()=>{
+    const handeldClickProduction = () => {
 
-        production()
+        if (isLoggedIn) {
+            production()
+
+        }
+      
+
+
+
     }
 
-    const handeldClickReport =()=>{
-        report(true)
-        setActivate(!activate)
+    const handeldClickReport = () => {
+
+        if (isLoggedIn) {
+            report(true)
+            setActivate(!activate)          
+
+        }
+
+       
     }
 
     return (
