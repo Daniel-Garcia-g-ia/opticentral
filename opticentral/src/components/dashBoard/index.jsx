@@ -40,7 +40,7 @@ function DashBoard() {
     const { turnContext } = useContext(DateContext);
     const { totalTimeContext } = useContext(DateContext);
     const [activateDeatilProduction, setActivateDetailsProduction] = useState(true)
-    const [activeTotalTime, setActiveTime] = useState(false);
+    const [activeTotalTime, setActiveTime] = useState(true);
     const [date, setDate] = useState('');
     const [dataTurn, setDataTurn] = useState("Turno 1");
     const [selectedDate, setSelectedDate] = useState();
