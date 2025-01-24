@@ -232,7 +232,7 @@ function DashBoard() {
                         } else {
 
                             setDataLength(result.body.data.length)
-                            setActiveTime(false)
+                            setActiveTime(true)
                             setReportLength(0)
                             basicMessage('Sin datos registrados')
                             setDataReport([])
@@ -254,7 +254,7 @@ function DashBoard() {
                         navigate('/')
                     })
             } else {
-                setActiveTime(true)
+                setActiveTime(false)
             }
 
         }
