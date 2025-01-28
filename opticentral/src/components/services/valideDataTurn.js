@@ -10,10 +10,10 @@ function validateTurn(turn) {
         min = '14:00';
         max = '22:00';
     } else if (turn === 'Turno 3') {
-        min1 = '22:00';
+        min1 = '00:00';
         max1 = '23:59';
         min2 = '00:00';
-        max2 = '06:00';
+        max2 = '23:59';
     }
 
     return turn === 'Turno 3'
