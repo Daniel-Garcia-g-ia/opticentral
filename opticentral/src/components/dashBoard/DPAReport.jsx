@@ -7,10 +7,13 @@ import { validateTurn } from "../services/valideDataTurn";
 
 function DPAReport({ values, typeReport }) {
 
-   
+
 
     const { dataReportProductionContext } = useContext(ReportContext);
     const { turnSelected } = useContext(DateContext);
+    const { equipmentId } = useContext(DateContext);
+    const { equipmentName } = useContext(DateContext);
+    const { location } = useContext(DateContext);
     const [timeDifference, setTimeDifference] = useState(null);
     const [startTime, setStartTime] = useState(values?.startTime || '');
     const [endTime, setEndTime] = useState(values?.endTime || '');
@@ -25,6 +28,9 @@ function DPAReport({ values, typeReport }) {
     const [min, setMin] = useState();
     const [max, setMax] = useState();
     const [dataReport, setDataReport] = useState({
+        equipmentId: equipmentId || null,
+        equipmentName: equipmentName || null,
+        location: location || null,
         startTime: values?.startTime || null,
         endTime: values?.endTime || null,
         totalTime: values?.totalTime || null,
@@ -32,15 +38,15 @@ function DPAReport({ values, typeReport }) {
         subTypeStop: values?.subTypeStop || null,
         specification: values?.specification || null,
         solution: values?.solution || null,
-        type: typeReport || null
+        typeReport: typeReport || null
 
 
 
     });
 
     const optionSubTypeInput = {
-        
-        'Cambio de Marca': [            
+
+        'Cambio de Marca': [
             'Cambio de Marca',
             'CIP Adicional',
             'Toma de muestra',
@@ -80,11 +86,11 @@ function DPAReport({ values, typeReport }) {
     }
 
     const optionSpecification = {
-        'Paro Programado':[
+        'Paro Programado': [
             'Heineken'
         ],
-        'Cambio de Marca':[
-            'Heineken'           
+        'Cambio de Marca': [
+            'Heineken'
         ],
         'CIP Adicional': [
             'CIP 3 pasos',
@@ -269,7 +275,7 @@ function DPAReport({ values, typeReport }) {
         setDataReport(prevState => ({
             ...prevState,
             typeStop: value,
-            type: 'DPA'
+            typeReport: 'DPA'
         }))
         setData(!data);
 

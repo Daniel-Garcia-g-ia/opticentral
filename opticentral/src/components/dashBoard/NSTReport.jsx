@@ -7,28 +7,34 @@ import { validateTurn } from "../services/valideDataTurn";
 
 
 function NSTReport({ values, typeReport }) {
-    
+
     const { dataReportProductionContext } = useContext(ReportContext);
     const { turnSelected } = useContext(DateContext);
+    const { equipmentId } = useContext(DateContext);
+    const { equipmentName } = useContext(DateContext);
+    const { location } = useContext(DateContext);
     const [timeDifference, setTimeDifference] = useState(null);
     const [startTime, setStartTime] = useState(values?.startTime || '');
     const [endTime, setEndTime] = useState(values?.endTime || '');
     const [dataTypeStop, setDataTypeStop] = useState(values?.typeStop || '');
     const [dataSubTypeStop, setDataSubTypeStop] = useState(values?.subTypeStop || '');
-    const [dataSolution, setDataSolution] = useState(values?.solution||'');
-    const [data, setData] = useState(false);    
+    const [dataSolution, setDataSolution] = useState(values?.solution || '');
+    const [data, setData] = useState(false);
     const [optionSubType, setOptionSubType] = useState([]);
     const [time, setTime] = useState(0);
     const [min, setMin] = useState();
     const [max, setMax] = useState();
     const [dataReport, setDataReport] = useState({
+        equipmentId: equipmentId || null,
+        equipmentName: equipmentName || null,
+        location: location || null,
         startTime: values?.startTime || null,
         endTime: values?.endTime || null,
         totalTime: values?.totalTime || null,
-        typeStop: values?.typeStop||null,
-        subTypeStop: values?.subTypeStop||null,
-        solution: values?.solution||null,
-        type: typeReport||null
+        typeStop: values?.typeStop || null,
+        subTypeStop: values?.subTypeStop || null,
+        solution: values?.solution || null,
+        typeReport: typeReport || null
 
     });
 
@@ -48,7 +54,7 @@ function NSTReport({ values, typeReport }) {
     useEffect(() => {
         if (typeReport === 'NST') {
 
-            setOptionSubType(optionSubTypeInput[dataTypeStop]);           
+            setOptionSubType(optionSubTypeInput[dataTypeStop]);
             setTimeDifference(values.totalTime)
             dataReportProductionContext(dataReport)
         }
@@ -139,7 +145,7 @@ function NSTReport({ values, typeReport }) {
         }
     };
 
-    
+
 
     const handledChangeInputTypeStop = (e) => {
         const value = e.target.value;
@@ -147,7 +153,7 @@ function NSTReport({ values, typeReport }) {
         setDataReport(prevState => ({
             ...prevState,
             typeStop: value,
-            type: 'NST'
+            typeReport: 'NST'
         }))
         setData(!data);
         if (optionSubTypeInput[value]) {

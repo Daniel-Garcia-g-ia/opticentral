@@ -183,6 +183,77 @@ function preDataReportItemNST(dataIds, dataReportNST, date, turn) {
     }
 }
 
+function preDataSetReportOpi(data, date, turn) {
+    if (data.typeReport === 'IC') {
+        return {
+            equipmentId: data.equipmentId,
+            equipmentName: data.equipmentName,
+            location: data.location,
+            date: date,
+            turn: turn,
+            typeReport: data.typeReport,
+            startTime: data.startTime,
+            endTime: data.endTime,
+            totalTime: data.totalTime,
+            system: data.system,
+            subSystem: data.subSystem,
+            component: data.component,
+            failureMode: data.failureMode,
+            solution: data.solution
+        }
+    } else if (data.typeReport === 'EC') {
+        return {
+            equipmentId: data.equipmentId,
+            equipmentNam: data.equipmentName,
+            location: data.location,
+            date: date,
+            turn: turn,
+            typeReport: data.typeReport,
+            startTime: data.startTime,
+            endTime: data.endTime,
+            totalTime: data.totalTime,
+            typeStop: data.typeStop,
+            subTypeStop: data.subTypeStop,
+            failureMode: data.failureMode,
+            solution: data.solution
+        }
+    } else if (data.typeReport === 'DPA') {
+        return {
+            equipmentId: data.equipmentId,
+            equipmentNam: data.equipmentName,
+            location: data.location,
+            date: date,
+            turn: turn,
+            typeReport: data.typeReport,
+            startTime: data.startTime,
+            endTime: data.endTime,
+            totalTime: data.totalTime,
+            typeReports: data.typeReports,
+            subTypeReport: data.subTypeReport,
+            specification: data.specification,
+            solution: data.solution
+        }
+    } else if (data.typeReport === 'NST') {
+        return {
+            equipmentId: data.equipmentId,
+            equipmentNam: data.equipmentName,
+            location: data.location,
+            date: date,
+            turn: turn,
+            typeReport: data.typeReport,
+            startTime: data.startTime,
+            endTime: data.endTime,
+            totalTime: data.totalTime,
+            typeStop: data.typeStop,
+            subTypeStop: data.subTypeReport,
+            solution: data.solution
+
+
+        }
+    }
+
+}
+
 function preDataUpdateReport(dataReport, data, date, turn) {
 
     if (data.type === 'IC') {
@@ -203,7 +274,7 @@ function preDataUpdateReport(dataReport, data, date, turn) {
                 failureMode: dataReport.failureMode,
                 machine: dataReport.machine,
                 solution: dataReport.solution,
-                type: dataReport.type
+                typess: dataReport.type
             }
         }
 
@@ -527,5 +598,6 @@ export {
     preDataUpdateReport,
     transformDataMain,
     dataBrand,
-    preDataDownLoad
+    preDataDownLoad,
+    preDataSetReportOpi
 }

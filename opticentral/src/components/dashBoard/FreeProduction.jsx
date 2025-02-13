@@ -22,8 +22,12 @@ function FreeProduction({ equipmentId, equipmentName, location, activateFreeProd
     const { dateSelected } = useContext(DateContext)
     const { turnSelected } = useContext(DateContext)
 
-    const { updateData } = useContext(UpdateContext)
+    
+    
 
+
+    const { updateData } = useContext(UpdateContext)
+    
     const [brewId, setBrewId] = useState(0);
     const [inputValues, setInputValues] = useState({});
     const [brands, setBrands]= useState({});

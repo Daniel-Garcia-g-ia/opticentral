@@ -10,6 +10,9 @@ function ICReport({ values, typeReport }) {
 
     const { dataReportProductionContext } = useContext(ReportContext);
     const { turnSelected } = useContext(DateContext);
+    const { equipmentId } = useContext(DateContext);
+    const { equipmentName } = useContext(DateContext);
+    const { location } = useContext(DateContext);
     const [startTime, setStartTime] = useState(values?.startTime || '');
     const [endTime, setEndTime] = useState(values?.endTime || '');
     const [timeDifference, setTimeDifference] = useState(null);
@@ -28,6 +31,9 @@ function ICReport({ values, typeReport }) {
     const [min, setMin] = useState();
     const [max, setMax] = useState();
     const [dataReport, setDataReport] = useState({
+        equipmentId: equipmentId || null,
+        equipmentName: equipmentName || null,
+        location: location || null,
         startTime: values?.startTime || null,
         endTime: values?.endTime || null,
         totalTime: values?.totalTime || null,
@@ -37,7 +43,7 @@ function ICReport({ values, typeReport }) {
         failureMode: values?.failureMode || null,
         machine: values?.machine || null,
         solution: values?.solution || null,
-        type: typeReport || null
+        typeReport: typeReport || null
 
     });
 
@@ -409,7 +415,7 @@ function ICReport({ values, typeReport }) {
         setDataReport(prevState => ({
             ...prevState,
             system: value,
-            type: 'IC'
+            typeReport: 'IC'
         }))
         setData(!data);
         setOptionComponent([])

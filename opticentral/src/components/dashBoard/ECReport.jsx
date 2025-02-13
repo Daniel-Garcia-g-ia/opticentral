@@ -9,6 +9,9 @@ function ECReport({ values, typeReport }) {
 
     const { dataReportProductionContext } = useContext(ReportContext);
     const { turnSelected } = useContext(DateContext);
+    const { equipmentId } = useContext(DateContext);
+    const { equipmentName } = useContext(DateContext);
+    const { location } = useContext(DateContext);
     const [timeDifference, setTimeDifference] = useState(null);
     const [startTime, setStartTime] = useState(values?.startTime || '');
     const [endTime, setEndTime] = useState(values?.endTime || '');
@@ -23,6 +26,9 @@ function ECReport({ values, typeReport }) {
     const [min, setMin] = useState();
     const [max, setMax] = useState();
     const [dataReport, setDataReport] = useState({
+        equipmentId: equipmentId || null,
+        equipmentName: equipmentName || null,
+        location: location || null,
         startTime: values?.startTime || null,
         endTime: values?.endTime || null,
         totalTime: values?.totalTime || null,
@@ -30,7 +36,7 @@ function ECReport({ values, typeReport }) {
         subTypeStop: values?.subTypeStop || null,
         failureMode: values?.failureMode || null,
         solution: values?.solution || null,
-        type: typeReport || null
+        typeReport: typeReport || null
 
     });
 
@@ -69,9 +75,9 @@ function ECReport({ values, typeReport }) {
 
             'Muestra Sacarificación',
             'Muestra TFM'
-            
+
         ],
-            'Servicios Industriales': [
+        'Servicios Industriales': [
             'Falta de CO2',
             'Falta de Agua Sobrecalentada',
             'Falta de Aire Comprimido',
@@ -103,13 +109,13 @@ function ECReport({ values, typeReport }) {
             'Cocecha Levadura',
             'Mantenimiento'
         ],
-        'Levadura':[
-            'Levadura No Disponible',            
+        'Levadura': [
+            'Levadura No Disponible',
 
         ],
         'Materia Prima Malta': [
             'Calidad de Malta',
-            'Compactada',            
+            'Compactada',
             'Liberación',
             'Disponibilidad',
             'Sin Inventario'
@@ -145,7 +151,7 @@ function ECReport({ values, typeReport }) {
             'Disponibilidad',
             'Sin Inventario'
         ],
-            'Muestra TFM': [
+        'Muestra TFM': [
             'PH',
             'Oxígeno',
             'TPO',
@@ -154,10 +160,10 @@ function ECReport({ values, typeReport }) {
             'Color',
             'Sensorial'
         ],
-        'Muestra Sacarificación':[
+        'Muestra Sacarificación': [
             'tiempo de sacarificación',
             'Extracto'
-        ],         
+        ],
         'Falta de CO2': [
             'Corte de Energía',
             'Falla en el Sitema',
@@ -307,7 +313,7 @@ function ECReport({ values, typeReport }) {
         setDataReport(prevState => ({
             ...prevState,
             typeStop: value,
-            type: 'EC'
+            typeReport: 'EC'
         }))
         setData(!data);
         if (optionSubTypeInput[value]) {

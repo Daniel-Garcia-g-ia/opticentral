@@ -38,6 +38,7 @@ function DashBoard() {
     const { permissonsRole } = useContext(NavbarContext);
     const { dateContext } = useContext(DateContext);
     const { turnContext } = useContext(DateContext);
+    const {dataEquipment}=useContext(DateContext);
     const { totalTimeContext } = useContext(DateContext);
     const [activateDeatilProduction, setActivateDetailsProduction] = useState(true)
     const [activeTotalTime, setActiveTime] = useState(false);
@@ -91,6 +92,7 @@ function DashBoard() {
 
         dateContext(date)
         turnContext(dataTurn)
+        dataEquipment({code, name, place})
 
 
 

@@ -5,8 +5,8 @@ import './index.css';
 import { ReportContext } from "../context/ReportContext";
 import { DateContext } from "../context/DateContext";
 import { getLocalStorage } from "../services/LocalStorage";
-import { fetchUpdateReportProduction } from "../services/fetchData";
-import { validateDataWhithoutNull, preDataReportItemIc, preDataReportItemEc, preDataReportItemDPA, preDataReportItemNST } from "../services/preData";
+import { fetchUpdateReportProduction, fetchSetOpiReport} from "../services/fetchData";
+import { validateDataWhithoutNull, preDataReportItemIc, preDataReportItemEc, preDataReportItemDPA, preDataReportItemNST, preDataSetReportOpi } from "../services/preData";
 import { eventBasic, textUnderMessage, processingAction, closeSwal } from "../services/alerts";
 import ICReport from "./ICReport";
 import ECReport from "./ECReport";
@@ -46,7 +46,8 @@ function AddReportExt({ setActivateDetailsProduction, setActivateReportExt, setS
             return
         } else {
             processingAction('Procesando Información', 'Por favor, espere ...')
-            fetchUpdateReportProduction(`${config.apiUrl}/app/v1/updateData`, data.id, authData.token, dataFetch)
+           
+            fetchSetOpiReport(`${config.apiUrl}/app/v1/opi-report`, authData.token, dataFetch)                
                 .then(result => {
                     closeSwal()
                     eventBasic('success', 'Reporte, ¡Guardado con exito!')
@@ -55,8 +56,8 @@ function AddReportExt({ setActivateDetailsProduction, setActivateReportExt, setS
                     setSelectedDate(!selectedDate);
                 })
                 .catch((error) => {
-                    textUnderMessage('ERROR', `${error}, 1002`, 'error'),
-                        closeSwal()
+                    textUnderMessage('ERROR', `${error}, 1002`, 'error')
+                       /*  closeSwal() */
 
                 })
         }
@@ -70,10 +71,10 @@ function AddReportExt({ setActivateDetailsProduction, setActivateReportExt, setS
 
     }, []);
     useEffect(() => {
-        if (releaseAddReport) {
+        if (releaseAddReport) {            
 
             const sumaTotalTime = Number(valueTimeContext) + Number(dataFetch.totalTime)
-            
+
 
             if (sumaTotalTime <= 8) {
                 setSaveReport(!saveReport)
@@ -151,23 +152,25 @@ function AddReportExt({ setActivateDetailsProduction, setActivateReportExt, setS
 
         if (valueTimeContext <= 8) {
             const validateDataNull = validateDataWhithoutNull(dataReportProduction);
-
+            
             if (validateDataNull) {
                 textUnderMessage("¡Validar Información!", "Por favor, ingrese información válida y completa !", "warning")
 
             } else {
                 if (typeReport === 'Causa Interna (IC)') {
-                    setDataFetch(preDataReportItemIc(data, dataReportProduction, dateSelected, turnSelected));
+                    
+                    setDataFetch(preDataSetReportOpi(dataReportProduction, dateSelected, turnSelected));
+                    
                 } else if (typeReport === 'Causa Externa (EC)') {
-                    setDataFetch(preDataReportItemEc(data, dataReportProduction, dateSelected, turnSelected));
+                    setDataFetch(preDataSetReportOpi(dataReportProduction, dateSelected, turnSelected));
 
 
                 } else if (typeReport === 'Actividad Planeada (DPA)') {
-                    setDataFetch(preDataReportItemDPA(data, dataReportProduction, dateSelected, turnSelected));
+                    setDataFetch(preDataSetReportOpi(dataReportProduction, dateSelected, turnSelected));
 
 
                 } else if (typeReport === 'No Programado (NST)') {
-                    setDataFetch(preDataReportItemNST(data, dataReportProduction, dateSelected, turnSelected));
+                    setDataFetch(preDataSetReportOpi(dataReportProduction, dateSelected, turnSelected));
                 }
 
                 setReleaseAddReport(true);

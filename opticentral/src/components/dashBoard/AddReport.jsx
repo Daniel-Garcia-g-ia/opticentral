@@ -6,6 +6,7 @@ import { DateContext } from "../context/DateContext";
 import { UpdateContext } from "../context/UpdateContext";
 import { getLocalStorage } from "../services/LocalStorage";
 import { fetchUpdateReportProduction } from "../services/fetchData";
+import {fetchSetOpiReport}from "../services/fetchData";
 import { preDataReportItemProduction, validateDataWhithoutNull } from "../services/preData";
 import { eventBasic, textUnderMessage, processingAction, closeSwal } from "../services/alerts";
 
@@ -48,9 +49,9 @@ function AddReport({ setActiveAddReport, setActivateDetailsProduction, setSelect
         } else {
             processingAction('Procesando Información', 'Por favor, espere ...')
 
-
-
-            fetchUpdateReportProduction(`${config.apiUrl}/app/v1/updateData`, data._id, authData.token, dataFetch)
+            console.log(dataFetch)
+            /* fetchSetOpiReport(`{${config.apiUrl}/app/v1}`,authData.token,dataFetch)
+            fetchUpdateReportProduction(`${config.apiUrl}/app/v1/updateData`, data._id, authData.token, dataFetch) */
 
                 .then(result => {
                     
@@ -115,6 +116,7 @@ function AddReport({ setActiveAddReport, setActivateDetailsProduction, setSelect
 
             } else {
 
+                console.log(data)
 
                 setDataFetch(preDataReportItemProduction(data, dataReportProduction, dateSelected, turnSelected));
 
