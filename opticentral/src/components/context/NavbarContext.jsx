@@ -8,13 +8,14 @@ const NavbarContext = createContext()
 
 const NavbarProvider = ({ children }) => {
    
-    const [permissonsRole, setPermissonsRole]= useState(false)
-    const [activateReport, setActivateReport]= useState(false)
+    const [permissonsRole, setPermissonsRole]= useState()
+    const [activateReport, setActivateReport]= useState()
     
 
-    const production = () => {
+    const production = () => {        
         
-        const user = getLocalStorage('authData');
+        const user = getLocalStorage('authData');      
+       
 
         if(user.role=='administrator'||'lider'){
             setPermissonsRole(true)            
@@ -28,11 +29,12 @@ const NavbarProvider = ({ children }) => {
 
     const discardProduction =()=>{
         setPermissonsRole(false)
+       
     }
 
 
     const report = (state)=>{
-        
+      
         setActivateReport(state)
               
         

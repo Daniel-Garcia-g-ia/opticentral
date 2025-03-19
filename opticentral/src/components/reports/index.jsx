@@ -17,35 +17,38 @@ function ExcelReport() {
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
     const [update, setUpdate] = useState(false);
+    const [dataReport, setDataReport]= useState();
+    const [dataReportOpi, setDataReportOpi]= useState();
+    const [releaseReport, setReleaseReport]= useState(false);
+    const [releaseReportOpi, setReleaseReportOpi]= useState(false);
 
     useEffect(() => {
-
-        const data = preDataDownLoad(startDate, endDate)
-        const authData = getLocalStorage('authData')
-        if (!authData || !authData.auth && !authData.token) {
-           console.log('error')
+        const data = preDataDownLoad(startDate, endDate);
+        const authData = getLocalStorage('authData');
+        if (!authData || (!authData.auth && !authData.token)) {
+          console.log('error');
         } else {
-            processingAction('Validando información', 'Por favor espere...', true)
-            fetchDataDownLoad(`${config.apiUrl}/app/v1/download`, authData.token, data)
-            .then(result=>{
-                generateExcel(result)
-                closeSwal()
+          processingAction('Validando información', 'Por favor espere...', true);
+          Promise.all([
+            fetchDataDownLoad(`${config.apiUrl}/app/v1/download`, authData.token, data),
+            fetchDataDownLoad(`${config.apiUrl}/app/v1/download-opi`, authData.token, data)
+          ])
+            .then(([result, resultOpi]) => {
+              setDataReport(result);
+              setDataReportOpi(resultOpi);
+              // Una vez que ambas respuestas han llegado, se genera el Excel.
+              generateExcel(result, resultOpi);
+              closeSwal();
             })
             .catch(error => {
-                processingAction(null, null, false)
-                eventBasic('error', `error: ${error}`)
-               
-               closeSwal()
-               
-            })
+              processingAction(null, null, false);
+              eventBasic('error', `error: ${error}`);
+              closeSwal();
+            });
         }
+      }, [update]);
+      
 
-
-
-
-
-
-    }, [update])
 
     const handleClickBack = () => {
         report(false)

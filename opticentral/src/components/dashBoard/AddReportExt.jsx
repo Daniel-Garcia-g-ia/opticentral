@@ -3,9 +3,10 @@ import config from "../../../config";
 import { useState, useEffect, useContext } from "react";
 import './index.css';
 import { ReportContext } from "../context/ReportContext";
+import { UpdateContext } from "../context/UpdateContext";
 import { DateContext } from "../context/DateContext";
 import { getLocalStorage } from "../services/LocalStorage";
-import { fetchUpdateReportProduction, fetchSetOpiReport} from "../services/fetchData";
+import { fetchUpdateReportProduction, fetchSetOpiReport } from "../services/fetchData";
 import { validateDataWhithoutNull, preDataReportItemIc, preDataReportItemEc, preDataReportItemDPA, preDataReportItemNST, preDataSetReportOpi } from "../services/preData";
 import { eventBasic, textUnderMessage, processingAction, closeSwal } from "../services/alerts";
 import ICReport from "./ICReport";
@@ -20,6 +21,8 @@ function AddReportExt({ setActivateDetailsProduction, setActivateReportExt, setS
     const { valueTimeContext } = useContext(DateContext);
     const { dateSelected } = useContext(DateContext);
     const { turnSelected } = useContext(DateContext);
+    const { updateData } = useContext(UpdateContext);
+    const { updateDataGannt } = useContext(UpdateContext);
     const [activateICReport, setActivateICReport] = useState(false);
     const [activateECReport, setActivateECReport] = useState(false);
     const [activateDPAReport, setActivateDPAReport] = useState(false);
@@ -28,6 +31,7 @@ function AddReportExt({ setActivateDetailsProduction, setActivateReportExt, setS
     const [dataFetch, setDataFetch] = useState({});
     const [releaseAddReport, setReleaseAddReport] = useState(false);
     const [validateRelease, setValidateRelease] = useState(false);
+    const [updateDataEffect, setUpdateDataEffect] = useState(false);
 
     const [typeReport, setTypeReport] = useState(' ')
 
@@ -46,23 +50,29 @@ function AddReportExt({ setActivateDetailsProduction, setActivateReportExt, setS
             return
         } else {
             processingAction('Procesando Información', 'Por favor, espere ...')
-           
-            fetchSetOpiReport(`${config.apiUrl}/app/v1/opi-report`, authData.token, dataFetch)                
+            console.log(dataFetch)
+
+
+            fetchSetOpiReport(`${config.apiUrl}/app/v1/opi-report`, authData.token, dataFetch)
                 .then(result => {
-                    closeSwal()
+                    console.log(result)
                     eventBasic('success', 'Reporte, ¡Guardado con exito!')
-                    setActivateDetailsProduction(true);
+                    closeSwal();                    
+                    updateDataGannt()                   
                     setActivateReportExt(false);
-                    setSelectedDate(!selectedDate);
-                })
+
+
+                })               
                 .catch((error) => {
                     textUnderMessage('ERROR', `${error}, 1002`, 'error')
-                       /*  closeSwal() */
+                    /*  closeSwal() */
 
                 })
         }
 
     }, [saveReport])
+
+  
 
 
     useEffect(() => {
@@ -71,11 +81,11 @@ function AddReportExt({ setActivateDetailsProduction, setActivateReportExt, setS
 
     }, []);
     useEffect(() => {
-        if (releaseAddReport) {            
+        if (releaseAddReport) {
 
             const sumaTotalTime = Number(valueTimeContext) + Number(dataFetch.totalTime)
 
-
+      
             if (sumaTotalTime <= 8) {
                 setSaveReport(!saveReport)
 
@@ -152,25 +162,27 @@ function AddReportExt({ setActivateDetailsProduction, setActivateReportExt, setS
 
         if (valueTimeContext <= 8) {
             const validateDataNull = validateDataWhithoutNull(dataReportProduction);
-            
+
             if (validateDataNull) {
                 textUnderMessage("¡Validar Información!", "Por favor, ingrese información válida y completa !", "warning")
 
             } else {
                 if (typeReport === 'Causa Interna (IC)') {
-                    
-                    setDataFetch(preDataSetReportOpi(dataReportProduction, dateSelected, turnSelected));
-                    
-                } else if (typeReport === 'Causa Externa (EC)') {
+                    console.log('aqui')
+
                     setDataFetch(preDataSetReportOpi(dataReportProduction, dateSelected, turnSelected));
 
+                } else if (typeReport === 'Causa Externa (EC)') {
+                    setDataFetch(preDataSetReportOpi(dataReportProduction, dateSelected, turnSelected));
+                    console.log('aqui')
 
                 } else if (typeReport === 'Actividad Planeada (DPA)') {
                     setDataFetch(preDataSetReportOpi(dataReportProduction, dateSelected, turnSelected));
-
+                    console.log('aqui')
 
                 } else if (typeReport === 'No Programado (NST)') {
                     setDataFetch(preDataSetReportOpi(dataReportProduction, dateSelected, turnSelected));
+                    console.log('aqui')
                 }
 
                 setReleaseAddReport(true);

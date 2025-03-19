@@ -4,6 +4,7 @@ import { GiConsoleController } from "react-icons/gi";
 import { LiaEtsy } from "react-icons/lia";
 import { SiTruenas, SiTrueup } from "react-icons/si";
 import TurnoNoProgramado from "../dashBoard/TurnoNoProgramado";
+import { basicMessage } from "./alerts";
 
 function flatArray(data) {
     const newData = data.flat()
@@ -184,6 +185,7 @@ function preDataReportItemNST(dataIds, dataReportNST, date, turn) {
 }
 
 function preDataSetReportOpi(data, date, turn) {
+    console.log(data)
     if (data.typeReport === 'IC') {
         return {
             equipmentId: data.equipmentId,
@@ -228,8 +230,8 @@ function preDataSetReportOpi(data, date, turn) {
             startTime: data.startTime,
             endTime: data.endTime,
             totalTime: data.totalTime,
-            typeReports: data.typeReports,
-            subTypeReport: data.subTypeReport,
+            typeReports: data.typeStop,
+            subTypeReport: data.subTypeStop,
             specification: data.specification,
             solution: data.solution
         }
@@ -245,7 +247,7 @@ function preDataSetReportOpi(data, date, turn) {
             endTime: data.endTime,
             totalTime: data.totalTime,
             typeStop: data.typeStop,
-            subTypeStop: data.subTypeReport,
+            subTypeStop: data.subTypeStop,
             solution: data.solution
 
 
@@ -260,8 +262,8 @@ function preDataUpdateReport(dataReport, data, date, turn) {
         return {
             typeReport: data.type,
             processDataId: data.idReport[1],
-            OPI_id: data.idReport[2],
-            reportId: data.idReport[3],
+            OPI_id: data.idReport[1],
+            reportId: data.idReport[1],
             updateData: {
                 date: date,
                 turn: turn,
@@ -282,8 +284,8 @@ function preDataUpdateReport(dataReport, data, date, turn) {
         return {
             typeReport: data.type,
             processDataId: data.idReport[1],
-            OPI_id: data.idReport[2],
-            reportId: data.idReport[3],
+            OPI_id: data.idReport[1],
+            reportId: data.idReport[1],
             updateData: {
                 turn: turn,
                 date: date,
@@ -303,8 +305,8 @@ function preDataUpdateReport(dataReport, data, date, turn) {
         return {
             typeReport: data.type,
             processDataId: data.idReport[1],
-            OPI_id: data.idReport[2],
-            reportId: data.idReport[3],
+            OPI_id: data.idReport[1],
+            reportId: data.idReport[1],
             updateData: {
                 turn: turn,
                 date: date,
@@ -324,8 +326,8 @@ function preDataUpdateReport(dataReport, data, date, turn) {
         return {
             typeReport: data.type,
             processDataId: data.idReport[1],
-            OPI_id: data.idReport[2],
-            reportId: data.idReport[3],
+            OPI_id: data.idReport[1],
+            reportId: data.idReport[1],
             updateData: {
                 turn: turn,
                 date: date,
@@ -377,10 +379,10 @@ function validateDataWhithoutNull(data) {
 function transformReportItems(reportItems, type, name, bg, ids, marca, brewId, reportId, processDataId, productionId) {
 
     const idsArray = [ids, processDataId, productionId, reportId]
-    return reportItems.map(item => ({
-        idReport: [...idsArray, item._id],
+    return reportItems.map(report => ({
+        idReport: [...idsArray, report._id],
         name,
-        data: { item },
+        data: { report },
         bg: bg,
         brand: marca,
         brewId: brewId,
@@ -405,18 +407,29 @@ function transformReportItemsEXT(reportItems, type, name, bg, ids, itemId, proce
     }));
 };
 
+function transforOPiItems(report, name, bg, _id) {
+    return {
+        type: report.typeReport,
+        name: name,
+        idReport: [_id, report._id],
+        bg: bg,
+        data: { report }
+
+    }
+}
+
 
 function sortReportsByStartTime(reports) {
     return reports.sort((a, b) => {
-        // Obtener el tiempo de inicio de 'a' y 'b', verificando ambos casos
-        const startTimeA = a.data?.item?.startTime || a.startTime;
-        const startTimeB = b.data?.item?.startTime || b.startTime;
+        // Extraemos el startTime de cada reporte desde data.report.startTime
+        const startTimeA = a.data?.report?.startTime;
+        const startTimeB = b.data?.report?.startTime;
 
-        // Determinar si el turno es nocturno y ajustar las horas
+        // Ajustamos la hora si es turno nocturno
         const adjustedTimeA = adjustTimeForNightShift(startTimeA);
         const adjustedTimeB = adjustTimeForNightShift(startTimeB);
 
-        // Comparar las horas ajustadas
+        // Comparamos las horas ajustadas
         return adjustedTimeA - adjustedTimeB;
     });
 }
@@ -424,17 +437,53 @@ function sortReportsByStartTime(reports) {
 // Ajusta el tiempo si pertenece a un turno nocturno
 function adjustTimeForNightShift(startTime) {
     const time = new Date(`1970-01-01T${startTime}:00`);
-
-    // Si el tiempo es después de la medianoche (entre 00:00 y 06:00), lo ajustamos
+    // Si el tiempo es entre las 00:00 y las 06:00, lo trasladamos al día siguiente
     if (time.getHours() < 6) {
-        time.setDate(time.getDate() + 1); // Lo trasladamos al día siguiente
+        time.setDate(time.getDate() + 1);
     }
-
     return time;
 }
 
 
 //funcion extraer los reportes
+
+function extracteOpiReport(data) {
+    let allTransformedData1 = [];
+    let allTransformedData2 = [];
+    let _id = data._id
+    data.report.forEach((report, index) => {
+
+
+        report.IC.map((report) => {
+            const transformDataOPI = [
+                transforOPiItems(report, 'Averia', '#F68D2B', _id),
+            ]
+            allTransformedData1 = transformDataOPI.concat(allTransformedData1);
+        })
+        report.EC.map((report) => {
+            const transformDataOPI = [
+                transforOPiItems(report, 'Paro Externo', '#4B6DAE', _id),
+            ]
+            allTransformedData1 = transformDataOPI.concat(allTransformedData1);
+        })
+        report.DPA.map((report) => {
+            const transformDataOPI = [
+                transforOPiItems(report, 'Paro Programado', '#D9DB4A', _id),
+            ]
+            allTransformedData1 = transformDataOPI.concat(allTransformedData1);
+        })
+        report.NST.map((report) => {
+            const transformDataOPI = [
+                transforOPiItems(report, 'No Programado', '#BB8493', _id),
+            ]
+            allTransformedData1 = transformDataOPI.concat(allTransformedData1);
+
+        })
+
+    })
+    const allTransformedData = [...allTransformedData1, ...allTransformedData2];
+    return sortReportsByStartTime(allTransformedData);
+}
 
 function extractedReportData(data, ids, date, turn) {
     let allTransformedData1 = [];
@@ -531,10 +580,11 @@ function extractedReportData(data, ids, date, turn) {
 
 // Función separada para calcular el tiempo total
 function extractedTotalTime(dataArray) {
+
     // Usamos reduce para sumar los tiempos totales de cada reporte
     const totalTime = dataArray.reduce((sum, report) => {
         // Verificamos si el reporte tiene 'data.item.totalTime' o 'tiempoTotal'
-        const reportTime = report.data?.item?.totalTime || report.totalTime || 0;
+        const reportTime = report.data?.report?.totalTime || report.totalTime || 0;
         return sum + reportTime;
     }, 0);
 
@@ -599,5 +649,8 @@ export {
     transformDataMain,
     dataBrand,
     preDataDownLoad,
-    preDataSetReportOpi
+    preDataSetReportOpi,
+    extracteOpiReport,
+    transforOPiItems, 
+    sortReportsByStartTime
 }

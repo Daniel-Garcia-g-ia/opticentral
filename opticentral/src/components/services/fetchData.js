@@ -27,9 +27,29 @@ function fetchData(url, token) {
 }
 
 
-async function fetchOneData(url, equipmentId, date, turn, token) {
+async function fetchOneDataOpi(url, equipmentId, date, turn, token) {
+    console.log(url)
     try {
         const response = await axios.get(`${url}/${equipmentId}/${date}/${turn}`, {
+            headers: {
+                "Content-Type": "application/json",
+                "x-access-token": token
+            }
+        });
+
+        // Axios automáticamente lanza un error si la respuesta no tiene éxito
+        return response.data;
+
+    } catch (error) {
+        // Aquí puedes manejar el error adecuadamente
+        console.error('Error fetching data:', error);
+        throw error;
+    }
+}
+async function fetchOneData(url, equipmentId, date, token) {
+    console.log(url)
+    try {
+        const response = await axios.get(`${url}/${equipmentId}/${date}`, {
             headers: {
                 "Content-Type": "application/json",
                 "x-access-token": token
@@ -87,6 +107,7 @@ async function fetchUpdateReportProduction(url, reportId, token, data) {
 
 function fetchSetOpiReport(url,token, data){
     return new Promise((resolve,reject)=>{
+        
         fetch(url,{
             method:'POST',
             headers:{
@@ -134,6 +155,7 @@ function fetchDataDownLoad (url, token,data){
 export {
     fetchData,
     fetchOneData,
+    fetchOneDataOpi,
     fetchSetReport,
     fetchUpdateReportProduction,
     fetchDataDownLoad,

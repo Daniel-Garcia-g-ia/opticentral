@@ -24,6 +24,7 @@ function Navbar() {
 
     const handeldClickProduction = () => {
 
+       
         if (isLoggedIn) {
             production()
 
@@ -78,7 +79,7 @@ function Navbar() {
                                     Reporte
                                 </a>
 
-                                <div className="navbar-item has-dropdown is-hoverable">
+                             {/*    <div className="navbar-item has-dropdown is-hoverable">
                                     <a className="navbar-link ">
                                         More
                                     </a>
@@ -98,7 +99,7 @@ function Navbar() {
                                             Report an issue
                                         </a>
                                     </div>
-                                </div>
+                                </div> */}
                             </div>
 
                             <div className="navbar-end pr-6">

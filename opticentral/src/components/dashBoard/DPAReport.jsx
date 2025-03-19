@@ -6,6 +6,7 @@ import { calculateTimeDifference } from "../services/calculateTimeDifference";
 import { validateTurn } from "../services/valideDataTurn";
 
 function DPAReport({ values, typeReport }) {
+    console.log(values)
 
 
 
@@ -17,8 +18,8 @@ function DPAReport({ values, typeReport }) {
     const [timeDifference, setTimeDifference] = useState(null);
     const [startTime, setStartTime] = useState(values?.startTime || '');
     const [endTime, setEndTime] = useState(values?.endTime || '');
-    const [dataTypeStop, setDataTypeStop] = useState(values?.typeStop || '');
-    const [dataSubTypeStop, setDataSubTypeStop] = useState(values?.subTypeStop || '');
+    const [dataTypeStop, setDataTypeStop] = useState(values?.typeReports || '');
+    const [dataSubTypeStop, setDataSubTypeStop] = useState(values?.subTypeReport || '');
     const [dataSpecification, setdataSpecification] = useState(values?.specification || '');
     const [dataSolution, setDataSolution] = useState(values?.solution || '');
     const [data, setData] = useState(false);
@@ -173,6 +174,7 @@ function DPAReport({ values, typeReport }) {
 
     useEffect(() => {
         if (typeReport === 'DPA') {
+            
 
             setOptionSubType(optionSubTypeInput[dataTypeStop]);
             setSpecification(optionSpecification[dataSubTypeStop]);

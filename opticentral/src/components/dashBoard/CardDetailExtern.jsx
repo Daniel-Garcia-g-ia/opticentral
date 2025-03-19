@@ -13,9 +13,9 @@ function CardDetailExtern({ data, handledHover, handledOut, activateEditModal, h
     const [DPAReport, setDPAReport] = useState(false);
     const [NSTReport, setNSTReport] = useState(false);
 
-    const { startTime, endTime, totalTime, machine, component, subSystem, failureMode } = data.data.item
-    const { subTypeStop, typeStop, solution } = data.data.item
-    const { specification } = data.data.item
+    const { startTime, endTime, totalTime, machine, component, subSystem, failureMode } = data.data.report
+    const { subTypeStop, typeStop, solution } = data.data.report
+    const { specification } = data.data.report
     const { type, name, bg } = data
 
 

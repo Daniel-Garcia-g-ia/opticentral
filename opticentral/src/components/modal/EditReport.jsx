@@ -20,9 +20,12 @@ import AddProduction from "../dashBoard/AddProduction";
 
 function EditReport({ data, setActiveDetail }) {
     const { updateData } = useContext(UpdateContext)
+    const { updateDataGannt } = useContext(UpdateContext);
+     const { dataReportProductionContext } = useContext(ReportContext);
     const { dataReportProduction } = useContext(ReportContext);
-    const { dateSelected }= useContext(DateContext);
-    const { turnSelected }= useContext(DateContext);
+    const { dateSelected } = useContext(DateContext);
+    const { turnSelected } = useContext(DateContext);
+    const { valueTimeContext } = useContext(DateContext);
 
     const [closeModal, setCloseModal] = useState(false);
     const [activeICReport, setActiveICReport] = useState(false);
@@ -30,11 +33,14 @@ function EditReport({ data, setActiveDetail }) {
     const [activeDPAReport, setActiveDPAReport] = useState(false);
     const [activeNSTReport, setActiveNSTReport] = useState(false);
     const [activeProductionReport, setActiveProductionReport] = useState(false);
+    const [releaseTime, setReleaseTime] = useState(false);
+    const [validateRelease, setValidateRelease] = useState(false);
 
     const [values, setValues] = useState();
     const [typeReport, setTypeReport] = useState();
     const [updateReport, setUpdateReport] = useState(false);
     const [dataFetch, setDataFetch] = useState({})
+
 
 
     useEffect(() => {
@@ -51,10 +57,10 @@ function EditReport({ data, setActiveDetail }) {
                 .then(result => {
                     closeSwal();
                     updateData();
+                    updateDataGannt();
 
 
                 }).then(result => {
-
                     eventBasic('success', 'Reporte, ¡Guardado con exito!')
                 })
                 .catch((error) => {
@@ -70,32 +76,34 @@ function EditReport({ data, setActiveDetail }) {
     }, [updateReport])
 
 
+
+
     useEffect(() => {
         if (data.type === 'IC') {
             setTypeReport(data.type)
             setActiveICReport(true);
-            setValues(data.data.item)
+            setValues(data.data.report)
 
         } else if (data.type === 'EC') {
             setTypeReport(data.type);
             setActiveECReport(true);
-            setValues(data.data.item);
+            setValues(data.data.report);
 
         } else if (data.type === 'DPA') {
             setTypeReport(data.type);
             setActiveDPAReport(true);
-            setValues(data.data.item);
+            setValues(data.data.report);
 
         }
         else if (data.type === 'NST') {
             setTypeReport(data.type);
             setActiveNSTReport(true);
-            setValues(data.data.item);
+            setValues(data.data.report);
         } else {
             setTypeReport(data.type);
             setActiveProductionReport(true);
-            setValues(data.data.item);
-          
+            setValues(data.data.report);
+
 
         }
     }, [])
@@ -107,9 +115,11 @@ function EditReport({ data, setActiveDetail }) {
 
     const handledClickSave = () => {
 
-        setDataFetch(preDataUpdateReport(dataReportProduction, data, dateSelected, turnSelected))
+        setDataFetch(preDataUpdateReport(dataReportProduction, data, dateSelected, turnSelected));
+        setReleaseTime(true);
         setUpdateReport(!updateReport)
-        
+       
+
     }
 
 

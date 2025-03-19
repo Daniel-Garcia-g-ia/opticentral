@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from "react";
 import ReportDetail from "./ReportDetail";
 
-function Gannt({ data }) {   
-
-   
-    const totalTime = data?.totalTime || data?.data?.item?.totalTime || 0;
-    const { startTime, endTime, name, bg } = data;    
-    const [activeTitle, setActiveTitle] = useState(true);    
-    const [activeDetail, setActiveDetail] = useState(false);    
-    const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });   
+function Gannt({ data }) {
+    console.log(data)
+    const totalTime = data?.report?.totalTime || data?.data?.report?.totalTime || 0;
+    const { name, bg } = data;
+    const [activeTitle, setActiveTitle] = useState(true);
+    const [activeDetail, setActiveDetail] = useState(false);
+    const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
     const heightBar = (75 * totalTime) / 8;
-        
+
     useEffect(() => {
-        
+
         if (totalTime <= 0.3) {
             setActiveTitle(false);
         }

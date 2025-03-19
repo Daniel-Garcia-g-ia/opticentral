@@ -17,13 +17,21 @@ import { MdPassword } from "react-icons/md";
 
 function Login() {
     
-
+    const [releaseLogin, setreleaseLogin]=useState(false)
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [navigate, setNavigate] = useState(false)
     const { login } = useContext(AuthContext);
 
     const { isLoggedIn } = useContext(AuthContext);
+    const { setIsLoggedIn } = useContext(AuthContext);
+
+    useEffect(()=>{
+        setIsLoggedIn(false)
+    },[])
+    
+       
+  
 
 
     
@@ -40,7 +48,9 @@ function Login() {
             }else if(userData.status==200){
                 closeSwal()
                 login(userData)
+                setreleaseLogin(!releaseLogin)
             }
+            
             
             
 
@@ -54,10 +64,10 @@ function Login() {
 
 
     }
-
     if (isLoggedIn) {
         return <Navigate to="/home" replace />
     }
+    
 
 
     return (

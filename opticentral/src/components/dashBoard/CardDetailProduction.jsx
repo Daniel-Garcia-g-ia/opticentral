@@ -3,7 +3,8 @@ import React from "react";
 import { LiaEditSolid } from "react-icons/lia";
 
 function CardDetailProduction({ data, handledHover, handledOut, activateEditModal, handleClickEdit }) {
-    const { startTime, endTime, name, totalTime, bg } = data.data.item    
+    console.log(data)
+    const { startTime, endTime, name, totalTime, bg } = data.data.report   
 
     return (
 

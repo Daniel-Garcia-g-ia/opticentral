@@ -8,6 +8,7 @@ import { TbRuler } from "react-icons/tb";
 import { SiNamemc } from "react-icons/si";
 
 function ReportDetail({ data, setActiveDetail }) {
+    console.log(data)
 
     const [activateEditModal, setActivateEditModal] = useState(false);
     const [activeExternal, setActiveExternal] = useState(false);
@@ -15,10 +16,9 @@ function ReportDetail({ data, setActiveDetail }) {
     const [dataReportExtern, setDataReportExtern] = useState({});
 
 
-
     useEffect(() => {
 
-        if (data.type !== 'EBT') {
+        if (data.type === 'IC'||data.type === 'EC'||data.type === 'DPA'||data.type === 'NST') {
             setActiveExternal(true)
             setDataReportExtern(data)      
 
