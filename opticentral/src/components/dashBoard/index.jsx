@@ -228,8 +228,7 @@ function DashBoard() {
                     fetchOneDataOpi(`${config.apiUrl}/app/v1/opi-report-consult`, code, date, dataTurn, authData.token)
                         .then(result => {
                             if (!result.body.auth) {
-                                navigate('/');
-                                
+                                navigate('/');                                
                             } else {
                                 closeSwal();
                                 console.log('aqui')
