@@ -87,8 +87,8 @@ export function generateExcel(apiDataProduction, apiDataOpi, fileName = "multi_s
                         dpaReport.startTime,
                         dpaReport.endTime,
                         dpaReport.totalTime,
-                        dpaReport.typeStop,
-                        dpaReport.subTypeStop,
+                        dpaReport.typeReports,
+                        dpaReport.subTypeReport,
                         dpaReport.specification,
                         dpaReport.solution,
                     ]);

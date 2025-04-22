@@ -1,9 +1,10 @@
 import React from "react";
 
 import { LiaEditSolid } from "react-icons/lia";
+import { RiDeleteRow } from "react-icons/ri";
 
-function CardDetailProduction({ data, handledHover, handledOut, activateEditModal, handleClickEdit }) {
-    console.log(data)
+function CardDetailProduction({ data, handledHover, handledOut, activateEditModal, handleClickEdit, handleClickDelete }) {
+    
     const { startTime, endTime, name, totalTime, bg } = data.data.report   
 
     return (
@@ -43,8 +44,9 @@ function CardDetailProduction({ data, handledHover, handledOut, activateEditModa
 
 
                 </div>
-                <div className="is-custom-edit">
+                <div className="is-custom-edit pl-2">
                     <span onClick={handleClickEdit}><LiaEditSolid size={34} /></span>
+                    <span onClick={handleClickDelete}><RiDeleteRow  size={30} /></span>
 
                 </div>
 

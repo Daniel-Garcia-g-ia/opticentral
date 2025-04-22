@@ -229,9 +229,12 @@ function DashBoard() {
                         .then(result => {
                             if (!result.body.auth) {
                                 navigate('/');
+                                
                             } else {
                                 closeSwal();
+                                console.log('aqui')
                                 const data = result.body.data[0];
+                                console.log(data)
                                 if (data && data.report) {
                                     if ((data.report[0].IC && data.report[0].IC.length > 0) ||
                                         (data.report[0].EC && data.report[0].EC.length > 0) ||
@@ -253,10 +256,10 @@ function DashBoard() {
                             }
                         })
                         .catch(error => console.error(error));
-                }, 100); // Ajusta el tiempo (en milisegundos) según la necesidad
+                },250); // Ajusta el tiempo (en milisegundos) según la necesidad
             }
         }
-    }, [chanceDataGannt]);
+    }, [chanceDataGannt,selectedDate, selectedDate]);
 
 
     useEffect(() => {

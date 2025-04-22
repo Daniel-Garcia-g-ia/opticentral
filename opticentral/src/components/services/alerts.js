@@ -60,13 +60,39 @@ function closeSwal (){
   Swal.close();
 }
 
+function confirmAcction(title, text, icon, confirmButtonText, titleconfirm, textConfirm) {
+  return Swal.fire({
+    title: title,
+    text: text,
+    icon: icon,
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: confirmButtonText
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // Se muestra la alerta de éxito y se devuelve true
+      return Swal.fire({
+        title: titleconfirm,
+        text: textConfirm,
+        icon: "success"
+      }).then(() => true);
+    } else {
+      // Si no se confirma, se devuelve false
+      return false;
+    }
+  });
+}
+
+
 export {
   successAlert,
   basicMessage,
   textUnderMessage,
   eventBasic,
   processingAction,
-  closeSwal
+  closeSwal,
+  confirmAcction
 }
 
 

@@ -1,12 +1,13 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { LiaEditSolid } from "react-icons/lia";
+import { RiDeleteRow } from "react-icons/ri";
 import ICReportDetail from "../subComponents/ICReportDetail";
 import ECReportDetail from "../subComponents/ECReportDetail";
 import DPAReportDetail from "../subComponents/DPAReportDetail";
 import NSTReportDetail from "../subComponents/NSTReportDetail";
 
-function CardDetailExtern({ data, handledHover, handledOut, activateEditModal, handleClickEdit }) {
+function CardDetailExtern({ data, handledHover, handledOut, activateEditModal, handleClickEdit, handleClickDeleteExternal }) {
    
     const [ICReport, setICReport] = useState(false);
     const [ECReport, setECReport] = useState(false);
@@ -99,6 +100,7 @@ function CardDetailExtern({ data, handledHover, handledOut, activateEditModal, h
                 </div>
                 <div className="is-custom-edit">
                     <span onClick={handleClickEdit}><LiaEditSolid size={34} /></span>
+                    <span onClick={handleClickDeleteExternal}><RiDeleteRow  size={30} /></span>
 
                 </div>
 

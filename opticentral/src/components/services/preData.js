@@ -201,6 +201,7 @@ function preDataSetReportOpi(data, date, turn) {
             subSystem: data.subSystem,
             component: data.component,
             failureMode: data.failureMode,
+            machine: data.machine,
             solution: data.solution
         }
     } else if (data.typeReport === 'EC') {
@@ -651,6 +652,6 @@ export {
     preDataDownLoad,
     preDataSetReportOpi,
     extracteOpiReport,
-    transforOPiItems, 
+    transforOPiItems,
     sortReportsByStartTime
 }

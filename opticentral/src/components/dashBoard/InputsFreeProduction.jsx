@@ -6,7 +6,7 @@ function InputsFreeProduction({ brewId, index, onInputChange, brands }) {
     const [formValue, setFormValue] = useState({
         brand: null,
         brewId: brewId,
-        volume: null,
+        volume: 675,
         dateInit: null,
         dateEnd: null,
         release: true // Set initial release value to false
@@ -62,7 +62,7 @@ function InputsFreeProduction({ brewId, index, onInputChange, brands }) {
                                 <span>Volumen</span>
                                 <div className="field pl-3 has-addons">
                                     <p className="control">
-                                        <input className="input is-small is-success is-custom-wifth-amount-hl" type="number" name="volume" onChange={handledChange} defaultValue={null} />
+                                        <input className="input is-small is-success is-custom-wifth-amount-hl" type="number" name="volume" onChange={handledChange} defaultValue={675} />
                                     </p>
                                     <p className="control">
                                         <a className="button is-static is-small">

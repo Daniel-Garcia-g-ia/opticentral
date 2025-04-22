@@ -22,15 +22,15 @@ function FreeProduction({ equipmentId, equipmentName, location, activateFreeProd
     const { dateSelected } = useContext(DateContext)
     const { turnSelected } = useContext(DateContext)
 
-    
-    
+
+
 
 
     const { updateData } = useContext(UpdateContext)
-    
+
     const [brewId, setBrewId] = useState(0);
     const [inputValues, setInputValues] = useState({});
-    const [brands, setBrands]= useState({});
+    const [brands, setBrands] = useState({});
     const [redirect, setRedirect] = useState(false);
     const [saveData, setSaveData] = useState(false)
 
@@ -49,9 +49,9 @@ function FreeProduction({ equipmentId, equipmentName, location, activateFreeProd
         } else {
 
             fetchData(`${config.apiUrl}/app/v1/brands`, authData.token)
-                .then(result => {                   
-                   const infoBrands= dataBrand(result.body.date)
-                   setBrands(infoBrands)
+                .then(result => {
+                    const infoBrands = dataBrand(result.body.date)
+                    setBrands(infoBrands)
                 }).catch(error => {
                     eventBasic('error', error)
 
@@ -92,13 +92,21 @@ function FreeProduction({ equipmentId, equipmentName, location, activateFreeProd
 
 
     const handledInputChange = (index, name, value) => {
-        setInputValues(prevValues => ({
-            ...prevValues,
-            [index]: {
+        setInputValues(prevValues => {
+            // Actualiza la propiedad modificada
+            const updatedItem = {
                 ...prevValues[index],
-                [name]: value
+                [name]: value,
+            };
+            // Si el input "volume" aún no está definido, se agrega con valor 675
+            if (!updatedItem.hasOwnProperty("volume")) {
+                updatedItem.volume = 675;
             }
-        }))
+            return {
+                ...prevValues,
+                [index]: updatedItem,
+            };
+        });
     }
 
 
@@ -106,8 +114,7 @@ function FreeProduction({ equipmentId, equipmentName, location, activateFreeProd
 
     const handledClickSave = () => {
 
-
-        if (!inputValues[0]?.brand || !inputValues[0]?.volume || !inputValues[0]?.brewId) {
+        if (!inputValues[0]?.brand || !inputValues[0]?.volume || !inputValues[0]?.brewId || !dateSelected) {
 
             textUnderMessage("¡Validar Información!", "Por favor, ingrese información válida y completa !", "warning")
 

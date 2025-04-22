@@ -353,3 +353,11 @@ padding-bottom: 0.5rem;
     width: fill;
     padding: 20px;
 }
+
+.is-custom-button-aux{
+    width: -webkit-fill-available;
+}
+.is-custom-delete:hover{
+    cursor: pointer;
+}
+

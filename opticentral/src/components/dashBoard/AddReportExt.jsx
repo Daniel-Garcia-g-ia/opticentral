@@ -60,6 +60,7 @@ function AddReportExt({ setActivateDetailsProduction, setActivateReportExt, setS
                     closeSwal();                    
                     updateDataGannt()                   
                     setActivateReportExt(false);
+                    setActivateDetailsProduction(true);
 
 
                 })               

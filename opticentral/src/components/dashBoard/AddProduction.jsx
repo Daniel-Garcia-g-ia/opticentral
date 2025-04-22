@@ -10,7 +10,7 @@ function AddProduction({ values, typeReport }) {
     const { turnSelected } = useContext(DateContext);
     const [startTime, setStartTime] = useState(values?.startTime || 0);
     const [endTime, setEndTime] = useState(values?.endTime || 0);
-    const [volume, setVolume] = useState(values?.volume || '');
+    const [volume, setVolume] = useState(values?.volume ||'');
     const [timeDifference, setTimeDifference] = useState(values?.totalTime || null);
     const [time, setTime] = useState(0);
     const [min, setMin] = useState();
@@ -20,7 +20,7 @@ function AddProduction({ values, typeReport }) {
         startTime: values?.startTime || null,
         endTime: values?.endTime || null,
         totalTime: values?.totalTime || null,
-        volume: values?.volume || null
+        volume: values?.volume || 675
     })
 
     useEffect(() => {        

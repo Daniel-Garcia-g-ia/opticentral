@@ -328,3 +328,7 @@
     display: flex;
     justify-content: center;
 }
+
+.is-custom-button-aux{
+    width: -webkit-fill-available;
+}
