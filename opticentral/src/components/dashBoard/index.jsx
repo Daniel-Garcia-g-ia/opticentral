@@ -244,7 +244,7 @@ function DashBoard() {
                                         setLengthOpiEstractedReport(report.length);
                                     } else {
                                         setOpiEstractedReport([]);
-                                        basicMessage('Sin datos registrados');
+                                        /* basicMessage('Sin datos registrados'); */
                                         setLengthOpiEstractedReport(0);
                                     }
                                 } else {
