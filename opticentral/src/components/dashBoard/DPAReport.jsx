@@ -88,7 +88,8 @@ function DPAReport({ values, typeReport }) {
 
     const optionSpecification = {
         'Paro Programado': [
-            'Heineken'
+            'Heineken',
+            'Levadura No Disponible'
         ],
         'Cambio de Marca': [
             'Heineken'
